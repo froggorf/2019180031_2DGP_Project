@@ -14,8 +14,9 @@ yoshi_motion_num = [8,8,5,5,8,8,2,2,0,0,1,1,1,1]
 X = 0
 Y = 1
 GRAVITY = 5
-MAXJUMPTIME = 12
+MAXJUMPTIME = 10
 jump_delay = 0
+
 
 class Yoshi:
     def __init__(self):
@@ -61,16 +62,15 @@ class Yoshi:
             self.delay += 1
 
     def draw(self):
-
-            # elif self.x>
-            self.image[yoshi_state[self.state]].clip_draw(
-                self.offset[0]*self.frame,
-                160*yoshi_motion[self.motion],
-                self.offset[0],
-                self.offset[1],
-                self.camera[X]+self.offset[0]//2,
-                self.camera[Y]+self.offset[1]//2
-            )
+        # elif self.x>
+        self.image[yoshi_state[self.state]].clip_draw(
+            self.offset[0]*self.frame,
+            160*yoshi_motion[self.motion],
+            self.offset[0],
+            self.offset[1],
+            self.camera[X]+self.offset[0]//2,
+            self.camera[Y]+self.offset[1]//2
+        )
 
 
 
@@ -106,24 +106,50 @@ class Yoshi:
         self.frame = 0
 
     def calc_gravity(self):
-
         global GRAVITY
         self.y += self.gravity
-        if self.gravity != -GRAVITY:
-            self.gravity -= GRAVITY
-            if self.gravity < -GRAVITY:
-                self.gravity = -GRAVITY
+        self.gravity -= GRAVITY
+        if self.gravity < -GRAVITY*3:
+            self.gravity = -GRAVITY*3
+
         from play_state import stageState
-        for rect in stageState.groundRect:
-            if self.myIntersectRect(rect):
-                self.y = rect.top
-                if self.motion == "RIGHT_FALL" or self.motion == "LEFT_FALL":
-                    self.check_fall()
-        for rect in stageState.stairRect:
-            if self.myIntersectRect(rect):
-                self.y = rect.top
-                if self.motion == "RIGHT_FALL" or self.motion == "LEFT_FALL":
-                    self.check_fall()
+        if self.gravity<=0:
+            for rect in stageState.groundRect:
+                if self.myIntersectRect(rect):
+                    self.y = rect.top
+                    self.gravity=-GRAVITY;
+                    if self.motion == "RIGHT_FALL" or self.motion == "LEFT_FALL":
+                        self.check_fall()
+            for rect in stageState.stairRect:
+                if self.myIntersectRect(rect):
+                    self.y = rect.top
+                    self.gravity = -GRAVITY;
+                    if self.motion == "RIGHT_FALL" or self.motion == "LEFT_FALL":
+                        self.check_fall()
+            for rect in stageState.largerBlock:
+                if self.myIntersectRect(rect.pos):
+                    self.y = rect.pos.top
+                    self.gravity = -GRAVITY
+                    if self.motion == "RIGHT_FALL" or self.motion == "LEFT_FALL":
+                        self.check_fall()
+            for rect in stageState.footBlock:
+                if self.myIntersectRect(rect.pos):
+                    self.y = rect.pos.top
+                    self.gravity = -GRAVITY;
+                    if self.motion == "RIGHT_FALL" or self.motion == "LEFT_FALL":
+                        self.check_fall()
+        else:       #점프중일때
+            for rect in stageState.largerBlock:
+                if self.myIntersectRect(rect.pos):
+                    self.y = rect.pos.bottom - self.offset[Y]-1
+                    self.gravity = 0
+                    rect.larger_block=True
+            for rect in stageState.footBlock:
+                if self.myIntersectRect(rect.pos):
+                    self.y = rect.pos.bottom - self.offset[Y]
+                    self.gravity = 0
+
+
 
     def check_fall(self):
         if self.motion == "RIGHT_FALL":
@@ -145,14 +171,15 @@ class Yoshi:
             bVertical = True
 
         if bVertical and bHorizontal:
+            ''
             return True
         else:
             return False
 
     def move(self):
         self.x += self.dir[X] * self.speed
-        if yoshi_motion == "RIGHT_RUN" or yoshi_motion == "LEFT_RUN":
-            self.x += self.dir[X] * self.speed
+        if self.motion == "RIGHT_RUN" or self.motion == "LEFT_RUN":
+            self.x += self.dir[X] * self.speed//2
         from play_state import stageState
         for rect in stageState.groundRect:
             if self.myIntersectRect(rect):
@@ -160,6 +187,20 @@ class Yoshi:
                     self.x = rect.left - self.offset[X]
                 elif self.dir[X] == -1:
                     self.x = rect.right
+        for rect in stageState.largerBlock:
+            if self.myIntersectRect(rect.pos):
+                if self.dir[X] == 1:
+                    self.x = rect.pos.left - self.offset[X]
+                    if self.motion == "RIGHT_IDLE_01" or self.motion == "RIGHT_IDLE_02":
+                        self.x-=10
+                elif self.dir[X] == -1:
+                    self.x = rect.pos.right
+        for rect in stageState.footBlock:
+            if self.myIntersectRect(rect.pos):
+                if self.dir[X] == 1:
+                    self.x = rect.pos.left - self.offset[X]
+                elif self.dir[X] == -1:
+                    self.x = rect.pos.right
         if self.x<0:
             self.x = 0
         if self.y<0:
@@ -170,7 +211,8 @@ class Yoshi:
         if self.pressJump != 0:
             if self.pressJump <=MAXJUMPTIME:
                 if jump_delay == 0:
-                    self.gravity += GRAVITY*3
+                    if self.gravity==-GRAVITY: self.gravity+=GRAVITY*4
+                    else :self.gravity += GRAVITY*2
                     self.pressJump+=1
                 jump_delay = (jump_delay+1) % 3
             else:
@@ -178,5 +220,4 @@ class Yoshi:
                     self.change_motion("LEFT_FALL")
                 elif self.motion == "RIGHT_JUMP":
                     self.change_motion("RIGHT_FALL")
-
 

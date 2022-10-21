@@ -24,6 +24,7 @@ class Yoshi:
         #위치 관련
         self.x = 253
         self.y = 320
+        self.size=[int(62*1.6),int(66*1.6)]
 
         #상태 관련
         self.state = "MARIO"
@@ -71,6 +72,7 @@ class Yoshi:
             self.camera[X]+self.offset[0]//2,
             self.camera[Y]+self.offset[1]//2
         )
+        print(self.size," ",self.offset)
 
 
 
@@ -113,7 +115,7 @@ class Yoshi:
             self.gravity = -GRAVITY*3
 
         from play_state import stageState
-        if self.gravity<=0:
+        if self.gravity<=0:     #중력 적용중일때
             for rect in stageState.groundRect:
                 if self.myIntersectRect(rect):
                     self.y = rect.top
@@ -141,12 +143,12 @@ class Yoshi:
         else:       #점프중일때
             for rect in stageState.largerBlock:
                 if self.myIntersectRect(rect.pos):
-                    self.y = rect.pos.bottom - self.offset[Y]-1
+                    self.y = rect.pos.bottom - self.size[Y]-1
                     self.gravity = 0
                     rect.larger_block=True
             for rect in stageState.footBlock:
                 if self.myIntersectRect(rect.pos):
-                    self.y = rect.pos.bottom - self.offset[Y]
+                    self.y = rect.pos.bottom - self.size[Y]
                     self.gravity = 0
 
 
@@ -164,10 +166,10 @@ class Yoshi:
         bVertical = False
         bHorizontal = False
 
-        if self.x < rect.right and self.x+self.offset[X] > rect.left:
+        if self.x < rect.right and self.x+self.size[X] > rect.left:
             bHorizontal=True
 
-        if self.y+self.offset[Y] > rect.bottom and self.y < rect.top:
+        if self.y+self.size[Y] > rect.bottom and self.y < rect.top:
             bVertical = True
 
         if bVertical and bHorizontal:
@@ -184,21 +186,21 @@ class Yoshi:
         for rect in stageState.groundRect:
             if self.myIntersectRect(rect):
                 if self.dir[X] == 1:
-                    self.x = rect.left - self.offset[X]
+                    self.x = rect.left - self.size[X]
                 elif self.dir[X] == -1:
                     self.x = rect.right
         for rect in stageState.largerBlock:
             if self.myIntersectRect(rect.pos):
                 if self.dir[X] == 1:
-                    self.x = rect.pos.left - self.offset[X]
-                    if self.motion == "RIGHT_IDLE_01" or self.motion == "RIGHT_IDLE_02":
-                        self.x-=10
+                    self.x = rect.pos.left - self.size[X]
+                    # if self.motion == "RIGHT_IDLE_01" or self.motion == "RIGHT_IDLE_02":
+                    #     self.x-=10
                 elif self.dir[X] == -1:
                     self.x = rect.pos.right
         for rect in stageState.footBlock:
             if self.myIntersectRect(rect.pos):
                 if self.dir[X] == 1:
-                    self.x = rect.pos.left - self.offset[X]
+                    self.x = rect.pos.left - self.size[X]
                 elif self.dir[X] == -1:
                     self.x = rect.pos.right
         if self.x<0:

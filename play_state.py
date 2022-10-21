@@ -156,7 +156,7 @@ def handle_yoshi(event):
     #W/w 키
     if event.key == SDLK_w:
         if event.type == SDL_KEYDOWN:
-            if yoshi.motion != "RIGHT_FALL" and yoshi.motion!="LEFT_FALL":
+            if yoshi.motion != "RIGHT_FALL" and yoshi.motion!="LEFT_FALL" and yoshi.motion!="LEFT_JUMP" and yoshi.motion!="RIGHT_JUMP":
                 yoshi.gravity+=yoshi_character.GRAVITY*4
                 yoshi.pressJump += 1
                 if yoshi.motion == "RIGHT_IDLE_01" or yoshi.motion == "RIGHT_IDLE_02" or yoshi.motion == "RIGHT_WALK" or yoshi.motion == "RIGHT_RUN" or yoshi.motion == "RIGHT_JUMP":

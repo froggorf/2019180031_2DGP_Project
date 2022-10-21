@@ -38,13 +38,16 @@ class StageState:
             myRect(1624,0,1626,688)
         ]
         self.footBlock = [
-            FootBlock(1921, 3263 - 2494, 1921 + 62, 3263 - 2494 + 62, "BLOCK"),
-            FootBlock(1983, 3263 - 2494, 1983 + 62, 3263 - 2494 + 62, "BLOCK"),
-            FootBlock(2107, 3263 - 2494, 2107 + 62, 3263 - 2494 + 62, "BLOCK"),
-            FootBlock(2169, 3263 - 2494, 2169 + 62, 3263 - 2494 + 62, "BLOCK")
+            FootBlock(1921, 3263 - 2494, 1921 + 62, 3263 - 2494 + 62),
+            FootBlock(1983, 3263 - 2494, 1983 + 62, 3263 - 2494 + 62),
+            FootBlock(2107, 3263 - 2494, 2107 + 62, 3263 - 2494 + 62),
+            FootBlock(2169, 3263 - 2494, 2169 + 62, 3263 - 2494 + 62)
         ]
         self.largerBlock = [
-            FootBlock(2045, 3263 - 2494, 2045 + 62, 3263 - 2494 + 62, "LARGER_BLOCK"),
+            LargeBlock(2045, 3263 - 2494, 2045 + 62, 3263 - 2494 + 62),
+        ]
+        self.jumpBlock =[
+            JumpBlock(500,508,500+62,508+62,81)
         ]
 
     #그리기 관련 함수
@@ -68,6 +71,9 @@ class StageState:
             if rect.myIntersectRect(self.cameraPos[X],self.cameraPos[Y],self.cameraPos[X]+self.cameraSize[X],self.cameraPos[Y]+self.cameraSize[Y]):
                 rect.draw(self.cameraPos[X],self.cameraPos[Y],self.cameraPos[X]+self.cameraSize[X],self.cameraPos[Y]+self.cameraSize[Y])
         for rect in self.largerBlock:
+            if rect.myIntersectRect(self.cameraPos[X],self.cameraPos[Y],self.cameraPos[X]+self.cameraSize[X],self.cameraPos[Y]+self.cameraSize[Y]):
+                rect.draw(self.cameraPos[X], self.cameraPos[Y], self.cameraPos[X] + self.cameraSize[X],self.cameraPos[Y] + self.cameraSize[Y])
+        for rect in self.jumpBlock:
             if rect.myIntersectRect(self.cameraPos[X],self.cameraPos[Y],self.cameraPos[X]+self.cameraSize[X],self.cameraPos[Y]+self.cameraSize[Y]):
                 rect.draw(self.cameraPos[X], self.cameraPos[Y], self.cameraPos[X] + self.cameraSize[X],self.cameraPos[Y] + self.cameraSize[Y])
 
@@ -110,20 +116,13 @@ class myRect:
 
 
 class FootBlock():
-    def __init__(self,g_left=0,g_bottom=0, g_right=0,g_top=0, g_type = "BLOCK"):
+    def __init__(self,g_left=0,g_bottom=0, g_right=0,g_top=0):
         self.pos = myRect(g_left,g_bottom,g_right,g_top)
-        self.type = g_type
         self.image = load_image('foot_block.png')
-        self.largertime = 0
-        self.first_w = self.pos.get_w()
-        self.first_h = self.pos.get_h()
-        self.larger_block = False
 
     def draw(self, left, bottom, right, top):
-        if self.type == "BLOCK":
-            self.image.clip_draw(63, 0, 63, 62, self.pos.left - left + self.pos.get_w() // 2, self.pos.bottom - bottom + self.pos.get_h() // 2, self.pos.get_w(), self.pos.get_h())
-        elif self.type == "LARGER_BLOCK":
-            self.image.clip_draw(0, 0, 63, 62, self.pos.left - left + self.pos.get_w() // 2, self.pos.bottom - bottom + self.pos.get_h() // 2, self.pos.get_w(), self.pos.get_h())
+        self.image.clip_draw(63, 0, 63, 62, self.pos.left - left + self.pos.get_w() // 2, self.pos.bottom - bottom + self.pos.get_h() // 2, self.pos.get_w(), self.pos.get_h())
+
 
     def myIntersectRect(self, left, bottom, right, top):
         if left == -1: return
@@ -141,15 +140,36 @@ class FootBlock():
         else:
             return False
 
+
+
+class LargeBlock(FootBlock):
+    def __init__(self,g_left,g_bottom,g_right,g_top):
+        self.pos = myRect(g_left, g_bottom, g_right, g_top)
+        self.image = load_image('foot_block.png')
+        self.largertime = 0
+        self.first_w = self.pos.get_w()
+        self.first_h = self.pos.get_h()
+        self.larger_block = False
+
+    def draw(self, left, bottom, right, top):
+        self.image.clip_draw(0, 0, 63, 62, self.pos.left - left + self.pos.get_w() // 2, self.pos.bottom - bottom + self.pos.get_h() // 2, self.pos.get_w(), self.pos.get_h())
+
     def large_block(self):
         if self.larger_block:
             if self.largertime >= 19:
                 self.larger_block = False
-            self.pos.left-=self.first_w//20
-            self.pos.right+=self.first_w//20
+            self.pos.left-=self.first_w//40
+            self.pos.right+=self.first_w//40
             self.pos.bottom+=self.first_h//20
-            self.pos.top+=self.first_h//20*3
+            self.pos.top+=self.first_h//12
             self.largertime+=1
 
+class JumpBlock(FootBlock):
+    def __init__(self, g_left=0, g_bottom=0, g_right=0, g_top=0, jumppower=0):
+        self.pos = myRect(g_left, g_bottom, g_right, g_top)
+        self.image = load_image('foot_block.png')
+        self.jump_power = jumppower
 
-
+    def draw(self, left, bottom, right, top):
+        self.image.clip_draw(126, 0, 63, 62, self.pos.left - left + self.pos.get_w() // 2,
+                             self.pos.bottom - bottom + self.pos.get_h() // 2, self.pos.get_w(), self.pos.get_h())

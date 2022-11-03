@@ -39,10 +39,11 @@ class IDLE:
     def enter(self, event=None):
         self.delay = 0
         self.frame = 0
+        self.dir[X] = 0
         print('enter - IDLE')
         pass
 
-    def exit(self):
+    def exit(self, event=None):
         print('exit - IDLE')
         pass
 
@@ -50,7 +51,7 @@ class IDLE:
         pass
 
     def draw(self):
-        if yoshi_motion[self.motion]%2 ==0: #RIGHT
+        if self.face == RIGHT: #RIGHT
             self.image[yoshi_state[self.state]].clip_draw(
                 int(62*1.6) * self.frame,
                 0,
@@ -75,11 +76,22 @@ class WALK:
     def enter(self, event=None):
         self.delay = 0
         self.frame = 0
-        print('enter - WALK')
+        if event == DD:
+            self.dir[X] += 1
+            self.face = RIGHT
+        elif event == AD:
+            self.dir[X] -= 1
+            self.face = LEFT
+        elif event == DU:
+            self.dir[X] -= 1
+            self.face = LEFT
+        elif event == AU:
+            self.dir[X] += 1
+            self.face = RIGHT
+
         pass
 
-    def exit(self):
-        print('exit - WALK')
+    def exit(self, event=None):
         pass
 
     def do(self):
@@ -87,7 +99,7 @@ class WALK:
         pass
 
     def draw(self):
-        if yoshi_motion[self.motion]%2 == 0:
+        if self.face == RIGHT:
             self.image[yoshi_state[self.state]].clip_draw(
                 int(64*1.6) * self.frame,
                 640,
@@ -111,11 +123,9 @@ class RUN:
     def enter(self, event=None):
         self.delay = 0
         self.frame = 0
-        print('enter - RUN')
         pass
 
-    def exit(self):
-        print('exit - RUN')
+    def exit(self, event=None):
         pass
 
     def do(self):
@@ -123,7 +133,7 @@ class RUN:
         pass
 
     def draw(self):
-        if yoshi_motion[self.motion]%2==0:
+        if self.face == RIGHT:
             self.image[yoshi_state[self.state]].clip_draw(
                 int(72*1.6) * self.frame,
                 960,
@@ -147,23 +157,39 @@ class JUMP:
     def enter(self, event=None):
         self.delay = 0
         self.frame = 0
-        print('enter - JUMP')
+        if event == DD:
+            self.dir[X] += 1
+            self.face = RIGHT
+        elif event == AD:
+            self.dir[X] -= 1
+            self.face = LEFT
+        elif event == DU:
+            self.dir[X] -= 1
+            self.face = LEFT
+        elif event == AU:
+            self.dir[X] += 1
+            self.face = RIGHT
+        self.gravity += GRAVITY * 4
+        self.pressJump += 1
         pass
 
-    def exit(self):
-        print('exit - JUMP')
+    def exit(self, event=None):
+        self.pressJump = 0
+        pass
 
     def do(self):
         if self.gravity < -GRAVITY:
             self.cur_state.exit(self)
             self.cur_state = FALL
             self.cur_state.enter(self)
+
+        self.check_jump()
         pass
 
     def draw(self):
-        if yoshi_motion[self.motion]%2 == 0:
+        if self.face == RIGHT:
             self.image[yoshi_state[self.state]].clip_draw(
-                int(60*1.6) * self.frame,
+                0,
                 1600,
                 int(60*1.6),
                 int(72*1.6),
@@ -172,7 +198,7 @@ class JUMP:
             )
         else:
             self.image[yoshi_state[self.state]].clip_draw(
-                int(60 * 1.6) * self.frame,
+                0,
                 1760,
                 int(60 * 1.6),
                 int(72 * 1.6),
@@ -188,7 +214,7 @@ class FALL:
         self.frame = 0
         pass
 
-    def exit(self):
+    def exit(self, event=None):
         print('exit - FALL')
         pass
 
@@ -196,9 +222,9 @@ class FALL:
         pass
 
     def draw(self):
-        if yoshi_motion[self.motion] %2 ==0:
+        if self.face == RIGHT:
             self.image[yoshi_state[self.state]].clip_draw(
-                int(58*1.6) * self.frame,
+                0,
                 1920,
                 int(58*1.6),
                 int(62*1.6),
@@ -207,7 +233,7 @@ class FALL:
             )
         else:
             self.image[yoshi_state[self.state]].clip_draw(
-                int(58 * 1.6) * self.frame,
+                0,
                 2080,
                 int(58 * 1.6),
                 int(62 * 1.6),
@@ -216,27 +242,25 @@ class FALL:
             )
 
 next_state = {
-    IDLE: {WD: JUMP, WU: JUMP, AD: WALK, AU: WALK, SD: IDLE, SU: IDLE, DD: WALK, DU: WALK, SHIFTD: IDLE, SHIFTU: IDLE},
-    WALK: {WD: JUMP, WU: JUMP, AD: IDLE, AU: IDLE, SD: WALK, SU: WALK, DD: IDLE, DU: IDLE, SHIFTD: RUN, SHIFTU: RUN},
-    RUN: {WD: JUMP, WU: JUMP, AD: IDLE, AU: IDLE, SD: RUN, SU: RUN, DD: IDLE, DU: IDLE, SHIFTD: WALK, SHIFTU: WALK},
-    JUMP: {WD: JUMP, WU: JUMP, AD: JUMP, AU: JUMP, SD: JUMP, SU: JUMP, DD: JUMP, DU: JUMP, SHIFTD: JUMP, SHIFTU: JUMP},
-    FALL: {WD: FALL, WU: FALL, AD: FALL, AU: FALL, SD: FALL, SU: FALL, DD: FALL, DU: FALL, SHIFTD: FALL, SHIFTU: FALL}
+    IDLE: {WD: JUMP, AD: WALK, AU: WALK, DD: WALK, DU: WALK},
+    WALK: {WD: JUMP, AD: IDLE, AU: IDLE, DD: IDLE, DU: IDLE, SHIFTD: RUN, SHIFTU: RUN},
+    RUN: {WD: JUMP, AD: IDLE, AU: IDLE, DD: IDLE, DU: IDLE, SHIFTD: WALK, SHIFTU: WALK},
+    JUMP: {AD:JUMP,AU:JUMP,DD:JUMP,DU:JUMP},
+    FALL: {AD: FALL, AU: FALL, DD: FALL, DU: FALL}
 }
 
 class Yoshi:
     def __init__(self):
         self.image = [load_image("yoshi_mario.png")]
         #위치 관련
-        self.x = 2400
-        self.y = 320
+        self.x = 4000
+        self.y = 1500
         self.size=[int(62*1.6),int(66*1.6)]
 
         #상태 관련
         self.state = "MARIO"
-        self.motion = "RIGHT_IDLE_02"
         self.frame = 0
         self.delay = 0
-        #self.offset = yoshi_offset[yoshi_state[self.state]][yoshi_motion[self.motion]]
 
         #이동 관련
         self.dir = [0, 0]
@@ -280,12 +304,9 @@ class Yoshi:
 
 
     def update(self):
-        #self.offset = yoshi_offset[yoshi_state[self.state]][yoshi_motion[self.motion]]
-        #if self.dir[X] == 1:
-
         self.sprite_update()
-        self.check_jump()
         self.calc_gravity()
+        self.calc_jump()
         self.move()
         self.check_camera()
 
@@ -307,10 +328,23 @@ class Yoshi:
             if self.y > stageState.image[stageState.selectStage].h - stageState.cameraSize[Y] // 2:
                 self.camera[Y] = stageState.cameraSize[Y] - (stageState.image[stageState.selectStage].h - self.y)
 
-    def change_motion(self, c_motion):
-        self.motion = c_motion
-        # self.delay = 0
-        # self.frame = 0
+ 
+    def calc_jump(self):
+        from play_state import stageState
+        for rect in stageState.largerBlock:
+            if self.myIntersectRect(rect.pos):
+                self.y = rect.pos.bottom - self.size[Y]-1
+                self.gravity = 0
+                rect.larger_block=True
+        for rect in stageState.footBlock:
+            if self.myIntersectRect(rect.pos):
+                self.y = rect.pos.bottom - self.size[Y]-1
+                self.gravity = 0
+        for rect in stageState.ceilingBlock:
+            if self.myIntersectRect(rect):
+                self.y = rect.bottom - self.size[Y]-2
+                self.gravity= 0
+        
 
     def calc_gravity(self):
         global GRAVITY
@@ -326,79 +360,42 @@ class Yoshi:
                     if self.myIntersectRect(rect.pos):
                         self.y = rect.pos.top
                         self.gravity = rect.jump_power
-                        if self.motion == "RIGHT_FALL" or self.motion == "RIGHT_JUMP":
-                            self.change_motion("RIGHT_JUMP")
-                        else:
-                            self.change_motion("LEFT_JUMP")
+
             for rect in stageState.groundRect:
                 if self.myIntersectRect(rect):
                     self.y = rect.top
                     self.gravity=-GRAVITY;
-                    if self.motion == "RIGHT_FALL" or self.motion == "LEFT_FALL":
+                    if self.cur_state==FALL:
                         self.check_fall()
             for rect in stageState.stairRect:
                 if self.myIntersectRect(rect):
                     self.y = rect.top
                     self.gravity = -GRAVITY;
-                    if self.motion == "RIGHT_FALL" or self.motion == "LEFT_FALL":
+                    if self.cur_state == FALL:
                         self.check_fall()
             for rect in stageState.largerBlock:
                 if self.myIntersectRect(rect.pos):
                     self.y = rect.pos.top
                     self.gravity = -GRAVITY
-                    if self.motion == "RIGHT_FALL" or self.motion == "LEFT_FALL":
+                    if self.cur_state == FALL:
                         self.check_fall()
             for rect in stageState.footBlock:
                 if self.myIntersectRect(rect.pos):
                     self.y = rect.pos.top
                     self.gravity = -GRAVITY;
-                    if self.motion == "RIGHT_FALL" or self.motion == "LEFT_FALL":
+                    if self.cur_state == FALL:
                         self.check_fall()
-        else:       #점프중일때
-            for rect in stageState.largerBlock:
-                if self.myIntersectRect(rect.pos):
-                    self.y = rect.pos.bottom - self.size[Y]-1
-                    self.gravity = 0
-                    rect.larger_block=True
-            for rect in stageState.footBlock:
-                if self.myIntersectRect(rect.pos):
-                    self.y = rect.pos.bottom - self.size[Y]-1
-                    self.gravity = 0
-            for rect in stageState.ceilingBlock:
-                if self.myIntersectRect(rect):
-                    self.y = rect.bottom - self.size[Y]-2
-                    self.gravity= 0
-            if self.gravity == 1:
-                if self.motion == "RIGHT_JUMP":
-                    self.motion = "RIGHT_FALL"
-                elif self.motion == "LEFT_JUMP":
-                    self.motion = "LEFT_FALL"
-
 
 
     def check_fall(self):
-        if self.motion == "RIGHT_FALL":
-            if self.dir[X] == 1:
-                self.change_motion("RIGHT_WALK")
-                self.cur_state.exit(self)
-                self.cur_state=WALK
-                self.cur_state.enter(self)
-            else:
-                self.change_motion("RIGHT_IDLE_01")
-                self.cur_state.exit(self)
-                self.cur_state = IDLE
-                self.cur_state.enter(self)
-        elif self.motion == "LEFT_FALL":
-            if self.dir[X] == -1:
-                self.change_motion("LEFT_WALK")
-                self.cur_state.exit(self)
-                self.cur_state = WALK
-                self.cur_state.enter(self)
-            else:
-                self.change_motion("LEFT_IDLE_01")
-                self.cur_state.exit(self)
-                self.cur_state = IDLE
-                self.cur_state.enter(self)
+        if self.dir[X] == 0:
+            self.cur_state.exit(self)
+            self.cur_state = IDLE
+            self.cur_state.enter(self)
+        else:
+            self.cur_state.exit(self)
+            self.cur_state = WALK
+            self.cur_state.enter(self)
 
 
     def myIntersectRect(self, rect ):
@@ -478,6 +475,7 @@ class Yoshi:
 
         if self.event_que:
             event = self.event_que.pop()
-            self.cur_state.exit(self)
-            self.cur_state = next_state[self.cur_state][event]
-            self.cur_state.enter(self,event)
+            if event in next_state[self.cur_state]:
+                self.cur_state.exit(self,event)
+                self.cur_state = next_state[self.cur_state][event]
+                self.cur_state.enter(self,event)

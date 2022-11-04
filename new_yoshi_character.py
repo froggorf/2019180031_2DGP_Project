@@ -12,6 +12,7 @@ jump_delay = 0
 
 #이벤트 정의
 WD,WU,AD,AU,SD,SU,DD,DU,SHIFTD,SHIFTU = range(10)
+key_down = [False for i in range(10)]
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_w): WD,
@@ -224,10 +225,11 @@ class FALL:
             )
 
 next_state = {
-    IDLE: {WD: JUMP, AD: WALK, AU: WALK, DD: WALK, DU: WALK},
-    WALK: {WD: JUMP, AD: IDLE, AU: IDLE, DD: IDLE, DU: IDLE, SHIFTD: RUN, SHIFTU: RUN},
-    RUN: {WD: JUMP, AD: IDLE, AU: IDLE, DD: IDLE, DU: IDLE, SHIFTD: WALK, SHIFTU: WALK},
-    JUMP: {AD:JUMP,AU:JUMP,DD:JUMP,DU:JUMP},
+    IDLE_01: {WD: JUMP, AD: WALK, AU: WALK, DD: WALK, DU: WALK},
+    IDLE_02: {WD: JUMP, AD: WALK, AU: WALK, DD: WALK, DU: WALK},
+    WALK: {WD: JUMP, AD: IDLE_01, AU: IDLE_01, DD: IDLE_01, DU: IDLE_01, SHIFTD: RUN, SHIFTU: RUN},
+    RUN: {WD: JUMP, AD: IDLE_01, AU: IDLE_01, DD: IDLE_01, DU: IDLE_01, SHIFTD: WALK, SHIFTU: WALK},
+    JUMP: {AD: JUMP, AU: JUMP, DD: JUMP, DU: JUMP},
     FALL: {AD: FALL, AU: FALL, DD: FALL, DU: FALL}
 }
 yoshi_delay = {IDLE_01:8,IDLE_02:10,WALK:8,RUN: 8,JUMP:0,FALL:0}
@@ -260,7 +262,7 @@ class Yoshi:
 
         # 상태 관련(리팩토링중)
         self.event_que = []
-        self.cur_state = IDLE
+        self.cur_state = IDLE_01
         self.face = LEFT
         self.cur_state.enter(self)
 
@@ -453,9 +455,33 @@ class Yoshi:
 
         if self.event_que:
             event = self.event_que.pop()
+            set_keydown(event)
             if event in next_state[self.cur_state]:
                 self.cur_state.exit(self, event)
                 self.cur_state = next_state[self.cur_state][event]
                 self.cur_state.enter(self, event)
+
+#TODO: 좋은 방법 생각나면 리팩토링 하기
+def set_keydown(event):
+    if event == WD:
+        key_down[WD]=True
+    elif event==WU:
+        key_down[WD] = False
+    elif event == AD:
+        key_down[AD] = True
+    elif event == AU:
+        key_down[AD] = False
+    elif event == SD:
+        key_down[SD] = True
+    elif event == SU:
+        key_down[SD] = False
+    elif event == DD:
+        key_down[DD] = True
+    elif event == DU:
+        key_down[DD] = False
+    elif event == SHIFTD:
+        key_down[SHIFTD] = True
+    elif event == SHIFTU:
+        key_down[SHIFTD] = False
 
 

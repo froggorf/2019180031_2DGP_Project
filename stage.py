@@ -22,6 +22,7 @@ class StageState:
         self.selectStage = 0
 
         #스테이지마다 다르게 갖는 변수
+        #맵 충돌체크 관련 변수들은 게임월드를 통한 관리 or 깔끔한 처리를 위한 리팩토링 진행 예정
         self.groundRect = [
             myRect(0,0,832,512),
             myRect(1024,0,1536,512),
@@ -32,10 +33,18 @@ class StageState:
             myRect(2880,940,3000,1100),
             myRect(3000,1060,3340,1080),
             myRect(3253,0,4044,530),
+            myRect(3250,0,3253,998),
+            myRect(3270,980,3385,1045),
             myRect(4042,0,4045,1150),
             myRect(3905,1272,3910,1345),
             myRect(4080,1282,4308,1334),
-            myRect(4290,1219,4798,1274)
+            myRect(4290,1219,4798,1274),
+            myRect(4749,1284,4755,1420),
+            myRect(4544,1600,4570,1727),
+            myRect(4787,1693,5307,1728),
+            myRect(5121,2735,5188,2890),
+            myRect(5260,1729,5317,2680),
+            myRect(5333,3262-404,6142,3262-381)
         ]
         self.stairRect = [
             myRect(830,0,880,528),
@@ -55,13 +64,20 @@ class StageState:
             myRect(2950,1120,3050, 1130),
             myRect(3976,1347,3990,1402),
             myRect(4028,1352,4035,1445),
-            myRect(4066,1347,4090,1402)
+            myRect(4066,1347,4090,1402),
+            myRect(4634,1685,4723,1780),
+            myRect(5204,3262-392,5299,3262-343)
         ]
         self.ceilingBlock = [
             myRect(2960,870,3000,1100),
             myRect(2880,920,3000,1100),
             myRect(3904, 1200, 4020, 1300),
-            myRect(4020,1150,4100,1250)
+            myRect(4020,1150,4100,1250),
+            myRect(4708,1419,4767,1503),
+            myRect(4647,1466,4705,1551),
+            myRect(4589,1532,4647,1614),
+            myRect(4552,1673,4609,1590),
+            myRect(5136,2660,5256,2783)
         ]
         self.footBlock = [
             FootBlock(1921, 3263 - 2494, 1921 + 62, 3263 - 2494 + 62),
@@ -78,7 +94,9 @@ class StageState:
             LargeBlock(3584,3263-2558,3584+62,3263-2558+62)
         ]
         self.jumpBlock =[
-            JumpBlock(500,508,500+62,508+62,101)
+            JumpBlock(500,508,500+62,508+62,101),
+            JumpBlock(4432,1275,4432+62,1275+62,75),
+            JumpBlock(4994,1720,4994+62,1720+62,115)
         ]
 
     #그리기 관련 함수
@@ -109,17 +127,17 @@ class StageState:
                 rect.draw(self.cameraPos[X], self.cameraPos[Y], self.cameraPos[X] + self.cameraSize[X],self.cameraPos[Y] + self.cameraSize[Y])
 
         #충돌체크 사각형 출력
-        for rect in self.groundRect:
-            if rect.myIntersectRect(self.cameraPos[X], self.cameraPos[Y], self.cameraPos[X] + self.cameraSize[X],self.cameraPos[Y] + self.cameraSize[Y]):
-                draw_rectangle(rect.left-self.cameraPos[X],rect.bottom-self.cameraPos[Y],rect.left-self.cameraPos[X]+rect.get_w(),rect.bottom-self.cameraPos[Y]+rect.get_h())
-
-        for rect in self.stairRect:
-            if rect.myIntersectRect(self.cameraPos[X], self.cameraPos[Y], self.cameraPos[X] + self.cameraSize[X],self.cameraPos[Y] + self.cameraSize[Y]):
-                draw_rectangle(rect.left - self.cameraPos[X], rect.bottom - self.cameraPos[Y],rect.left - self.cameraPos[X] + rect.get_w(),rect.bottom - self.cameraPos[Y] + rect.get_h())
-
-        for rect in self.ceilingBlock:
-            if rect.myIntersectRect(self.cameraPos[X], self.cameraPos[Y], self.cameraPos[X] + self.cameraSize[X],self.cameraPos[Y] + self.cameraSize[Y]):
-                draw_rectangle(rect.left - self.cameraPos[X], rect.bottom - self.cameraPos[Y],rect.left - self.cameraPos[X] + rect.get_w(),rect.bottom - self.cameraPos[Y] + rect.get_h())
+        # for rect in self.groundRect:
+        #     if rect.myIntersectRect(self.cameraPos[X], self.cameraPos[Y], self.cameraPos[X] + self.cameraSize[X],self.cameraPos[Y] + self.cameraSize[Y]):
+        #         draw_rectangle(rect.left-self.cameraPos[X],rect.bottom-self.cameraPos[Y],rect.left-self.cameraPos[X]+rect.get_w(),rect.bottom-self.cameraPos[Y]+rect.get_h())
+        #
+        # for rect in self.stairRect:
+        #     if rect.myIntersectRect(self.cameraPos[X], self.cameraPos[Y], self.cameraPos[X] + self.cameraSize[X],self.cameraPos[Y] + self.cameraSize[Y]):
+        #         draw_rectangle(rect.left - self.cameraPos[X], rect.bottom - self.cameraPos[Y],rect.left - self.cameraPos[X] + rect.get_w(),rect.bottom - self.cameraPos[Y] + rect.get_h())
+        #
+        # for rect in self.ceilingBlock:
+        #     if rect.myIntersectRect(self.cameraPos[X], self.cameraPos[Y], self.cameraPos[X] + self.cameraSize[X],self.cameraPos[Y] + self.cameraSize[Y]):
+        #         draw_rectangle(rect.left - self.cameraPos[X], rect.bottom - self.cameraPos[Y],rect.left - self.cameraPos[X] + rect.get_w(),rect.bottom - self.cameraPos[Y] + rect.get_h())
 
 
     #업데이트

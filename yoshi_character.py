@@ -202,7 +202,10 @@ class JUMP:
 
     def do(self):
         self.check_jump()
-
+        if self.gravity<0:
+            self.cur_state.exit(self)
+            self.cur_state = FALL
+            self.cur_state.enter(self)
         pass
 
     def draw(self):
@@ -287,7 +290,7 @@ class Yoshi:
     def __init__(self):
         self.image = [load_image("yoshi_mario.png")]
         # 위치 관련
-        self.x = 4000
+        self.x = 50
         self.y = 1500
         self.size = [int(62 * 1.6), int(66 * 1.6)]
 
@@ -384,6 +387,9 @@ class Yoshi:
                     if self.myIntersectRect(rect.pos):
                         self.y = rect.pos.top
                         self.gravity = rect.jump_power
+                        self.cur_state.exit(self)
+                        self.cur_state=JUMP
+                        self.cur_state.enter(self)
             for rect in stageState.groundRect:
                 if self.myIntersectRect(rect):
                     self.y = rect.top

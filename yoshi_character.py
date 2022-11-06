@@ -11,7 +11,7 @@ MAXJUMPTIME = 10
 jump_delay = 0
 
 #이벤트 정의
-WD,WU,AD,AU,SD,SU,DD,DU,SHIFTD,SHIFTU = range(10)
+WD,WU,AD,AU,SD,SU,DD,DU,SHIFTD,SHIFTU,GOTOFLY = range(11)
 key_down = [False for i in range(10)]
 
 key_event_table = {
@@ -195,8 +195,7 @@ class JUMP:
                 self.face= RIGHT
 
     def exit(self, event=None):
-        if event == WU:
-            self.pressJump = 0
+        self.pressJump = 0
 
         pass
 
@@ -246,8 +245,6 @@ class FALL:
             self.dir[X] += 1
             if key_down[DD] == True:
                 self.face= RIGHT
-        pass
-
     def exit(self, event=None):
         pass
 
@@ -274,16 +271,78 @@ class FALL:
                 self.camera[Y] + int(62 * 1.6) // 2
             )
 
+fly_gravity = [0,4,4,0,-4,-4,-2,2,10]
+class FLY:
+    def enter(self, event=None):
+        self.delay = 0
+        self.frame = 0
+        if event == GOTOFLY:
+            self.flytime = 0
+        if event == DD:
+            self.dir[X] += 1
+            self.face = RIGHT
+        elif event == AD:
+            self.dir[X] -= 1
+            self.face = LEFT
+        elif event == DU:
+            self.dir[X] -= 1
+            if key_down[AD] == True:
+                self.face = LEFT
+        elif event == AU:
+            self.dir[X] += 1
+            if key_down[DD] == True:
+                self.face = RIGHT
+        pass
+
+    def exit(self, event=None):
+        if event == WU:
+            self.flytime = 0
+            self.gravity = 0
+        pass
+
+    def do(self):
+        self.flytime = (self.flytime+1)
+        print(self.flytime)
+        if self.flytime == 90:
+            self.cur_state.exit(self)
+            self.cur_state = FALL
+            self.cur_state.enter(self)
+        else:
+            self.gravity = fly_gravity[self.flytime//10]
+        pass
+
+    def draw(self):
+        if self.face == RIGHT:
+            self.image[yoshi_state[self.state]].clip_draw(
+                int(62*1.6) * self.frame,
+                1280,
+                int(62*1.6),
+                int(68*1.6),
+                self.camera[X] + int(62*1.6) // 2,
+                self.camera[Y] + int(68*1.6) // 2
+            )
+        else:
+            self.image[yoshi_state[self.state]].clip_draw(
+                int(62*1.6) * self.frame,
+                1440,
+                int(62*1.6),
+                int(68*1.6),
+                self.camera[X] + int(62*1.6) // 2,
+                self.camera[Y] + int(68*1.6)// 2
+            )
+    pass
+
 next_state = {
     IDLE_01: {WD: JUMP, AD: WALK, AU: WALK, DD: WALK, DU: WALK},
     IDLE_02: {WD: JUMP, AD: WALK, AU: WALK, DD: WALK, DU: WALK},
     WALK: {WD: JUMP, AD: IDLE_01, AU: IDLE_01, DD: IDLE_01, DU: IDLE_01, SHIFTD: RUN, SHIFTU: WALK},
     RUN: {WD: JUMP, AD: IDLE_01, AU: IDLE_01, DD: IDLE_01, DU: IDLE_01, SHIFTD: WALK, SHIFTU: WALK},
     JUMP: {WD: JUMP, WU:FALL,AD: JUMP, AU: JUMP, DD: JUMP, DU: JUMP},
-    FALL: {AD: FALL, AU: FALL, DD: FALL, DU: FALL}
+    FALL: {AD: FALL, AU: FALL, DD: FALL, DU: FALL},
+    FLY: {WU: FALL, AD:FLY, AU: FLY, DD: FLY, DU:FLY}
 }
-yoshi_delay = {IDLE_01:8,IDLE_02:10,WALK:8,RUN: 8,JUMP:0,FALL:0}
-yoshi_motion_num = {IDLE_01:8,IDLE_02:5, WALK:8, RUN:2, JUMP:1, FALL:1}
+yoshi_delay = {IDLE_01:8,IDLE_02:10,WALK:8,RUN: 8,JUMP:0,FALL:0, FLY: 6}
+yoshi_motion_num = {IDLE_01:8,IDLE_02:5, WALK:8, RUN:2, JUMP:1, FALL:1, FLY: 8}
 
 
 class Yoshi:
@@ -307,8 +366,10 @@ class Yoshi:
         # 카메라 관련
         self.camera = [0, 0]
 
-        # 점프 관련
+        # 점프/날기 관련
         self.pressJump = False
+        self.flytime = 0
+
 
         # 상태 관련(리팩토링중)
         self.event_que = []
@@ -487,16 +548,16 @@ class Yoshi:
             if self.pressJump <=MAXJUMPTIME:
                 if jump_delay == 0:
                     if self.gravity==-GRAVITY: self.gravity+=GRAVITY*4
-                    else :self.gravity += GRAVITY*2
+                    else :
+                        self.gravity += GRAVITY*2
                     self.pressJump+=1
                 jump_delay = (jump_delay+1) % 3
             else:
-                self.pressJump=0
+                #self.pressJump=0
                 jump_delay=0
-
                 self.cur_state.exit(self)
-                self.cur_state= FALL
-                self.cur_state.enter(self)
+                self.cur_state= FLY
+                self.cur_state.enter(self,GOTOFLY)
 
     def add_event(self, event):
         self.event_que.insert(0, event)

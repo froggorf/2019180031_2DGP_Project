@@ -249,6 +249,13 @@ class FALL:
         pass
 
     def do(self):
+        if self.flytime <0 :
+            print(self.flytime)
+            self.flytime+=1
+        if self.flytime == 0 and key_down[WD]:
+            self.cur_state.exit(self)
+            self.cur_state = FLY
+            self.cur_state.enter(self,GOTOFLY)
         pass
 
     def draw(self):
@@ -271,6 +278,7 @@ class FALL:
                 self.camera[Y] + int(62 * 1.6) // 2
             )
 
+#TODO: FALL 중일때도 FLY로 넘어갈 수 있게 하기
 fly_gravity = [0,4,4,0,-4,-4,-2,2,10]
 class FLY:
     def enter(self, event=None):
@@ -296,7 +304,7 @@ class FLY:
 
     def exit(self, event=None):
         if event == WU:
-            self.flytime = 0
+            self.flytime = -50
             self.gravity = 0
         pass
 
@@ -304,7 +312,7 @@ class FLY:
         self.flytime = (self.flytime+1)
         print(self.flytime)
         if self.flytime == 90:
-            self.cur_state.exit(self)
+            self.cur_state.exit(self, WU)
             self.cur_state = FALL
             self.cur_state.enter(self)
         else:

@@ -11,7 +11,8 @@ quit_game = False
 gameMode = {"START":0, "SELECTSTAGE":1 ,"PLAYSTAGE":2}
 yoshi =None
 stageState = None
-
+pressA= None
+pressD = None
 def enter():
     global X,Y
     X = 0
@@ -25,7 +26,8 @@ def enter():
     stageState = stage.StageState()
     global quit_game
     quit_game=False
-    game_framework.push_state(start_state)
+    #TODO: 나중에 다시 키기
+    #game_framework.push_state(start_state)
 
 def exit():
     global X, Y
@@ -73,8 +75,21 @@ def on_quit_game():
     quit_game=True
 
 def resume():
+    if pressA and not pressD:
+        yoshi.cur_state.exit(yoshi)
+        yoshi.cur_state = yoshi_character.WALK
+        yoshi.dir[X] -= 1
+        yoshi.face = 0
+    elif pressD and not pressA:
+        yoshi.cur_state.exit(yoshi)
+        yoshi.cur_state = yoshi_character.WALK
+        yoshi.dir[X] += 1
+        yoshi.face = 1
+
     if quit_game == True:
         game_framework.pop_state()
+
+
 
 def pause():
     pass

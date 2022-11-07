@@ -21,7 +21,7 @@ class StageState:
         #스테이지 구분 관련
         self.selectStage = 0
 
-        #스테이지마다 다르게 갖는 변수
+        #TODO: 스테이지마다 다르게 갖도록
         #맵 충돌체크 관련 변수들은 게임월드를 통한 관리 or 깔끔한 처리를 위한 리팩토링 진행 예정
         self.groundRect = [
             myRect(0,0,832,512),
@@ -99,6 +99,7 @@ class StageState:
             JumpBlock(4994,1720,4994+62,1720+62,115)
         ]
 
+        self.finishLine = myRect(5747,2870,6139,3262)
     #그리기 관련 함수
     def draw(self, yoshi_x, yoshi_y):
         self.cameraPos[X] = yoshi_x - self.cameraSize[X]//2

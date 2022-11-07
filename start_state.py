@@ -12,7 +12,8 @@ def enter():
     time = 0
     play_state.yoshi.x = -60
     play_state.yoshi.y = 700
-
+    play_state.pressA= False
+    play_state.pressD=False
 def exit():
     global image, move, time
     del image
@@ -32,6 +33,17 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.pop_state()
+        elif event.key == SDLK_a:
+            if event.type == SDL_KEYDOWN:
+                play_state.pressA  =True
+            else:
+                play_state.pressA  =False
+        elif event.key == SDLK_d:
+            if event.type == SDL_KEYDOWN:
+                play_state.pressD = True
+            else:
+                play_state.pressD  =False
+
     pass
 
 def update():

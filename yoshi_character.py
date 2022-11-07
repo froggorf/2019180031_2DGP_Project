@@ -1,5 +1,7 @@
 from pico2d import *
 import random
+import game_framework
+import finish_state
 
 yoshi_state = {"MARIO": 0 , "NOMARIO":1, "MARIO_SWALLOW":2, "NOMARIO_SWALLOW":3}
 X = 0
@@ -355,8 +357,8 @@ class Yoshi:
     def __init__(self):
         self.image = [load_image("yoshi_mario.png")]
         # 위치 관련
-        self.x = 50
-        self.y = 1500
+        self.x = 5200
+        self.y = 3000
         self.size = [int(62 * 1.6), int(66 * 1.6)]
 
         # 상태 관련
@@ -410,6 +412,9 @@ class Yoshi:
         self.calc_gravity()
         self.check_block()
         self.move()
+
+
+        self.check_finish()
 
 
     def check_camera(self):
@@ -565,6 +570,11 @@ class Yoshi:
                 self.cur_state= FLY
                 self.cur_state.enter(self,GOTOFLY)
 
+    def check_finish(self):
+        from play_state import stageState
+        if self.myIntersectRect(stageState.finishLine):
+            self.cur_state= WALK
+            game_framework.push_state(finish_state)
     def add_event(self, event):
         self.event_que.insert(0, event)
 

@@ -3,6 +3,7 @@ from pico2d import *
 import yoshi_character
 import stage
 import pause_state
+import start_state
 
 X = 0
 Y = 1
@@ -24,6 +25,7 @@ def enter():
     stageState = stage.StageState()
     global quit_game
     quit_game=False
+    game_framework.push_state(start_state)
 
 def exit():
     global X, Y
@@ -80,80 +82,5 @@ def pause():
 def handle_yoshi(event):
     yoshi.handle_event(event)
 
-
-    #A/a 키
-    # if event.key == SDLK_a:
-    #     if event.type == SDL_KEYDOWN:
-    #         if yoshi.motion != "RIGHT_WALK" and yoshi.motion != "RIGHT_RUN":
-    #             #if yoshi.motion != "LEFT_WALK":
-    #
-    #             #yoshi.dir[X] -= 1
-    #             stageState.dir[X] -= 1
-    #             if yoshi.motion == "RIGHT_JUMP" or yoshi.motion=="LEFT_JUMP":
-    #                 yoshi.change_motion("LEFT_JUMP")
-    #             elif yoshi.motion == "RIGHT_FALL" or yoshi.motion == "LEFT_FALL":
-    #                 yoshi.change_motion("LEFT_FALL")
-    #             else:
-    #                 yoshi.change_motion("LEFT_WALK")
-    #     else:
-    #         #yoshi.dir[X] += 1
-    #         stageState.dir[X] += 1
-    #         if yoshi.motion != "RIGHT_JUMP" and yoshi.motion != "LEFT_JUMP" and yoshi.motion!="RIGHT_FALL" and yoshi.motion!="LEFT_FALL":
-    #             yoshi.change_motion("LEFT_IDLE_01")
-    #
-    # #D/d 키
-    # if event.key == SDLK_d:
-    #     if event.type == SDL_KEYDOWN:
-    #         if yoshi.motion != "LEFT_WALK" and yoshi.motion != "LEFT_RUN":
-    #
-    #             #yoshi.dir[X] += 1
-    #             stageState.dir[X] += 1
-    #             if yoshi.motion == "RIGHT_JUMP" or yoshi.motion=="LEFT_JUMP":
-    #                 yoshi.change_motion("RIGHT_JUMP")
-    #             elif yoshi.motion == "RIGHT_FALL" or yoshi.motion == "LEFT_FALL":
-    #                 yoshi.change_motion("RIGHT_FALL")
-    #             else:
-    #                 yoshi.change_motion("RIGHT_WALK")
-    #     else:
-    #         pressD = False
-    #         #yoshi.dir[X] -= 1
-    #         stageState.dir[X] -= 1
-    #         if yoshi.motion != "RIGHT_JUMP" and yoshi.motion != "LEFT_JUMP" and yoshi.motion!="RIGHT_FALL" and yoshi.motion!="LEFT_FALL":
-    #             yoshi.change_motion("RIGHT_IDLE_01")
-    # #W/w 키
-    # if event.key == SDLK_w:
-    #     if event.type == SDL_KEYDOWN:
-    #         if yoshi.motion != "RIGHT_FALL" and yoshi.motion!="LEFT_FALL" and yoshi.motion!="LEFT_JUMP" and yoshi.motion!="RIGHT_JUMP":
-    #             yoshi.gravity+=yoshi_character.GRAVITY*4
-    #             yoshi.pressJump += 1
-    #             if yoshi.motion == "RIGHT_IDLE_01" or yoshi.motion == "RIGHT_IDLE_02" or yoshi.motion == "RIGHT_WALK" or yoshi.motion == "RIGHT_RUN" or yoshi.motion == "RIGHT_JUMP":
-    #                 yoshi.change_motion("RIGHT_JUMP")
-    #             else:
-    #                 yoshi.change_motion("LEFT_JUMP")
-    #     else:
-    #         yoshi.pressJump = 0
-    #         if yoshi.motion == "RIGHT_IDLE_01" or yoshi.motion == "RIGHT_IDLE_02" or yoshi.motion == "RIGHT_WALK" or yoshi.motion == "RIGHT_RUN" or yoshi.motion == "RIGHT_JUMP" or yoshi.motion == "RIGHT_FALL":
-    #             yoshi.change_motion("RIGHT_FALL")
-    #         else:
-    #             yoshi.change_motion("LEFT_FALL")
-    # #S/s 키
-    # if event.key == SDLK_s:
-    #     if event.type == SDL_KEYDOWN:
-    #         pass
-    #     else:
-    #         pass
-    # #SHIFT 키
-    # if event.key == SDLK_LSHIFT:
-    #     if event.type == SDL_KEYDOWN:
-    #         if yoshi.motion == "LEFT_WALK":
-    #             yoshi.change_motion("LEFT_RUN")
-    #         elif yoshi.motion == "RIGHT_WALK":
-    #             yoshi.change_motion("RIGHT_RUN")
-    #     else:
-    #         if yoshi.motion == "LEFT_RUN":
-    #             yoshi.change_motion("LEFT_WALK")
-    #         elif yoshi.motion == "RIGHT_RUN":
-    #             yoshi.change_motion("RIGHT_WALK")
     if event.key == SDLK_F1:
-        print('aa')
         yoshi.y += 500

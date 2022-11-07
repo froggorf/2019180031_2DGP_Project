@@ -300,7 +300,6 @@ class FLY:
             self.dir[X] += 1
             if key_down[DD] == True:
                 self.face = RIGHT
-        pass
 
     def exit(self, event=None):
         if event == WU:
@@ -338,7 +337,6 @@ class FLY:
                 self.camera[X] + int(62*1.6) // 2,
                 self.camera[Y] + int(68*1.6)// 2
             )
-    pass
 
 next_state = {
     IDLE_01: {WD: JUMP, AD: WALK, AU: WALK, DD: WALK, DU: WALK},
@@ -381,8 +379,8 @@ class Yoshi:
 
         # 상태 관련(리팩토링중)
         self.event_que = []
-        self.cur_state = IDLE_01
-        self.face = LEFT
+        self.cur_state = FALL
+        self.face = RIGHT
         self.cur_state.enter(self)
 
     def sprite_update(self):
@@ -402,6 +400,7 @@ class Yoshi:
             self.delay += 1
 
     def draw(self):
+        self.check_camera()
         self.cur_state.draw(self)
 
     def update(self):
@@ -411,7 +410,6 @@ class Yoshi:
         self.calc_gravity()
         self.check_block()
         self.move()
-        self.check_camera()
 
 
     def check_camera(self):

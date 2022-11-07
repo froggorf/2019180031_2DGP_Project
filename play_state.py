@@ -27,7 +27,7 @@ def enter():
     global quit_game
     quit_game=False
     #TODO: 나중에 다시 키기
-    #game_framework.push_state(start_state)
+    game_framework.push_state(start_state)
 
 def exit():
     global X, Y

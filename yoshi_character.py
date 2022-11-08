@@ -177,7 +177,7 @@ class JUMP:
     def enter(self, event=None):
         self.delay = 0
         self.frame = 0
-        if event == WD:
+        if event == WD and self.gravity < 10:
             self.gravity += GRAVITY*5
             self.pressJump += 1
 
@@ -248,6 +248,7 @@ class FALL:
             if key_down[DD] == True:
                 self.face= RIGHT
     def exit(self, event=None):
+        self.pressJump = 0
         pass
 
     def do(self):
@@ -436,7 +437,7 @@ class Yoshi:
     def check_block(self):#TODO: 점프중에만 적용되도록 설정
         from play_state import stageState
         #TODO: 나중에 game_world 에 넣어서 한번에 꺼내쓸수 있도록 해보기
-        if self.gravity>=0:
+        if self.gravity>=0 or self.cur_state == FLY:
             for rect in stageState.largerBlock:
                 if self.myIntersectRect(rect.pos):
                     self.y = rect.pos.bottom - self.size[Y] - 1
@@ -459,6 +460,7 @@ class Yoshi:
                     if self.myIntersectRect(rect.pos):
                         self.y = rect.pos.top
                         self.gravity = rect.jump_power
+                        self.pressJump = MAXJUMPTIME
                         self.cur_state.exit(self)
                         self.cur_state=JUMP
                         self.cur_state.enter(self)
@@ -500,12 +502,13 @@ class Yoshi:
             self.cur_state.exit(self)
             self.cur_state = IDLE_01
             self.cur_state.enter(self)
-        elif key_down[AD] or key_down[DD]:
+        elif key_down[AD] or key_down[DD] or self.dir[X] != 0:
             self.cur_state.exit(self)
             self.cur_state = WALK
             self.cur_state.enter(self)
         else:
             print('Error - 일어날 수 없음')
+
 
     def myIntersectRect(self, rect ):
         if rect.left == -1: return

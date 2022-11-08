@@ -8,6 +8,7 @@ icon_size = None
 playable_stage = None
 icon_pos = None
 X,Y = None,None
+select_stage = None
 
 def enter():
     global select_stage_image, icon_image
@@ -15,17 +16,19 @@ def enter():
     global playable_stage
     global icon_pos
     global X,Y
+    global select_stage
     select_stage_image = load_image('stage_select.png')
     icon_image = load_image('stage_icon.png')
     icon_size=[110,120]
     playable_stage = 1
     icon_pos = [[],[50,186],[240,186], [431,186],[625,186]]
     X,Y = 0,1
+    select_stage = 0
 
 
 def exit():
     global select_stage_image, icon_image, icon_size
-    global playable_stage, icon_pos, X,Y
+    global playable_stage, icon_pos, X,Y, select_stage
     del select_stage_image
     del icon_image
     del icon_size
@@ -33,6 +36,7 @@ def exit():
     del icon_pos
     del X
     del Y
+    del select_stage
 
 
 
@@ -55,6 +59,7 @@ def handle_events():
         #elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
             #game_framework.push_state(play_state)
         elif event.type==SDL_KEYDOWN and event.key == SDLK_1:
+            select_stage = 0
             game_framework.push_state(play_state)
 
 

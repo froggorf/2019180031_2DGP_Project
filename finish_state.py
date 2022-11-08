@@ -45,7 +45,6 @@ def update():
             forward = True
     play_state.yoshi.x += 3
     if play_state.yoshi.x > 6140:
-        print('???')
         play_state.on_quit_game()
         stage_select_state.playable_stage += 1
         if stage_select_state.playable_stage > 4: stage_select_state.playable_stage=4

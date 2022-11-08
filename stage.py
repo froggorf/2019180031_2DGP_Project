@@ -1,5 +1,6 @@
 from pico2d import *
 import yoshi_character
+import stage_select_state
 X = 0
 Y = 1
 
@@ -11,15 +12,17 @@ class StageState:
         #카메라(화면출력) 관련
         self.cameraPos = [0,0]
         #from main import width, height
-        self.cameraSize = [1200,975]
+        self.cameraSize = [get_canvas_width(),get_canvas_height()]
         self.dir = [0,0]
         self.cameraSpeed = 5
 
         #이미지 관련
         self.image = [load_image("stage1_1.png")]
+        self.background_image = [load_image("stage1_background.png")]
 
         #스테이지 구분 관련
-        self.selectStage = 0
+        self.selectStage = stage_select_state.select_stage
+
 
         #TODO: 스테이지마다 다르게 갖도록
         #맵 충돌체크 관련 변수들은 게임월드를 통한 관리 or 깔끔한 처리를 위한 리팩토링 진행 예정
@@ -102,12 +105,36 @@ class StageState:
         self.finishLine = myRect(5747,2870,6139,3262)
     #그리기 관련 함수
     def draw(self, yoshi_x, yoshi_y):
-        self.cameraPos[X] = yoshi_x - self.cameraSize[X]//2
-        self.cameraPos[Y] = yoshi_y - self.cameraSize[Y]//2
-        if self.cameraPos[X] <0: self.cameraPos[X] = 0
-        if self.cameraPos[Y] <0 : self.cameraPos[Y]=0
-        if self.cameraPos[X]+self.cameraSize[X] > self.image[self.selectStage].w : self.cameraPos[X] = self.image[self.selectStage].w - self.cameraSize[X]
-        if self.cameraPos[Y] + self.cameraSize[Y] > self.image[self.selectStage].h:self.cameraPos[Y] = self.image[self.selectStage].h - self.cameraSize[Y]
+        self.cameraPos[X] = yoshi_x - self.cameraSize[X] // 2
+        self.cameraPos[Y] = yoshi_y - self.cameraSize[Y] // 2
+        backgroundPos_x = self.cameraPos[X] / self.image[self.selectStage].w * self.background_image[self.selectStage].w
+        backgroundPos_y = self.cameraPos[Y] / self.image[self.selectStage].h * self.background_image[self.selectStage].h
+        backgroundPos_x = int(backgroundPos_x)
+        backgroundPos_y = int(backgroundPos_y)
+        if self.cameraPos[X] < 0: self.cameraPos[X] = 0
+        if self.cameraPos[Y] < 0: self.cameraPos[Y] = 0
+        if self.cameraPos[X] + self.cameraSize[X] > self.image[self.selectStage].w: self.cameraPos[X] = self.image[self.selectStage].w - self.cameraSize[X]
+        if self.cameraPos[Y] + self.cameraSize[Y] > self.image[self.selectStage].h: self.cameraPos[Y] = self.image[self.selectStage].h - self.cameraSize[Y]
+
+        if backgroundPos_x < 0 : backgroundPos_x = 0
+        if backgroundPos_y < 0: backgroundPos_y = 0
+        if backgroundPos_x + self.cameraSize[X] > self.background_image[self.selectStage].w : backgroundPos_x = self.background_image[self.selectStage].w - self.cameraSize[X]
+        if backgroundPos_y + self.cameraSize[Y] > self.background_image[self.selectStage].h: backgroundPos_y = self.background_image[self.selectStage].h - self.cameraSize[Y]
+
+        #백그라운드 맵 그리기
+        self.background_image[self.selectStage].clip_draw(
+            backgroundPos_x,
+            backgroundPos_y,
+            self.cameraSize[X],
+            self.cameraSize[Y],
+            self.cameraSize[X]//2,
+            self.cameraSize[Y]//2
+        )
+
+
+
+        #지형 맵 그리기
+
         self.image[self.selectStage].clip_draw(
             self.cameraPos[X],
             self.cameraPos[Y],

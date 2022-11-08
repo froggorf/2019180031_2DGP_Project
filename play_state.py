@@ -20,6 +20,7 @@ def enter():
     global pressA, pressD
     pressA = False
     pressD = False
+
     global gameMode, yoshi, stageState
     gameMode = {"START": 0, "SELECTSTAGE": 1, "PLAYSTAGE": 2}
     yoshi = yoshi_character.Yoshi()

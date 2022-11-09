@@ -4,6 +4,7 @@ import yoshi_character
 import stage
 import pause_state
 import start_state
+import enemy
 
 X = 0
 Y = 1
@@ -11,6 +12,7 @@ quit_game = False
 gameMode = {"START":0, "SELECTSTAGE":1 ,"PLAYSTAGE":2}
 yoshi =None
 stageState = None
+enemies = None
 pressA= None
 pressD = None
 def enter():
@@ -21,9 +23,10 @@ def enter():
     pressA = False
     pressD = False
 
-    global gameMode, yoshi, stageState
+    global gameMode, yoshi, stageState, enemies
     gameMode = {"START": 0, "SELECTSTAGE": 1, "PLAYSTAGE": 2}
     yoshi = yoshi_character.Yoshi()
+    enemies = enemy.Flower(400,700)
     stageState = stage.StageState()
     global quit_game
     quit_game=False
@@ -37,26 +40,30 @@ def exit():
     global pressA, pressD
     del pressA
     del pressD
-    global gameMode, yoshi, stageState
+    global gameMode, yoshi, stageState, enemies
     del gameMode
     del yoshi
     del stageState
+    del enemies
     global quit_game
     del quit_game
 
 def update():
     yoshi.update()
+    enemies.update()
     stageState.update()
 
 def draw_world():
     stageState.draw(yoshi.x, yoshi.y)
     yoshi.draw()
+    enemies.draw()
 
 
 def draw():
     clear_canvas()
     stageState.draw(yoshi.x,yoshi.y)
     yoshi.draw()
+    enemies.draw()
     # for rect in stageState.groundRect:
     #     pico2d.draw_rectangle(rect.left,rect.bottom, rect.right,rect.top)
     update_canvas()

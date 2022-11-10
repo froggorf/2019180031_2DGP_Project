@@ -255,6 +255,7 @@ class FALL:
         if self.flytime <0 :
             print(self.flytime)
             self.flytime+=1
+
         if self.flytime == 0 and key_down[WD]:
             self.cur_state.exit(self)
             self.cur_state = FLY
@@ -306,7 +307,7 @@ class FLY:
 
     def exit(self, event=None):
         if event == WU:
-            self.flytime = -50
+            self.flytime = -35
             self.gravity = 0
         pass
 
@@ -356,7 +357,7 @@ yoshi_motion_num = {IDLE_01:8,IDLE_02:5, WALK:8, RUN:2, JUMP:1, FALL:1, FLY: 8}
 
 class Yoshi:
     def __init__(self):
-        self.image = [load_image("yoshi_mario.png")]
+        self.image = [load_image("yoshi_mario.png"),load_image("test.png")]
         # 위치 관련
         self.x = 5200
         self.y = 3000
@@ -413,6 +414,9 @@ class Yoshi:
         self.calc_gravity()
         self.check_block()
         self.move()
+
+        #TODO: 나중에 game_world만들고 충돌체크 처리하기
+        self.collide_enemy()
 
 
         self.check_finish()
@@ -494,6 +498,11 @@ class Yoshi:
         self.y += self.gravity
         self.gravity -= GRAVITY
         if self.gravity < -GRAVITY * 3:
+            if self.cur_state != FALL and self.cur_state!= FLY:
+                self.cur_state.exit(self)
+                self.flytime = 0
+                self.cur_state = FALL
+                self.cur_state.enter(self)
             self.gravity = -GRAVITY * 3
 
 
@@ -573,6 +582,12 @@ class Yoshi:
                 self.cur_state= FLY
                 self.cur_state.enter(self,GOTOFLY)
 
+    def collide_enemy(self):
+        from play_state import enemies
+        from stage import myRect
+        a = myRect(enemies.x, enemies.y, enemies.x+60,enemies.y+80)
+        if self.myIntersectRect(a):
+            self.state = "NOMARIO"
     def check_finish(self):
         from play_state import stageState
         if self.myIntersectRect(stageState.finishLine):

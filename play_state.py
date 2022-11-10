@@ -15,6 +15,7 @@ stageState = None
 enemies = None
 pressA= None
 pressD = None
+
 def enter():
     global X,Y
     X = 0
@@ -56,16 +57,15 @@ def update():
 def draw_world():
     stageState.draw(yoshi.x, yoshi.y)
     yoshi.draw()
-    enemies.draw()
+    enemies.draw(*stageState.get_camera())
 
 
 def draw():
     clear_canvas()
     stageState.draw(yoshi.x,yoshi.y)
     yoshi.draw()
-    enemies.draw()
-    # for rect in stageState.groundRect:
-    #     pico2d.draw_rectangle(rect.left,rect.bottom, rect.right,rect.top)
+    enemies.draw(*stageState.get_camera())
+
     update_canvas()
     delay(0.01)
 

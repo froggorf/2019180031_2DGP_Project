@@ -4,9 +4,6 @@ import stage_select_state
 X = 0
 Y = 1
 
-
-
-
 class StageState:
     def __init__(self):
         #카메라(화면출력) 관련
@@ -171,7 +168,6 @@ class StageState:
     #업데이트
     def update(self):
         self.check_larger_block()
-        pass
 
     def cameraMove(self):
         self.cameraPos[X] += self.dir[X]*self.cameraSpeed
@@ -185,6 +181,9 @@ class StageState:
         for rect in self.largerBlock:
             rect.large_block()
 
+    def get_camera(self):
+        return self.cameraPos[X], self.cameraPos[Y], self.cameraPos[X]+self.cameraSize[X], self.cameraPos[Y]+self.cameraSize[Y]
+
 
 
 class myRect:
@@ -193,7 +192,6 @@ class myRect:
         self.bottom = g_bottom
         self.right = g_right
         self.top = g_top
-
 
     def printRect(self):
         print(self.left, " ",self.right)

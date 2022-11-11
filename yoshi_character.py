@@ -43,24 +43,45 @@ class IDLE_01:
         pass
 
     def draw(self):
-        if self.face == RIGHT: #RIGHT
-            self.image[yoshi_state[self.state]].clip_draw(
-                int(62*1.6) * self.frame,
-                0,
-                int(62*1.6),
-                int(66*1.6),
-                self.camera[X] + int(62*1.6) // 2,
-                self.camera[Y] + int(66*1.6) // 2
-            )
-        else:
-            self.image[yoshi_state[self.state]].clip_draw(
-                int(62*1.6) * self.frame,
-                160,
-                int(62 * 1.6),
-                int(66 * 1.6),
-                self.camera[X] + int(62*1.6) // 2,
-                self.camera[Y] + int(66*1.6) // 2
-            )
+        if self.state == "MARIO":
+            if self.face == RIGHT: #RIGHT
+                self.image[yoshi_state[self.state]].clip_draw(
+                    int(62*1.6) * self.frame,
+                    0,
+                    int(62*1.6),
+                    int(66*1.6),
+                    self.camera[X] + int(62*1.6) // 2,
+                    self.camera[Y] + int(66*1.6) // 2
+                )
+            else:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    int(62*1.6) * self.frame,
+                    160,
+                    int(62 * 1.6),
+                    int(66 * 1.6),
+                    self.camera[X] + int(62*1.6) // 2,
+                    self.camera[Y] + int(66*1.6) // 2
+                )
+        elif self.state == "NOMARIO":
+            if self.face == RIGHT:  # RIGHT
+                self.image[yoshi_state[self.state]].clip_draw(
+                    int(54 * 1.6) * self.frame,
+                    0,
+                    int(54 * 1.6),
+                    int(64 * 1.6),
+                    self.camera[X] + int(54 * 1.6) // 2,
+                    self.camera[Y] + int(64 * 1.6) // 2
+                )
+            else:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    int(54 * 1.6) * self.frame,
+                    160,
+                    int(54 * 1.6),
+                    int(64 * 1.6),
+                    self.camera[X] + int(54 * 1.6) // 2,
+                    self.camera[Y] + int(64 * 1.6) // 2
+                )
+
 
 class IDLE_02:
     def enter(self, event=None):
@@ -76,24 +97,44 @@ class IDLE_02:
         pass
 
     def draw(self):
-        if self.face == RIGHT: #RIGHT
-            self.image[yoshi_state[self.state]].clip_draw(
-                int(62*1.6) * self.frame,
-                320,
-                int(62*1.6),
-                int(66*1.6),
-                self.camera[X] + int(62*1.6) // 2,
-                self.camera[Y] + int(66*1.6) // 2
-            )
-        else:
-            self.image[yoshi_state[self.state]].clip_draw(
-                int(62*1.6) * self.frame,
-                480,
-                int(62 * 1.6),
-                int(66 * 1.6),
-                self.camera[X] + int(62*1.6) // 2,
-                self.camera[Y] + int(66*1.6) // 2
-            )
+        if self.state == "MARIO":
+            if self.face == RIGHT:  # RIGHT
+                self.image[yoshi_state[self.state]].clip_draw(
+                    int(62 * 1.6) * self.frame,
+                    320,
+                    int(62 * 1.6),
+                    int(66 * 1.6),
+                    self.camera[X] + int(62 * 1.6) // 2,
+                    self.camera[Y] + int(66 * 1.6) // 2
+                )
+            else:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    int(62 * 1.6) * self.frame,
+                    480,
+                    int(62 * 1.6),
+                    int(66 * 1.6),
+                    self.camera[X] + int(62 * 1.6) // 2,
+                    self.camera[Y] + int(66 * 1.6) // 2
+                )
+        elif self.state == "NOMARIO":
+            if self.face == RIGHT:  # RIGHT
+                self.image[yoshi_state[self.state]].clip_draw(
+                    int(42 * 1.6) * self.frame,
+                    320,
+                    int(42 * 1.6),
+                    int(60 * 1.6),
+                    self.camera[X] + int(42 * 1.6) // 2,
+                    self.camera[Y] + int(60 * 1.6) // 2
+                )
+            else:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    int(42 * 1.6) * self.frame,
+                    480,
+                    int(42 * 1.6),
+                    int(60 * 1.6),
+                    self.camera[X] + int(42 * 1.6) // 2,
+                    self.camera[Y] + int(60 * 1.6) // 2
+                )
 
 class WALK:
     def enter(self, event=None):
@@ -121,24 +162,44 @@ class WALK:
         pass
 
     def draw(self):
-        if self.face == RIGHT:
-            self.image[yoshi_state[self.state]].clip_draw(
-                int(64*1.6) * self.frame,
-                640,
-                int(64*1.6),
-                int(66*1.6),
-                self.camera[X] + int(64*1.6) // 2,
-                self.camera[Y] + int(66*1.6) // 2
-            )
-        else:
-            self.image[yoshi_state[self.state]].clip_draw(
-                int(64*1.6)*self.frame,
-                800,
-                int(64*1.6),
-                int(66*1.6),
-                self.camera[X] + int(64*1.6) // 2,
-                self.camera[Y] + int(66*1.6) // 2
-            )
+        if self.state == "MARIO":
+            if self.face == RIGHT:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    int(64 * 1.6) * self.frame,
+                    640,
+                    int(64 * 1.6),
+                    int(66 * 1.6),
+                    self.camera[X] + int(64 * 1.6) // 2,
+                    self.camera[Y] + int(66 * 1.6) // 2
+                )
+            else:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    int(64 * 1.6) * self.frame,
+                    800,
+                    int(64 * 1.6),
+                    int(66 * 1.6),
+                    self.camera[X] + int(64 * 1.6) // 2,
+                    self.camera[Y] + int(66 * 1.6) // 2
+                )
+        elif self.state == "NOMARIO":
+            if self.face == RIGHT:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    int(52 * 1.6) * self.frame,
+                    640,
+                    int(52 * 1.6),
+                    int(62 * 1.6),
+                    self.camera[X] + int(52 * 1.6) // 2,
+                    self.camera[Y] + int(62 * 1.6) // 2
+                )
+            else:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    int(52 * 1.6) * self.frame,
+                    800,
+                    int(52 * 1.6),
+                    int(62 * 1.6),
+                    self.camera[X] + int(52 * 1.6) // 2,
+                    self.camera[Y] + int(62 * 1.6) // 2
+                )
 
 class RUN:
     def enter(self, event=None):
@@ -154,24 +215,44 @@ class RUN:
         pass
 
     def draw(self):
-        if self.face == RIGHT:
-            self.image[yoshi_state[self.state]].clip_draw(
-                int(72*1.6) * self.frame,
-                960,
-                int(72*1.6),
-                int(68*1.6),
-                self.camera[X] + int(72*1.6) // 2,
-                self.camera[Y] + int(68*1.6) // 2
-            )
-        else:
-            self.image[yoshi_state[self.state]].clip_draw(
-                int(72*1.6) * self.frame,
-                1120,
-                int(72*1.6),
-                int(68*1.6),
-                self.camera[X] + int(72*1.6) // 2,
-                self.camera[Y] + int(68*1.6)// 2
-            )
+        if self.state == "MARIO":
+            if self.face == RIGHT:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    int(72 * 1.6) * self.frame,
+                    960,
+                    int(72 * 1.6),
+                    int(68 * 1.6),
+                    self.camera[X] + int(72 * 1.6) // 2,
+                    self.camera[Y] + int(68 * 1.6) // 2
+                )
+            else:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    int(72 * 1.6) * self.frame,
+                    1120,
+                    int(72 * 1.6),
+                    int(68 * 1.6),
+                    self.camera[X] + int(72 * 1.6) // 2,
+                    self.camera[Y] + int(68 * 1.6) // 2
+                )
+        elif self.state == "NOMARIO":
+            if self.face == RIGHT:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    int(72 * 1.6) * self.frame,
+                    960,
+                    int(72 * 1.6),
+                    int(52 * 1.6),
+                    self.camera[X] + int(72 * 1.6) // 2,
+                    self.camera[Y] + int(52 * 1.6) // 2
+                )
+            else:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    int(72 * 1.6) * self.frame,
+                    1120,
+                    int(72 * 1.6),
+                    int(52 * 1.6),
+                    self.camera[X] + int(72 * 1.6) // 2,
+                    self.camera[Y] + int(52 * 1.6) // 2
+                )
 
 class JUMP:
     def enter(self, event=None):
@@ -210,24 +291,44 @@ class JUMP:
         pass
 
     def draw(self):
-        if self.face == RIGHT:
-            self.image[yoshi_state[self.state]].clip_draw(
-                0,
-                1600,
-                int(60*1.6),
-                int(72*1.6),
-                self.camera[X] + int(60*1.6) // 2,
-                self.camera[Y] + int(72*1.6) // 2
-            )
-        else:
-            self.image[yoshi_state[self.state]].clip_draw(
-                0,
-                1760,
-                int(60 * 1.6),
-                int(72 * 1.6),
-                self.camera[X] + int(60 * 1.6) // 2,
-                self.camera[Y] + int(72 * 1.6) // 2
-            )
+        if self.state == "MARIO":
+            if self.face == RIGHT:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    0,
+                    1600,
+                    int(60 * 1.6),
+                    int(72 * 1.6),
+                    self.camera[X] + int(60 * 1.6) // 2,
+                    self.camera[Y] + int(72 * 1.6) // 2
+                )
+            else:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    0,
+                    1760,
+                    int(60 * 1.6),
+                    int(72 * 1.6),
+                    self.camera[X] + int(60 * 1.6) // 2,
+                    self.camera[Y] + int(72 * 1.6) // 2
+                )
+        elif self.state == "NOMARIO":
+            if self.face == RIGHT:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    0,
+                    1600,
+                    int(50 * 1.6),
+                    int(66 * 1.6),
+                    self.camera[X] + int(50 * 1.6) // 2,
+                    self.camera[Y] + int(66 * 1.6) // 2
+                )
+            else:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    0,
+                    1760,
+                    int(50 * 1.6),
+                    int(66 * 1.6),
+                    self.camera[X] + int(50 * 1.6) // 2,
+                    self.camera[Y] + int(66 * 1.6) // 2
+                )
 
 class FALL:
     def enter(self, event=None):
@@ -263,24 +364,44 @@ class FALL:
         pass
 
     def draw(self):
-        if self.face == RIGHT:
-            self.image[yoshi_state[self.state]].clip_draw(
-                0,
-                1920,
-                int(58*1.6),
-                int(62*1.6),
-                self.camera[X] + int(58*1.6) // 2,
-                self.camera[Y] + int(62*1.6) // 2
-            )
-        else:
-            self.image[yoshi_state[self.state]].clip_draw(
-                0,
-                2080,
-                int(58 * 1.6),
-                int(62 * 1.6),
-                self.camera[X] + int(58 * 1.6) // 2,
-                self.camera[Y] + int(62 * 1.6) // 2
-            )
+        if self.state == "MARIO":
+            if self.face == RIGHT:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    0,
+                    1920,
+                    int(58 * 1.6),
+                    int(62 * 1.6),
+                    self.camera[X] + int(58 * 1.6) // 2,
+                    self.camera[Y] + int(62 * 1.6) // 2
+                )
+            else:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    0,
+                    2080,
+                    int(58 * 1.6),
+                    int(62 * 1.6),
+                    self.camera[X] + int(58 * 1.6) // 2,
+                    self.camera[Y] + int(62 * 1.6) // 2
+                )
+        elif self.state == "NOMARIO":
+            if self.face == RIGHT:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    0,
+                    1920,
+                    int(46 * 1.6),
+                    int(60 * 1.6),
+                    self.camera[X] + int(46 * 1.6) // 2,
+                    self.camera[Y] + int(60 * 1.6) // 2
+                )
+            else:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    0,
+                    2080,
+                    int(46 * 1.6),
+                    int(60 * 1.6),
+                    self.camera[X] + int(46 * 1.6) // 2,
+                    self.camera[Y] + int(60 * 1.6) // 2
+                )
 
 #TODO: FALL 중일때도 FLY로 넘어갈 수 있게 하기
 fly_gravity = [0,4,4,0,-4,-4,-2,2,10]
@@ -323,24 +444,44 @@ class FLY:
         pass
 
     def draw(self):
-        if self.face == RIGHT:
-            self.image[yoshi_state[self.state]].clip_draw(
-                int(62*1.6) * self.frame,
-                1280,
-                int(62*1.6),
-                int(68*1.6),
-                self.camera[X] + int(62*1.6) // 2,
-                self.camera[Y] + int(68*1.6) // 2
-            )
-        else:
-            self.image[yoshi_state[self.state]].clip_draw(
-                int(62*1.6) * self.frame,
-                1440,
-                int(62*1.6),
-                int(68*1.6),
-                self.camera[X] + int(62*1.6) // 2,
-                self.camera[Y] + int(68*1.6)// 2
-            )
+        if self.state == "MARIO":
+            if self.face == RIGHT:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    int(62 * 1.6) * self.frame,
+                    1280,
+                    int(62 * 1.6),
+                    int(68 * 1.6),
+                    self.camera[X] + int(62 * 1.6) // 2,
+                    self.camera[Y] + int(68 * 1.6) // 2
+                )
+            else:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    int(62 * 1.6) * self.frame,
+                    1440,
+                    int(62 * 1.6),
+                    int(68 * 1.6),
+                    self.camera[X] + int(62 * 1.6) // 2,
+                    self.camera[Y] + int(68 * 1.6) // 2
+                )
+        elif self.state == "NOMARIO":
+            if self.face == RIGHT:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    int(50 * 1.6) * self.frame,
+                    1280,
+                    int(50 * 1.6),
+                    int(68 * 1.6),
+                    self.camera[X] + int(50 * 1.6) // 2,
+                    self.camera[Y] + int(68 * 1.6) // 2
+                )
+            else:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    int(50 * 1.6) * self.frame,
+                    1440,
+                    int(50 * 1.6),
+                    int(68 * 1.6),
+                    self.camera[X] + int(50 * 1.6) // 2,
+                    self.camera[Y] + int(68 * 1.6) // 2
+                )
 
 next_state = {
     IDLE_01: {WD: JUMP, AD: WALK, AU: WALK, DD: WALK, DU: WALK},
@@ -424,19 +565,18 @@ class Yoshi:
 
     def check_camera(self):
         from play_state import stageState
-        if self.state == "MARIO":
-            self.camera[X] = stageState.cameraSize[X] // 2
-            self.camera[Y] = stageState.cameraSize[Y] // 2
-            if self.x < stageState.cameraSize[X] // 2:  # 맵 왼편
-                self.camera[X] = self.x
-            if self.y < stageState.cameraSize[Y] // 2:  # 맵 아래편
-                self.camera[Y] = self.y
-
-            # 맵 오른편 위편
-            if self.x > stageState.image[stageState.selectStage].w - stageState.cameraSize[X] // 2:
-                self.camera[X] = stageState.cameraSize[X] - (stageState.image[stageState.selectStage].w - self.x)
-            if self.y > stageState.image[stageState.selectStage].h - stageState.cameraSize[Y] // 2:
-                self.camera[Y] = stageState.cameraSize[Y] - (stageState.image[stageState.selectStage].h - self.y)
+        #if self.state == "MARIO":
+        self.camera[X] = stageState.cameraSize[X] // 2
+        self.camera[Y] = stageState.cameraSize[Y] // 2
+        if self.x < stageState.cameraSize[X] // 2:  # 맵 왼편
+            self.camera[X] = self.x
+        if self.y < stageState.cameraSize[Y] // 2:  # 맵 아래편
+            self.camera[Y] = self.y
+        # 맵 오른편 위편
+        if self.x > stageState.image[stageState.selectStage].w - stageState.cameraSize[X] // 2:
+            self.camera[X] = stageState.cameraSize[X] - (stageState.image[stageState.selectStage].w - self.x)
+        if self.y > stageState.image[stageState.selectStage].h - stageState.cameraSize[Y] // 2:
+            self.camera[Y] = stageState.cameraSize[Y] - (stageState.image[stageState.selectStage].h - self.y)
 
     def check_block(self):#TODO: 점프중에만 적용되도록 설정
         from play_state import stageState

@@ -27,7 +27,7 @@ def enter():
     global gameMode, yoshi, stageState, enemies
     gameMode = {"START": 0, "SELECTSTAGE": 1, "PLAYSTAGE": 2}
     yoshi = yoshi_character.Yoshi()
-    enemies = enemy.Flower(400,700)
+    enemies = enemy.Flower(800,700)
     stageState = stage.StageState()
     global quit_game
     quit_game=False

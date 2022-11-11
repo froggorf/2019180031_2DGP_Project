@@ -1,6 +1,8 @@
 from pico2d import *
 import yoshi_character
 import stage_select_state
+from coin import Coin
+import play_state
 X = 0
 Y = 1
 
@@ -98,8 +100,13 @@ class StageState:
             JumpBlock(4432,1275,4432+62,1275+62,75),
             JumpBlock(4994,1720,4994+62,1720+62,115)
         ]
-
+        self.coins=[
+            Coin(800,700)
+        ]
         self.finishLine = myRect(5747,2870,6139,3262)
+
+        self.coin_num = 0
+
     #그리기 관련 함수
     def draw(self, yoshi_x, yoshi_y):
         self.cameraPos[X] = yoshi_x - self.cameraSize[X] // 2
@@ -151,6 +158,11 @@ class StageState:
             if rect.myIntersectRect(self.cameraPos[X],self.cameraPos[Y],self.cameraPos[X]+self.cameraSize[X],self.cameraPos[Y]+self.cameraSize[Y]):
                 rect.draw(self.cameraPos[X], self.cameraPos[Y], self.cameraPos[X] + self.cameraSize[X],self.cameraPos[Y] + self.cameraSize[Y])
 
+
+        #코인 그리기
+        for coin in self.coins:
+            coin.draw(self.cameraPos[X],self.cameraPos[Y],self.cameraPos[X]+self.cameraSize[X],self.cameraPos[Y]+self.cameraSize[Y])
+
         #충돌체크 사각형 출력
         # for rect in self.groundRect:
         #     if rect.myIntersectRect(self.cameraPos[X], self.cameraPos[Y], self.cameraPos[X] + self.cameraSize[X],self.cameraPos[Y] + self.cameraSize[Y]):
@@ -168,7 +180,10 @@ class StageState:
     #업데이트
     def update(self):
         self.check_larger_block()
-
+        for coin in self.coins:
+            if coin.update(play_state.yoshi.x,play_state.yoshi.y,play_state.yoshi.size[X]+play_state.yoshi.x,play_state.yoshi.y+play_state.yoshi.size[Y])==100:
+                self.coins.remove(coin)
+                self.coin_num+=1
     def cameraMove(self):
         self.cameraPos[X] += self.dir[X]*self.cameraSpeed
         self.cameraPos[Y] += self.dir[Y]*self.cameraSpeed

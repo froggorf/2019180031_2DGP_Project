@@ -107,3 +107,5 @@ def handle_yoshi(event):
 
     if event.key == SDLK_F1:
         yoshi.y += 500
+    if event.key == SDLK_F2 and event.type == SDL_KEYDOWN:
+        yoshi.x += 500

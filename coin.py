@@ -36,7 +36,7 @@ class Coin(Item):
         )
 
     def update(self, l,b,r,t):
-        Coin.frame = (Coin.frame+0.1) % 4
+        Coin.frame = (Coin.frame+0.01) % 4
         temp = stage.myRect(l,b,r,t)
         if self.myIntersectRect(temp):
             return 100

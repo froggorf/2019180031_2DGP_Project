@@ -1,6 +1,8 @@
 from pico2d import *
 import random
 
+LEFT = 0
+RIGHT = 1
 class Enemy:
     def __init__(self,x,y):
         self.x = x
@@ -9,6 +11,7 @@ class Enemy:
         self.frame = 0
         self.movetime = 0
         self.waittime = random.randint(30,100)
+        self.face = LEFT
     # def draw(self):
     #     pass
 
@@ -26,8 +29,12 @@ class Flower(Enemy):
 
     def draw(self,left, bottom, right, top):
         #Flower.image.clip_draw(61*int(self.frame),1000-85,61,85,self.x,self.y)
-        self.image.clip_draw(61*int(self.frame), 1000-85, 61, 85, self.x - left + 61 // 2,
-                             self.y - bottom + 85 // 2, 61, 85)
+        if self.face == RIGHT:
+            self.image.clip_draw(61*int(self.frame), 1000-85, 61, 85, self.x - left + 61 // 2,
+                                 self.y - bottom + 85 // 2, 61, 85)
+        else:
+            self.image.clip_composite_draw(61*int(self.frame), 1000-85, 61, 85,0,'h', self.x - left + 61 // 2,
+                                 self.y - bottom + 85 // 2, 61, 85)
         pass
 
     def update(self):
@@ -39,8 +46,10 @@ class Flower(Enemy):
         if self.movetime == 0:
             if self.waittime == 0:
                 self.movetime = random.randint(60,120)
+                self.face = RIGHT
                 if random.randint(0,1)==0:
                     self.movetime*=-1
+                    self.face= LEFT
             else:
                 self.waittime-=1
         elif self.movetime<0:

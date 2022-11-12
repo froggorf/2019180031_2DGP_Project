@@ -1,7 +1,8 @@
 from pico2d import *
 import yoshi_character
 import stage_select_state
-from coin import Coin
+from item import Coin
+from item import BabyMario
 import play_state
 X = 0
 Y = 1
@@ -137,6 +138,9 @@ class StageState:
             Coin(5100,3070),
             Coin(5150,3050)
         ]
+
+        self.babymario = None
+
         self.finishLine = myRect(5747,2870,6139,3262)
 
         self.coin_num = 0
@@ -197,6 +201,10 @@ class StageState:
         for coin in self.coins:
             coin.draw(self.cameraPos[X],self.cameraPos[Y],self.cameraPos[X]+self.cameraSize[X],self.cameraPos[Y]+self.cameraSize[Y])
 
+        #베이비마리오 그리기
+        if self.babymario!=None:
+            self.babymario.draw(self.cameraPos[X],self.cameraPos[Y],self.cameraPos[X]+self.cameraSize[X],self.cameraPos[Y]+self.cameraSize[Y])
+
         #충돌체크 사각형 출력
         # for rect in self.groundRect:
         #     if rect.myIntersectRect(self.cameraPos[X], self.cameraPos[Y], self.cameraPos[X] + self.cameraSize[X],self.cameraPos[Y] + self.cameraSize[Y]):
@@ -218,6 +226,11 @@ class StageState:
             if coin.update(play_state.yoshi.x,play_state.yoshi.y,play_state.yoshi.size[X]+play_state.yoshi.x,play_state.yoshi.y+play_state.yoshi.size[Y])==100:
                 self.coins.remove(coin)
                 self.coin_num+=1
+        if self.babymario!= None:
+            if self.babymario.update(play_state.yoshi.x,play_state.yoshi.y,play_state.yoshi.size[X]+play_state.yoshi.x,play_state.yoshi.y+play_state.yoshi.size[Y]) == 100:
+                play_state.yoshi.state = "MARIO"
+                self.babymario = None
+
     def cameraMove(self):
         self.cameraPos[X] += self.dir[X]*self.cameraSpeed
         self.cameraPos[Y] += self.dir[Y]*self.cameraSpeed

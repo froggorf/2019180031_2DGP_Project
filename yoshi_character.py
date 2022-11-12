@@ -2,6 +2,8 @@ from pico2d import *
 import random
 import game_framework
 import finish_state
+import play_state
+import item
 
 yoshi_state = {"MARIO": 0 , "NOMARIO":1, "MARIO_SWALLOW":2, "NOMARIO_SWALLOW":3}
 X = 0
@@ -727,7 +729,9 @@ class Yoshi:
         from stage import myRect
         a = myRect(enemies.x, enemies.y, enemies.x+60,enemies.y+80)
         if self.myIntersectRect(a):
-            self.state = "NOMARIO"
+            if self.state == "MARIO":
+                self.state = "NOMARIO"
+                play_state.stageState.babymario = item.BabyMario(self.x-80,self.y+80)
     def check_finish(self):
         from play_state import stageState
         if self.myIntersectRect(stageState.finishLine):

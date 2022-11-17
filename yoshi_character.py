@@ -660,7 +660,7 @@ class Yoshi:
         else:
             print('Error - 일어날 수 없음')
 
-
+    #TODO: game_world 리팩토링 진행하기
     def myIntersectRect(self, rect ):
         if rect.left == -1: return
         bVertical = False

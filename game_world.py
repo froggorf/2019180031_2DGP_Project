@@ -1,9 +1,27 @@
-
 # layer 0: Background Objects
 # layer 1: Foreground Objects
 objects = [[], []]
-#'boy:ball' : [(boy),(ball1, ball2, ball3, ...)] 와 같은 정보가 담김
+
 collision_group = dict()
+#'boy:ball' : [(boy),(ball1, ball2, ball3, ...)] 와 같은 정보가 담김
+
+# yoshi
+# -largerBlock(stageState)
+# -footBlock(stageState)
+# -ceilingBlock(stageState)
+# -jumpBlock(stageState)
+# -groundRect(stageState)
+# -stairRect(stageState)
+#
+# -enemy
+#
+# -coin(item)
+#
+# -finishLine(stageState)
+#
+#
+# enemy - 지형들
+
 
 def add_object(o, depth):
     objects[depth].append(o)

@@ -129,5 +129,10 @@ class Flower(Enemy):
         else:
             return False
 
+    def get_bb(self):
+        return self.x, self.y, self.x + 61, self.y + 85
+
+    def handle_collision(self, other, group):
+        print('enemies 가 무언가랑 만났다고 함')
 
 

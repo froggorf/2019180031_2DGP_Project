@@ -59,6 +59,12 @@ class Coin(Item):
         else:
             return False
 
+    def get_bb(self):
+        return self.x, self.y, self.x + self.size[X], self.y + self.size[Y]
+
+    def handle_collision(self, other, group):
+        print('coin 가 무언가랑 만났다고 함')
+
 
 LEFT = 0
 RIGHT = 1
@@ -129,3 +135,8 @@ class BabyMario(Item):
         else:
             return False
 
+    def get_bb(self):
+        return self.x, self.y, self.x + self.size[X], self.y + self.size[Y]
+
+    def handle_collision(self, other, group):
+        print('babyMario 가 무언가랑 만났다고 함')

@@ -546,7 +546,7 @@ class Yoshi:
         else:
             self.delay += 1
 
-    def draw(self):
+    def draw(self,temp1,temp2,temp3,temp4):
         self.check_camera()
         self.cur_state.draw(self)
 
@@ -752,6 +752,12 @@ class Yoshi:
                 self.cur_state.exit(self, event)
                 self.cur_state = next_state[self.cur_state][event]
                 self.cur_state.enter(self, event)
+
+    def get_bb(self):
+        return self.x, self.y, self.x+self.size[X], self.y+self.size[Y]
+
+    def handle_collision(self,other,group):
+        print('yoshi 가 무언가랑 만났다고 함')
 
 #TODO: 좋은 방법 생각나면 리팩토링 하기
 def set_keydown(event):

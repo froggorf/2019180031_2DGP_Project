@@ -73,7 +73,6 @@ def enter():
     game_world.add_collision_group(enemies, ceilingBlock, 'enemies:ceilingBlock')
     game_world.add_collision_group(enemies, footBlock, 'enemies:footBlock')
     game_world.add_collision_group(enemies, largeBlock, 'enemies:largeBlock')
-    game_world.add_collision_group(enemies, jumpBlock, 'enemies:jumpBlock')
 
 def exit():
     global X, Y

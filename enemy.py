@@ -1,6 +1,6 @@
 from pico2d import *
 import random
-
+import play_state
 LEFT = 0
 RIGHT = 1
 class Enemy:
@@ -63,24 +63,23 @@ class Flower(Enemy):
             if self.movetime <= 0:
                 self.waittime = random.randint(60,120)
 
-        # self.check_block()
+        self.check_block()
 
     def check_block(self):
-        from play_state import stageState
-        for rect in stageState.groundRect:
-            if self.myIntersectRect(rect):
+        for rect in play_state.groundRect:
+            if play_state.collide(self,rect):
                 if self.movetime >= 0:
                     self.x = rect.left - 70
                 elif self.movetime <= 0:
                     self.x = rect.right
-        for rect in stageState.largerBlock:
-            if self.myIntersectRect(rect.pos):
+        for rect in play_state.largeBlock:
+            if play_state.collide(self,rect):
                 if self.movetime >= 0:
                     self.x = rect.left - 70
                 elif self.movetime <= 0:
                     self.x = rect.pos.right
-        for rect in stageState.footBlock:
-            if self.myIntersectRect(rect.pos):
+        for rect in play_state.footBlock:
+            if play_state.collide(self,rect):
                 if self.movetime >= 0:
                     self.x = rect.left - 70
                 elif self.movetime <= 0:
@@ -133,7 +132,17 @@ class Flower(Enemy):
         return self.x, self.y, self.x + 61, self.y + 85
 
     def handle_collision(self, other, group):
-        pass
+        if self == other: return
         #print('enemies 가 무언가랑 만났다고 함')
 
+        if group == 'enemies:groundRect':
+            self.y = other.top + 1
+        elif group == 'enemies:stairRect':
+            self.y = other.top + 1
+        elif group == 'enemies:ceilingBlock':
+            self.y = other.bottom - 85 - 2
+        elif group == 'enemies:largeBlock':
+            self.y = other.pos.top + 1
+        elif group == 'yoshi:footBlock':
+            self.y = other.pos.top + 1
 

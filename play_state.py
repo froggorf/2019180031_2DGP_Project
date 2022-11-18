@@ -43,14 +43,10 @@ def enter():
     yoshi = yoshi_character.Yoshi()
     game_world.add_object(yoshi,1)
 
-    #stage 상태에서 넣기
     enemies = [enemy.Flower(800,700)]
     game_world.add_objects(enemies, 1)
 
     stage1_status.input_object_to_game_world()
-
-    game_world.add_objects(groundRect,1)
-
 
     stageState = stage.StageState()
     game_world.add_object(stageState,0)
@@ -106,7 +102,7 @@ def update():
 
     for a,b,group in game_world.all_collision_pairs():
         if collide(a,b):
-            print('Collision by', group)
+            #print('Collision by', group)
             a.handle_collision(b,group)
             a.handle_collision(a, group)
 

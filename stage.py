@@ -291,6 +291,7 @@ class myRect:
         return self.left, self.bottom, self.right, self.top
 
     def handle_collision(self, other, group):
+
         print('myRect 가 무언가랑 만났다고 함')
 
 
@@ -304,6 +305,8 @@ class FootBlock():
     def draw(self, left, bottom, right, top):
         self.image.clip_draw(63, 0, 63, 62, self.pos.left - left + self.pos.get_w() // 2, self.pos.bottom - bottom + self.pos.get_h() // 2, self.pos.get_w(), self.pos.get_h())
 
+    def update(self):
+        pass
     def get_bb(self):
         return self.pos.left, self.pos.bottom, self.pos.right, self.pos.top
 
@@ -331,8 +334,7 @@ class LargeBlock(FootBlock):
         pass
 
     def check_larger_block(self):
-        for rect in self.largerBlock:
-            rect.large_block()
+            self.large_block()
 
     def large_block(self):
         if self.larger_block:

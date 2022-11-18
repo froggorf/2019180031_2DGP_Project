@@ -2,6 +2,7 @@ from pico2d import *
 import random
 import game_framework
 import finish_state
+import game_world
 import play_state
 import item
 
@@ -356,7 +357,6 @@ class FALL:
 
     def do(self):
         if self.flytime <0 :
-            print(self.flytime)
             self.flytime+=1
 
         if self.flytime == 0 and key_down[WD]:
@@ -436,7 +436,6 @@ class FLY:
 
     def do(self):
         self.flytime = (self.flytime+1)
-        print(self.flytime)
         if self.flytime == 90:
             self.cur_state.exit(self, WU)
             self.cur_state = FALL
@@ -554,12 +553,12 @@ class Yoshi:
         self.sprite_update()
 
         self.cur_state.do(self)
+        self.move()
         self.calc_gravity()
         # self.check_block()
-        # self.move()
 
         #TODO: 나중에 game_world만들고 충돌체크 처리하기
-        # self.collide_enemy()
+        #self.collide_enemy()
 
 
         # self.check_finish()
@@ -584,60 +583,61 @@ class Yoshi:
         from play_state import stageState
         #TODO: 나중에 game_world 에 넣어서 한번에 꺼내쓸수 있도록 해보기
         if self.gravity>=0 or self.cur_state == FLY:
-            for rect in stageState.largerBlock:
-                if self.myIntersectRect(rect.pos):
-                    self.y = rect.pos.bottom - self.size[Y] - 1
-                    self.gravity = 0
-                    rect.larger_block = True
+            pass
+            # for rect in stageState.largerBlock:
+            #     if self.myIntersectRect(rect.pos):
+            #         self.y = rect.pos.bottom - self.size[Y] - 1
+            #         self.gravity = 0
+            #         rect.larger_block = True
                     #TODO: 나중에 larger_block 상태 만들고서 치면 바뀌게 하기
-            for rect in stageState.footBlock:
-                if self.myIntersectRect(rect.pos):
-                    self.y = rect.pos.bottom - self.size[Y] - 1
-                    self.gravity = 0
-            for rect in stageState.ceilingBlock:
-                if self.myIntersectRect(rect):
-                    self.y = rect.bottom - self.size[Y] - 2
-                    self.gravity = 0
+            # for rect in stageState.footBlock:
+            #     if self.myIntersectRect(rect.pos):
+            #         self.y = rect.pos.bottom - self.size[Y] - 1
+            #         self.gravity = 0
+            # for rect in stageState.ceilingBlock:
+            #     if self.myIntersectRect(rect):
+            #         self.y = rect.bottom - self.size[Y] - 2
+            #         self.gravity = 0
 
         # TODO: check_fall 함수 이름을 check_landing 으로 바꾸기
-        else:
-            for rect in stageState.jumpBlock:
-                if self.y - self.gravity >= rect.pos.top:
-                    if self.myIntersectRect(rect.pos):
-                        self.y = rect.pos.top
-                        self.gravity = rect.jump_power
-                        self.pressJump = MAXJUMPTIME
-                        self.cur_state.exit(self)
-                        self.cur_state=JUMP
-                        self.cur_state.enter(self)
-            for rect in stageState.groundRect:
-                if self.myIntersectRect(rect):
-                    self.y = rect.top
-                    self.gravity = -GRAVITY;
-                    if self.cur_state == FALL:
-                        self.check_fall()
-            for rect in stageState.stairRect:
-                if self.myIntersectRect(rect):
-                    self.y = rect.top
-                    self.gravity = -GRAVITY;
-                    if self.cur_state == FALL:
-                        self.check_fall()
-            for rect in stageState.largerBlock:
-                if self.myIntersectRect(rect.pos):
-                    self.y = rect.pos.top
-                    self.gravity = -GRAVITY
-                    if self.cur_state == FALL:
-                        self.check_fall()
-            for rect in stageState.footBlock:
-                if self.myIntersectRect(rect.pos):
-                    self.y = rect.pos.top
-                    self.gravity = -GRAVITY;
-                    if self.cur_state == FALL:
-                        self.check_fall()
+        # else:
+        #     for rect in stageState.jumpBlock:
+        #         if self.y - self.gravity >= rect.pos.top:
+        #             if self.myIntersectRect(rect.pos):
+        #                 self.y = rect.pos.top
+        #                 self.gravity = rect.jump_power
+        #                 self.pressJump = MAXJUMPTIME
+        #                 self.cur_state.exit(self)
+        #                 self.cur_state=JUMP
+        #                 self.cur_state.enter(self)
+            # for rect in stageState.groundRect:
+            #     if self.myIntersectRect(rect):
+
+            # for rect in stageState.stairRect:
+            #     if self.myIntersectRect(rect):
+            #         self.y = rect.top
+            #         self.gravity = -GRAVITY;
+            #         if self.cur_state == FALL:
+            #             self.check_fall()
+            # for rect in stageState.largerBlock:
+            #     if self.myIntersectRect(rect.pos):
+            #         self.y = rect.pos.top
+            #         self.gravity = -GRAVITY
+            #         if self.cur_state == FALL:
+            #             self.check_fall()
+            # for rect in stageState.footBlock:
+            #     if self.myIntersectRect(rect.pos):
+            #         self.y = rect.pos.top
+            #         self.gravity = -GRAVITY;
+            #         if self.cur_state == FALL:
+            #             self.check_fall()
 
 
     def calc_gravity(self):
         self.y += self.gravity
+        #TODO: 나중에 지우기
+        if self.y<0:
+            self.y = 0
         self.gravity -= GRAVITY
         if self.gravity < -GRAVITY * 3:
             if self.cur_state != FALL and self.cur_state!= FLY:
@@ -681,25 +681,26 @@ class Yoshi:
         self.x += self.dir[X] * self.speed
         if self.cur_state==RUN:
             self.x += self.dir[X] * self.speed // 2
-        from play_state import stageState
-        for rect in stageState.groundRect:
-            if self.myIntersectRect(rect):
+
+        for rect in play_state.groundRect:
+            if play_state.collide(play_state.yoshi,rect):
                 if self.dir[X] == 1:
-                    self.x = rect.left - self.size[X]
+                    self.x = rect.left - self.size[X] - 1
                 elif self.dir[X] == -1:
-                    self.x = rect.right
-        for rect in stageState.largerBlock:
-            if self.myIntersectRect(rect.pos):
+                    self.x = rect.right + 1
+        for rect in play_state.largeBlock:
+            if play_state.collide(play_state.yoshi,rect):
                 if self.dir[X] == 1:
-                    self.x = rect.pos.left - self.size[X]
+                    self.x = rect.pos.left - self.size[X] - 1
                 elif self.dir[X] == -1:
-                    self.x = rect.pos.right
-        for rect in stageState.footBlock:
-            if self.myIntersectRect(rect.pos):
+                    self.x = rect.pos.right + 1
+        for rect in play_state.footBlock:
+            if play_state.collide(play_state.yoshi,rect):
                 if self.dir[X] == 1:
-                    self.x = rect.pos.left - self.size[X]
+                    self.x = rect.pos.left - self.size[X] - 1
                 elif self.dir[X] == -1:
-                    self.x = rect.pos.right
+                    self.x = rect.pos.right+ 1
+
         if self.x < 0:
             self.x = 0
         if self.y < 0:
@@ -733,10 +734,11 @@ class Yoshi:
                 self.state = "NOMARIO"
                 play_state.stageState.babymario = item.BabyMario(self.x-80,self.y+80)
     def check_finish(self):
-        from play_state import stageState
-        if self.myIntersectRect(stageState.finishLine):
-            self.cur_state= WALK
-            game_framework.push_state(finish_state)
+        pass
+        # from play_state import stageState
+        # if self.myIntersectRect(stageState.finishLine):
+        #     self.cur_state= WALK
+        #     game_framework.push_state(finish_state)
     def add_event(self, event):
         self.event_que.insert(0, event)
 
@@ -757,7 +759,61 @@ class Yoshi:
         return self.x, self.y, self.x+self.size[X], self.y+self.size[Y]
 
     def handle_collision(self,other,group):
-        print('yoshi 가 무언가랑 만났다고 함')
+        #print('yoshi 가 무언가랑 만났다고 함')
+        if other == self : return
+
+        if group == 'yoshi:groundRect':
+            self.y = other.top+ 1
+            self.gravity = -GRAVITY;
+            if self.cur_state == FALL:
+                self.check_fall()
+        elif group == 'yoshi:stairRect':
+            self.y = other.top+ 1
+            self.gravity = -GRAVITY;
+            if self.cur_state == FALL:
+                self.check_fall()
+        elif group == 'yoshi:ceilingBlock':
+            if self.gravity>= 0:
+                self.y = other.bottom - self.size[Y] - 2
+                self.gravity = 0
+        elif group == 'yoshi:largeBlock':
+            if self.gravity >= 0:
+                self.y = other.pos.bottom - self.size[Y] - 1
+                self.gravity = 0
+                other.larger_block = True
+            else:
+                self.y = other.pos.top + 1
+                self.gravity = -GRAVITY
+                if self.cur_state == FALL:
+                    self.check_fall()
+        elif group == 'yoshi:footBlock':
+            for rect in play_state.largeBlock:
+                if play_state.collide(self, rect):
+                    self.handle_collision(rect,'yoshi:largeBlock')
+            if self.gravity>=0:
+                self.y = other.pos.bottom - self.size[Y] - 1
+                self.gravity = 0
+            else:
+                self.y = other.pos.top + 1
+                self.gravity = -GRAVITY;
+                if self.cur_state == FALL:
+                    self.check_fall()
+        elif group == 'yoshi:jumpBlock':
+            if self.y - self.gravity >= other.pos.top:
+                    self.y = other.pos.top
+                    self.gravity = other.jump_power
+                    self.pressJump = MAXJUMPTIME
+                    self.cur_state.exit(self)
+                    self.cur_state = JUMP
+                    self.cur_state.enter(self)
+        elif group == 'yoshi:coins':
+            game_world.remove_object(other)
+        elif group == 'yoshi:finishLine':
+            self.cur_state = WALK
+            game_framework.push_state(finish_state)
+
+
+
 
 #TODO: 좋은 방법 생각나면 리팩토링 하기
 def set_keydown(event):

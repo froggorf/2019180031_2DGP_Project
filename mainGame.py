@@ -5,6 +5,6 @@ import logo_state
 import play_state
 import title_state
 
-pico2d.open_canvas(1200,975)
+pico2d.open_canvas(1200,975,sync=True)
 game_framework.run(title_state)
 pico2d.close_canvas()

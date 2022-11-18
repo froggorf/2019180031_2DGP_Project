@@ -34,12 +34,12 @@ class Coin(Item):
             self.size[Y]
         )
 
-    def update(self, l,b,r,t):
+    def update(self):
         Coin.frame = (Coin.frame+0.01) % 4
-        from stage import myRect
-        temp = myRect(l,b,r,t)
-        if self.myIntersectRect(temp):
-            return 100
+        # from stage import myRect
+        # temp = myRect(l,b,r,t)
+        # if self.myIntersectRect(temp):
+        #     return 100
 
 
     # TODO: 나중에 game_World에 넣고서 충돌체크 리팩토링 하고선 지우기

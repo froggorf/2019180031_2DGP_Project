@@ -1,6 +1,7 @@
 import play_state
 import stage
 import item
+import game_world
 
 def input_object_to_game_world():
     play_state.groundRect = [
@@ -70,7 +71,7 @@ def input_object_to_game_world():
         stage.FootBlock(3646, 3263 - 2558, 3646 + 62, 3263 - 2558 + 62),
         stage.FootBlock(3708, 3263 - 2558, 3708 + 62, 3263 - 2558 + 62),
     ]
-    play_state.largerBlock = [
+    play_state.largeBlock = [
         stage.LargeBlock(2045, 3263 - 2494, 2045 + 62, 3263 - 2494 + 62),
         stage.LargeBlock(3584, 3263 - 2558, 3584 + 62, 3263 - 2558 + 62)
     ]
@@ -117,3 +118,14 @@ def input_object_to_game_world():
         item.Coin(5150, 3050)
     ]
     play_state.finishLine = stage.myRect(5747, 2870, 6139, 3262)
+
+
+
+    game_world.add_objects(play_state.largeBlock, 1)
+    game_world.add_objects(play_state.groundRect,1)
+    game_world.add_objects(play_state.stairRect, 1)
+    game_world.add_objects(play_state.ceilingBlock, 1)
+    game_world.add_objects(play_state.footBlock, 1)
+    game_world.add_objects(play_state.jumpBlock, 1)
+    game_world.add_objects(play_state.coins, 1)
+    game_world.add_object(play_state.finishLine, 1)

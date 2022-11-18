@@ -63,7 +63,7 @@ class Flower(Enemy):
             if self.movetime <= 0:
                 self.waittime = random.randint(60,120)
 
-        self.check_block()
+        # self.check_block()
 
     def check_block(self):
         from play_state import stageState
@@ -93,7 +93,7 @@ class Flower(Enemy):
 
     def calc_gravity(self):
         self.y -= 5
-        self.check_ground()
+        # self.check_ground()
 
 
 

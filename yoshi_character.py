@@ -555,14 +555,14 @@ class Yoshi:
 
         self.cur_state.do(self)
         self.calc_gravity()
-        self.check_block()
-        self.move()
+        # self.check_block()
+        # self.move()
 
         #TODO: 나중에 game_world만들고 충돌체크 처리하기
-        self.collide_enemy()
+        # self.collide_enemy()
 
 
-        self.check_finish()
+        # self.check_finish()
 
 
     def check_camera(self):

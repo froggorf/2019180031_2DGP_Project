@@ -224,15 +224,15 @@ class StageState:
 
     #업데이트
     def update(self):
-        self.check_larger_block()
-        for coin in self.coins:
-            if coin.update(play_state.yoshi.x,play_state.yoshi.y,play_state.yoshi.size[X]+play_state.yoshi.x,play_state.yoshi.y+play_state.yoshi.size[Y])==100:
-                self.coins.remove(coin)
-                self.coin_num+=1
-        if self.babymario!= None:
-            if self.babymario.update(play_state.yoshi.x,play_state.yoshi.y,play_state.yoshi.size[X]+play_state.yoshi.x,play_state.yoshi.y+play_state.yoshi.size[Y]) == 100:
-                play_state.yoshi.state = "MARIO"
-                self.babymario = None
+        pass
+        # for coin in self.coins:
+        #     if coin.update(play_state.yoshi.x,play_state.yoshi.y,play_state.yoshi.size[X]+play_state.yoshi.x,play_state.yoshi.y+play_state.yoshi.size[Y])==100:
+        #         self.coins.remove(coin)
+        #         self.coin_num+=1
+        # if self.babymario!= None:
+        #     if self.babymario.update(play_state.yoshi.x,play_state.yoshi.y,play_state.yoshi.size[X]+play_state.yoshi.x,play_state.yoshi.y+play_state.yoshi.size[Y]) == 100:
+        #         play_state.yoshi.state = "MARIO"
+        #         self.babymario = None
 
     def cameraMove(self):
         self.cameraPos[X] += self.dir[X]*self.cameraSpeed
@@ -242,9 +242,7 @@ class StageState:
         if self.cameraPos[X] + self.cameraSize[X] > self.image[self.selectStage].w: self.cameraPos[X] = self.image[self.selectStage].w - self.cameraSize[X]
         if self.cameraPos[Y] + self.cameraSize[Y] > self.image[self.selectStage].h: self.cameraPos[Y] = self.image[self.selectStage].h - self.cameraSize[Y]
 
-    def check_larger_block(self):
-        for rect in self.largerBlock:
-            rect.large_block()
+
 
     def get_camera(self):
         return self.cameraPos[X], self.cameraPos[Y], self.cameraPos[X]+self.cameraSize[X], self.cameraPos[Y]+self.cameraSize[Y]
@@ -259,6 +257,9 @@ class myRect:
         self.top = g_top
 
     def draw(self,temp1,temp2,temp3,temp4):
+        pass
+
+    def update(self):
         pass
     def printRect(self):
         print(self.left, " ",self.right)
@@ -324,6 +325,14 @@ class LargeBlock(FootBlock):
 
     def draw(self, left, bottom, right, top):
         self.image.clip_draw(0, 0, 63, 62, self.pos.left - left + self.pos.get_w() // 2, self.pos.bottom - bottom + self.pos.get_h() // 2, self.pos.get_w(), self.pos.get_h())
+
+    def update(self):
+        self.check_larger_block()
+        pass
+
+    def check_larger_block(self):
+        for rect in self.largerBlock:
+            rect.large_block()
 
     def large_block(self):
         if self.larger_block:

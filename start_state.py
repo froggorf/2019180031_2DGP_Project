@@ -56,7 +56,7 @@ def update():
         play_state.yoshi.x += 5
         play_state.yoshi.y -= 2
         time += 1
-    elif time<83:
+    elif time<80:
         play_state.yoshi.x += 4
         play_state.yoshi.y -= 3
         time += 1

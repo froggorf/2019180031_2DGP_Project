@@ -42,22 +42,6 @@ class Coin(Item):
         #     return 100
 
 
-    # TODO: 나중에 game_World에 넣고서 충돌체크 리팩토링 하고선 지우기
-    def myIntersectRect(self, rect):
-        if rect.left == -1: return
-        bVertical = False
-        bHorizontal = False
-
-        if self.x < rect.right and self.x + 70 > rect.left:
-            bHorizontal = True
-
-        if self.y + 85 > rect.bottom and self.y < rect.top:
-            bVertical = True
-
-        if bVertical and bHorizontal:
-            return True
-        else:
-            return False
 
     def get_bb(self):
         return self.x, self.y, self.x + self.size[X], self.y + self.size[Y]
@@ -79,9 +63,8 @@ class BabyMario(Item):
         self.face = LEFT
         self.up = False
 
-    def update(self,l,b,r,t):
+    def update(self):
         BabyMario.frame = (BabyMario.frame+0.1)%2
-        from stage import myRect
         if self.face == LEFT:
             self.x-=1
         else:
@@ -102,9 +85,7 @@ class BabyMario(Item):
                         self.face = LEFT
 
 
-        temp = myRect(l, b, r, t)
-        if self.myIntersectRect(temp):
-            return 100
+
 
     def draw(self,left,bottom,right,top):
         Item.image.clip_draw(
@@ -118,22 +99,6 @@ class BabyMario(Item):
             self.size[Y]
         )
 
-    # TODO: 나중에 game_World에 넣고서 충돌체크 리팩토링 하고선 지우기
-    def myIntersectRect(self, rect):
-        if rect.left == -1: return
-        bVertical = False
-        bHorizontal = False
-
-        if self.x < rect.right and self.x + 70 > rect.left:
-            bHorizontal = True
-
-        if self.y + 85 > rect.bottom and self.y < rect.top:
-            bVertical = True
-
-        if bVertical and bHorizontal:
-            return True
-        else:
-            return False
 
     def get_bb(self):
         return self.x, self.y, self.x + self.size[X], self.y + self.size[Y]

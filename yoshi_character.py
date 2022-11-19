@@ -719,7 +719,7 @@ class Yoshi:
                     self.pressJump+=1
                 jump_delay = (jump_delay+1) % 3
             else:
-                #self.pressJump=0
+                self.pressJump=0
                 jump_delay=0
                 self.cur_state.exit(self)
                 self.cur_state= FLY
@@ -811,6 +811,14 @@ class Yoshi:
         elif group == 'yoshi:finishLine':
             self.cur_state = WALK
             game_framework.push_state(finish_state)
+        elif group == 'yoshi:enemies':
+            if self.state == "MARIO":
+                self.state = "NOMARIO"
+                play_state.babyMario = item.BabyMario(self.x-80,self.y+80)
+                play_state.spawnMario = True
+        elif group == 'yoshi:babyMario':
+            play_state.yoshi.state='MARIO'
+            game_world.remove_object(other)
 
 
 

@@ -22,11 +22,14 @@ largeBlock = None
 jumpBlock = None
 coins = None
 finishLine = None
+babyMario = None
 
 stageState = None
 enemies = None
 pressA= None
 pressD = None
+
+spawnMario = None
 
 def enter():
     global X,Y
@@ -37,7 +40,7 @@ def enter():
     pressD = False
 
     global gameMode, yoshi, stageState, enemies,groundRect
-    global stairRect, ceilingBlock,footBlock,largeBlock,jumpBlock,coins ,finishLine
+    global stairRect, ceilingBlock,footBlock,largeBlock,jumpBlock,coins ,finishLine,babyMario
     gameMode = {"START": 0, "SELECTSTAGE": 1, "PLAYSTAGE": 2}
 
     yoshi = yoshi_character.Yoshi()
@@ -93,11 +96,17 @@ def exit():
     game_world.clear()
 
 def update():
+    global spawnMario
     for game_object in game_world.all_objects():
         game_object.update()
     # yoshi.update()
     # enemies.update()
     # stageState.update()
+
+    if spawnMario:
+        game_world.add_object(babyMario, 1)
+        game_world.add_collision_group(yoshi, babyMario, 'yoshi:babyMario')
+        spawnMario = False
 
     for a,b,group in game_world.all_collision_pairs():
         if collide(a,b):

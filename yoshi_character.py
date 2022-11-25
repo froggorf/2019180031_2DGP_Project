@@ -16,8 +16,8 @@ MAXJUMPTIME = 10
 jump_delay = 0
 
 #이벤트 정의
-WD,WU,AD,AU,SD,SU,DD,DU,SHIFTD,SHIFTU,GOTOFLY = range(11)
-key_down = [False for i in range(10)]
+WD,WU,AD,AU,SD,SU,DD,DU,SHIFTD,SHIFTU,GOTOFLY,CTRLD,CTRLU = range(13)
+key_down = [False for i in range(13)]
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_w): WD,
@@ -30,6 +30,7 @@ key_event_table = {
     (SDL_KEYUP, SDLK_d): DU,
     (SDL_KEYDOWN, SDLK_LSHIFT): SHIFTD,
     (SDL_KEYUP, SDLK_LSHIFT): SHIFTU,
+    (SDL_KEYDOWN, SDLK_LCTRL): CTRLD,
 }
 
 class IDLE_01:
@@ -484,22 +485,137 @@ class FLY:
                     self.camera[Y] + int(68 * 1.6) // 2
                 )
 
+class ATTACK:
+    def enter(self, event=None):
+        self.delay = 0
+        self.frame = 0
+        self.dir[X] = 0
+
+        self.attack_time = 0
+        self.tongue_length = 0
+    def exit(self, event=None):
+        if(key_down[DD] and key_down[AD]):
+            self.cur_state = IDLE_01
+            self.cur_state.enter(self)
+        elif key_down[DD]:
+            self.cur_state = WALK
+            self.cur_state.enter(self,DD)
+        elif key_down[AD]:
+            self.cur_state = WALK
+            self.cur_state.enter(self, AD)
+        else:
+            self.cur_state = IDLE_01
+            self.cur_state.enter(self)
+
+    def do(self):
+        self.attack_time+=1
+        if self.attack_time <=27:
+            self.tongue_length+=10
+            if (self.tongue_length >= self.tongueImg.w):
+                self.tongue_length = self.tongueImg.w
+
+        elif self.attack_time <=27+5:
+            pass
+        elif self.attack_time <=27+5+27:
+            self.tongue_length-=10
+            if (self.tongue_length < 0):
+                self.tongue_length  =0
+        else:
+            self.cur_state.exit(self)
+
+
+
+
+
+        pass
+
+    def draw(self):
+        if self.state == "MARIO":
+            if self.face == RIGHT:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    int(68 * 1.6) * self.frame,
+                    self.image[yoshi_state[self.state]].h-328,
+                    int(68 * 1.6),
+                    int(64 * 1.6),
+                    self.camera[X] + int(68 * 1.6) // 2,
+                    self.camera[Y] + int(64 * 1.6) // 2
+                )
+
+                self.tongueImg.clip_draw(
+                    self.tongueImg.w - self.tongue_length,
+                    self.tongueImg.h//2,
+                    self.tongue_length,
+                    self.tongueImg.h//2,
+                    self.camera[X]+ self.tongue_length//2+80,
+                    self.camera[Y]+ self.tongueImg.h//2+11
+                )
+
+            else:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    int(68 * 1.6) * self.frame,
+                    self.image[yoshi_state[self.state]].h - 168,
+                    int(68 * 1.6),
+                    int(64 * 1.6),
+                    self.camera[X] + int(68 * 1.6) // 2,
+                    self.camera[Y] + int(64 * 1.6) // 2
+                )
+                print(self.tongue_length)
+                self.tongueImg.clip_draw(
+                    0,
+                    0,
+                    self.tongue_length,
+                    self.tongueImg.h//2,
+                    self.camera[X] - self.tongue_length // 2 +25,
+                    self.camera[Y] + self.tongueImg.h // 2 + 11
+                )
+
+
+
+        #draw_rectangle(self.tongue_x,self.tongue_y,self.tongue_x+self.tongue_length,self.tongueImg.h)
+
+
+        # elif self.state == "NOMARIO":
+        #     if self.face == RIGHT:
+        #         self.image[yoshi_state[self.state]].clip_draw(
+        #             int(50 * 1.6) * self.frame,
+        #             1280,
+        #             int(50 * 1.6),
+        #             int(68 * 1.6),
+        #             self.camera[X] + int(50 * 1.6) // 2,
+        #             self.camera[Y] + int(68 * 1.6) // 2
+        #         )
+        #     else:
+        #         self.image[yoshi_state[self.state]].clip_draw(
+        #             int(50 * 1.6) * self.frame,
+        #             1440,
+        #             int(50 * 1.6),
+        #             int(68 * 1.6),
+        #             self.camera[X] + int(50 * 1.6) // 2,
+        #             self.camera[Y] + int(68 * 1.6) // 2
+        #         )
+
+            #혀 출력
+
+
+
 next_state = {
-    IDLE_01: {WD: JUMP, AD: WALK, AU: WALK, DD: WALK, DU: WALK},
-    IDLE_02: {WD: JUMP, AD: WALK, AU: WALK, DD: WALK, DU: WALK},
-    WALK: {WD: JUMP, AD: IDLE_01, AU: IDLE_01, DD: IDLE_01, DU: IDLE_01, SHIFTD: RUN, SHIFTU: WALK},
-    RUN: {WD: JUMP, AD: IDLE_01, AU: IDLE_01, DD: IDLE_01, DU: IDLE_01, SHIFTD: WALK, SHIFTU: WALK},
+    IDLE_01: {WD: JUMP, AD: WALK, AU: WALK, DD: WALK, DU: WALK,CTRLD:ATTACK},
+    IDLE_02: {WD: JUMP, AD: WALK, AU: WALK, DD: WALK, DU: WALK, CTRLD:ATTACK},
+    WALK: {WD: JUMP, AD: IDLE_01, AU: IDLE_01, DD: IDLE_01, DU: IDLE_01, SHIFTD: RUN, SHIFTU: WALK,CTRLD:ATTACK},
+    RUN: {WD: JUMP, AD: IDLE_01, AU: IDLE_01, DD: IDLE_01, DU: IDLE_01, SHIFTD: WALK, SHIFTU: WALK,CTRLD:ATTACK},
     JUMP: {WD: JUMP, WU:FALL,AD: JUMP, AU: JUMP, DD: JUMP, DU: JUMP},
     FALL: {AD: FALL, AU: FALL, DD: FALL, DU: FALL},
-    FLY: {WU: FALL, AD:FLY, AU: FLY, DD: FLY, DU:FLY}
+    FLY: {WU: FALL, AD:FLY, AU: FLY, DD: FLY, DU:FLY},
+    ATTACK:{}
 }
-yoshi_delay = {IDLE_01:8,IDLE_02:10,WALK:8,RUN: 8,JUMP:0,FALL:0, FLY: 6}
-yoshi_motion_num = {IDLE_01:8,IDLE_02:5, WALK:8, RUN:2, JUMP:1, FALL:1, FLY: 8}
+yoshi_delay = {IDLE_01:8,IDLE_02:10,WALK:8,RUN: 8,JUMP:0,FALL:0, FLY: 6,ATTACK: 10}
+yoshi_motion_num = {IDLE_01:8,IDLE_02:5, WALK:8, RUN:2, JUMP:1, FALL:1, FLY: 8, ATTACK:1}
 
 
 class Yoshi:
     def __init__(self):
-        self.image = [load_image("yoshi_mario.png"),load_image("test.png")]
+        self.image = [load_image("yoshi_temp.png"),load_image("test.png")]
+        self.tongueImg = load_image("tongue.png")
         # 위치 관련
         self.x = 5200
         self.y = 3000
@@ -555,7 +671,6 @@ class Yoshi:
         self.cur_state.do(self)
         self.move()
         self.calc_gravity()
-        # self.check_block()
 
         #TODO: 나중에 game_world만들고 충돌체크 처리하기
         #self.collide_enemy()
@@ -579,58 +694,6 @@ class Yoshi:
         if self.y > stageState.image[stageState.selectStage].h - stageState.cameraSize[Y] // 2:
             self.camera[Y] = stageState.cameraSize[Y] - (stageState.image[stageState.selectStage].h - self.y)
 
-    def check_block(self):#TODO: 점프중에만 적용되도록 설정
-        from play_state import stageState
-        #TODO: 나중에 game_world 에 넣어서 한번에 꺼내쓸수 있도록 해보기
-        if self.gravity>=0 or self.cur_state == FLY:
-            pass
-            # for rect in stageState.largerBlock:
-            #     if self.myIntersectRect(rect.pos):
-            #         self.y = rect.pos.bottom - self.size[Y] - 1
-            #         self.gravity = 0
-            #         rect.larger_block = True
-                    #TODO: 나중에 larger_block 상태 만들고서 치면 바뀌게 하기
-            # for rect in stageState.footBlock:
-            #     if self.myIntersectRect(rect.pos):
-            #         self.y = rect.pos.bottom - self.size[Y] - 1
-            #         self.gravity = 0
-            # for rect in stageState.ceilingBlock:
-            #     if self.myIntersectRect(rect):
-            #         self.y = rect.bottom - self.size[Y] - 2
-            #         self.gravity = 0
-
-        # TODO: check_fall 함수 이름을 check_landing 으로 바꾸기
-        # else:
-        #     for rect in stageState.jumpBlock:
-        #         if self.y - self.gravity >= rect.pos.top:
-        #             if self.myIntersectRect(rect.pos):
-        #                 self.y = rect.pos.top
-        #                 self.gravity = rect.jump_power
-        #                 self.pressJump = MAXJUMPTIME
-        #                 self.cur_state.exit(self)
-        #                 self.cur_state=JUMP
-        #                 self.cur_state.enter(self)
-            # for rect in stageState.groundRect:
-            #     if self.myIntersectRect(rect):
-
-            # for rect in stageState.stairRect:
-            #     if self.myIntersectRect(rect):
-            #         self.y = rect.top
-            #         self.gravity = -GRAVITY;
-            #         if self.cur_state == FALL:
-            #             self.check_fall()
-            # for rect in stageState.largerBlock:
-            #     if self.myIntersectRect(rect.pos):
-            #         self.y = rect.pos.top
-            #         self.gravity = -GRAVITY
-            #         if self.cur_state == FALL:
-            #             self.check_fall()
-            # for rect in stageState.footBlock:
-            #     if self.myIntersectRect(rect.pos):
-            #         self.y = rect.pos.top
-            #         self.gravity = -GRAVITY;
-            #         if self.cur_state == FALL:
-            #             self.check_fall()
 
 
     def calc_gravity(self):
@@ -814,7 +877,7 @@ class Yoshi:
         elif group == 'yoshi:enemies':
             if self.state == "MARIO":
                 self.state = "NOMARIO"
-                play_state.babyMario = item.BabyMario(self.x-80,self.y+80)
+                play_state.babyMario = item.BabyMario(self.x-130,self.y+100)
                 play_state.spawnMario = True
         elif group == 'yoshi:babyMario':
             play_state.yoshi.state='MARIO'
@@ -845,5 +908,9 @@ def set_keydown(event):
         key_down[SHIFTD] = True
     elif event == SHIFTU:
         key_down[SHIFTD] = False
+    elif event == CTRLD:
+        key_down[CTRLD] = True
+    elif event == CTRLU:
+        key_down[CTRLU] = False
 
 

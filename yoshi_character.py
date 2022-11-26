@@ -16,8 +16,8 @@ MAXJUMPTIME = 10
 jump_delay = 0
 
 #이벤트 정의
-WD,WU,AD,AU,SD,SU,DD,DU,SHIFTD,SHIFTU,GOTOFLY,CTRLD,CTRLU = range(13)
-key_down = [False for i in range(13)]
+WD,WU,AD,AU,SD,SU,DD,DU,SHIFTD,SHIFTU,GOTOFLY,CTRLD,CTRLU,ED,EU = range(15)
+key_down = [False for i in range(15)]
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_w): WD,
@@ -31,6 +31,8 @@ key_event_table = {
     (SDL_KEYDOWN, SDLK_LSHIFT): SHIFTD,
     (SDL_KEYUP, SDLK_LSHIFT): SHIFTU,
     (SDL_KEYDOWN, SDLK_LCTRL): CTRLD,
+    (SDL_KEYDOWN,SDLK_e):ED,
+    (SDL_KEYUP,SDLK_e):EU
 }
 
 class IDLE_01:
@@ -543,50 +545,152 @@ class TONGUE_ATTACK:
                     self.camera[Y] + int(64 * 1.6) // 2
                 )
 
-class EGG_ATTACK:
-    pass
+class EGG_ATTACK_START:
+    aiming_line_img = None
+    def enter(self, event=None):
+        if self.egg_count <= 0:
+            self.dir[X] = 0
+            self.cur_state.exit(self)
+            return
+        if EGG_ATTACK_START.aiming_line_img == None:
+            EGG_ATTACK_START.aiming_line_img = load_image('aiming_line.png')
+        self.delay = 0
+        self.frame = 0
+        self.dir[X] = 0
+
+        self.degree = 0
+        self.radian = 0
+        self.forward = True
+
+        pass
+
+    def exit(self, event=None):
+        if event == ED: return
+        if (key_down[DD] and key_down[AD]):
+            self.cur_state = IDLE_01
+            self.cur_state.enter(self)
+        elif key_down[DD]:
+            self.cur_state = WALK
+            self.cur_state.enter(self, DD)
+        elif key_down[AD]:
+            self.cur_state = WALK
+            self.cur_state.enter(self, AD)
+        else:
+            self.cur_state = IDLE_01
+            self.cur_state.enter(self)
+
+    def do(self):
+        if self.forward:
+            self.degree -= 2
+            if self.degree <= -70:
+                self.degree = -70
+                self.forward = False
+        else:
+            self.degree += 2
+            if self.degree >= 70:
+                self.degree = 70
+                self.forward = True
+
+        self.radian = 3.141592*self.degree/180
+
+
+    def draw(self):
+        if self.state == "MARIO":
+            if self.face == RIGHT:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    int(68 * 1.6) * self.frame,
+                    self.image[yoshi_state[self.state]].h-328,
+                    int(68 * 1.6),
+                    int(64 * 1.6),
+                    self.camera[X] + int(68 * 1.6) // 2,
+                    self.camera[Y] + int(64 * 1.6) // 2
+                )
+            EGG_ATTACK_START.aiming_line_img.clip_composite_draw(
+                0,
+                0,
+                EGG_ATTACK_START.aiming_line_img.w,
+                EGG_ATTACK_START.aiming_line_img.h,
+                self.radian,
+                '',
+                self.camera[X]+int(68 * 1.6),
+                self.camera[Y]+EGG_ATTACK_START.aiming_line_img.h//2,
+                #get_canvas_width()//2,
+                #get_canvas_height()//2
+            )
+        else:
+          self.image[yoshi_state[self.state]].clip_draw(
+                int(68 * 1.6) * self.frame,
+                self.image[yoshi_state[self.state]].h - 168,
+                int(68 * 1.6),
+                int(64 * 1.6),
+                self.camera[X] + int(68 * 1.6) // 2,
+                self.camera[Y] + int(64 * 1.6) // 2
+            )
+
+class EGG_ATTACK_END:
+    def enter(self, event=None):
+        self.delay = 0
+        self.frame = 0
+        print(self.degree)
+        pass
+
+    def exit(self, event=None):
+        if (key_down[DD] and key_down[AD]):
+            self.cur_state = IDLE_01
+            self.cur_state.enter(self)
+        elif key_down[DD]:
+            self.cur_state = WALK
+            self.cur_state.enter(self, DD)
+        elif key_down[AD]:
+            self.cur_state = WALK
+            self.cur_state.enter(self, AD)
+        else:
+            self.cur_state = IDLE_01
+            self.cur_state.enter(self)
+
+    def do(self):
+        pass
+
+    def draw(self):
+        if self.state == "MARIO":
+            if self.face == RIGHT:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    int(68 * 1.6) * self.frame,
+                    self.image[yoshi_state[self.state]].h - 328,
+                    int(68 * 1.6),
+                    int(64 * 1.6),
+                    self.camera[X] + int(68 * 1.6) // 2,
+                    self.camera[Y] + int(64 * 1.6) // 2
+                )
+        else:
+            self.image[yoshi_state[self.state]].clip_draw(
+                int(68 * 1.6) * self.frame,
+                self.image[yoshi_state[self.state]].h - 168,
+                int(68 * 1.6),
+                int(64 * 1.6),
+                self.camera[X] + int(68 * 1.6) // 2,
+                self.camera[Y] + int(64 * 1.6) // 2
+            )
 
 
 
-        #draw_rectangle(self.tongue_x,self.tongue_y,self.tongue_x+self.tongue_length,self.tongueImg.h)
-
-
-        # elif self.state == "NOMARIO":
-        #     if self.face == RIGHT:
-        #         self.image[yoshi_state[self.state]].clip_draw(
-        #             int(50 * 1.6) * self.frame,
-        #             1280,
-        #             int(50 * 1.6),
-        #             int(68 * 1.6),
-        #             self.camera[X] + int(50 * 1.6) // 2,
-        #             self.camera[Y] + int(68 * 1.6) // 2
-        #         )
-        #     else:
-        #         self.image[yoshi_state[self.state]].clip_draw(
-        #             int(50 * 1.6) * self.frame,
-        #             1440,
-        #             int(50 * 1.6),
-        #             int(68 * 1.6),
-        #             self.camera[X] + int(50 * 1.6) // 2,
-        #             self.camera[Y] + int(68 * 1.6) // 2
-        #         )
-
-            #혀 출력
 
 
 
 next_state = {
-    IDLE_01: {WD: JUMP, AD: WALK, AU: WALK, DD: WALK, DU: WALK,CTRLD:TONGUE_ATTACK},
-    IDLE_02: {WD: JUMP, AD: WALK, AU: WALK, DD: WALK, DU: WALK, CTRLD:TONGUE_ATTACK},
-    WALK: {WD: JUMP, AD: IDLE_01, AU: IDLE_01, DD: IDLE_01, DU: IDLE_01, SHIFTD: RUN, SHIFTU: WALK,CTRLD:TONGUE_ATTACK},
-    RUN: {WD: JUMP, AD: IDLE_01, AU: IDLE_01, DD: IDLE_01, DU: IDLE_01, SHIFTD: WALK, SHIFTU: WALK,CTRLD:TONGUE_ATTACK},
+    IDLE_01: {WD: JUMP, AD: WALK, AU: WALK, DD: WALK, DU: WALK,CTRLD:TONGUE_ATTACK,ED:EGG_ATTACK_START},
+    IDLE_02: {WD: JUMP, AD: WALK, AU: WALK, DD: WALK, DU: WALK, CTRLD:TONGUE_ATTACK, ED:EGG_ATTACK_START},
+    WALK: {WD: JUMP, AD: IDLE_01, AU: IDLE_01, DD: IDLE_01, DU: IDLE_01, SHIFTD: RUN, SHIFTU: WALK,CTRLD:TONGUE_ATTACK,ED:EGG_ATTACK_START},
+    RUN: {WD: JUMP, AD: IDLE_01, AU: IDLE_01, DD: IDLE_01, DU: IDLE_01, SHIFTD: WALK, SHIFTU: WALK,CTRLD:TONGUE_ATTACK,ED:EGG_ATTACK_START},
     JUMP: {WD: JUMP, WU:FALL,AD: JUMP, AU: JUMP, DD: JUMP, DU: JUMP},
     FALL: {AD: FALL, AU: FALL, DD: FALL, DU: FALL},
     FLY: {WU: FALL, AD:FLY, AU: FLY, DD: FLY, DU:FLY},
-    TONGUE_ATTACK:{}
+    TONGUE_ATTACK:{},
+    EGG_ATTACK_START:{ED: EGG_ATTACK_END},
+    EGG_ATTACK_END:{}
 }
-yoshi_delay = {IDLE_01:8,IDLE_02:10,WALK:8,RUN: 8,JUMP:0,FALL:0, FLY: 6,TONGUE_ATTACK: 10}
-yoshi_motion_num = {IDLE_01:8,IDLE_02:5, WALK:8, RUN:2, JUMP:1, FALL:1, FLY: 8, TONGUE_ATTACK:1}
+yoshi_delay = {IDLE_01:8,IDLE_02:10,WALK:8,RUN: 8,JUMP:0,FALL:0, FLY: 6,TONGUE_ATTACK: 10,EGG_ATTACK_START:10,EGG_ATTACK_END: 10}
+yoshi_motion_num = {IDLE_01:8,IDLE_02:5, WALK:8, RUN:2, JUMP:1, FALL:1, FLY: 8, TONGUE_ATTACK:1,EGG_ATTACK_START:1,EGG_ATTACK_END:1}
 
 class Tongue:
     tongueImg = None
@@ -973,5 +1077,10 @@ def set_keydown(event):
         key_down[CTRLD] = True
     elif event == CTRLU:
         key_down[CTRLU] = False
+    elif event == ED:
+        key_down[ED] = True
+    elif event== EU:
+        key_down[ED] = False
+
 
 

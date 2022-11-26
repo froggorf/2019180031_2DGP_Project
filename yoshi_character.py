@@ -491,9 +491,17 @@ class ATTACK:
         self.frame = 0
         self.dir[X] = 0
 
+        play_state.tongue = Tongue(self.face,self.x,self.y)
+        play_state.spawnTongue = True
         self.attack_time = 0
-        self.tongue_length = 0
+
     def exit(self, event=None):
+        if play_state.tongue.eatting:
+            self.egg_count+=1
+            print(self.egg_count)
+
+        game_world.remove_object(play_state.tongue)
+
         if(key_down[DD] and key_down[AD]):
             self.cur_state = IDLE_01
             self.cur_state.enter(self)
@@ -509,18 +517,7 @@ class ATTACK:
 
     def do(self):
         self.attack_time+=1
-        if self.attack_time <=27:
-            self.tongue_length+=10
-            if (self.tongue_length >= self.tongueImg.w):
-                self.tongue_length = self.tongueImg.w
-
-        elif self.attack_time <=27+5:
-            pass
-        elif self.attack_time <=27+5+27:
-            self.tongue_length-=10
-            if (self.tongue_length < 0):
-                self.tongue_length  =0
-        else:
+        if self.attack_time>27+5+27+1:
             self.cur_state.exit(self)
 
 
@@ -540,16 +537,6 @@ class ATTACK:
                     self.camera[X] + int(68 * 1.6) // 2,
                     self.camera[Y] + int(64 * 1.6) // 2
                 )
-
-                self.tongueImg.clip_draw(
-                    self.tongueImg.w - self.tongue_length,
-                    self.tongueImg.h//2,
-                    self.tongue_length,
-                    self.tongueImg.h//2,
-                    self.camera[X]+ self.tongue_length//2+80,
-                    self.camera[Y]+ self.tongueImg.h//2+11
-                )
-
             else:
                 self.image[yoshi_state[self.state]].clip_draw(
                     int(68 * 1.6) * self.frame,
@@ -559,15 +546,8 @@ class ATTACK:
                     self.camera[X] + int(68 * 1.6) // 2,
                     self.camera[Y] + int(64 * 1.6) // 2
                 )
-                print(self.tongue_length)
-                self.tongueImg.clip_draw(
-                    0,
-                    0,
-                    self.tongue_length,
-                    self.tongueImg.h//2,
-                    self.camera[X] - self.tongue_length // 2 +25,
-                    self.camera[Y] + self.tongueImg.h // 2 + 11
-                )
+
+
 
 
 
@@ -611,11 +591,92 @@ next_state = {
 yoshi_delay = {IDLE_01:8,IDLE_02:10,WALK:8,RUN: 8,JUMP:0,FALL:0, FLY: 6,ATTACK: 10}
 yoshi_motion_num = {IDLE_01:8,IDLE_02:5, WALK:8, RUN:2, JUMP:1, FALL:1, FLY: 8, ATTACK:1}
 
+class Tongue:
+    tongueImg = None
+    def __init__(self, face,x,y):
+        self.face = face
+        self.x = x
+        self.y=y
+        self.attack_time = 0
+        self.tongue_length = 0
+        self.eatting = False
+        if Tongue.tongueImg == None:
+            Tongue.tongueImg = load_image("tongue.png")
+        pass
+    def draw(self,left,bottom,right,top):
+        if self.face == RIGHT:
+            #self.x - left + self.size[X] // 2,
+            self.tongueImg.clip_draw_to_origin(
+                self.tongueImg.w - self.tongue_length,
+                self.tongueImg.h // 2,
+                self.tongue_length,
+                self.tongueImg.h // 2,
+                self.x - left+80,
+                self.y - bottom+22
+            )
+            # self.tongueImg.clip_draw(
+            #
+            #
+            # )
+        else:
+            self.tongueImg.clip_draw_to_origin(
+                0,
+                0,
+                self.tongue_length,
+                self.tongueImg.h // 2,
+                self.x-left-self.tongue_length+30,
+                self.y-bottom+22
+            )
+
+        pass
+
+    def update(self):
+        self.attack_time += 1
+        if self.attack_time <= 27:
+            self.tongue_length += 10
+            if (self.tongue_length >= self.tongueImg.w):
+                self.tongue_length = self.tongueImg.w
+
+        elif self.attack_time <= 27 + 5:
+            pass
+        elif self.attack_time <= 27 + 5 + 27+1:
+            self.tongue_length -= 10
+            if (self.tongue_length < 0):
+                self.tongue_length = 0
+        else:
+            pass
+
+    def get_bb(self):
+        if self.face==RIGHT:
+            return self.x+80,self.y,self.x+self.tongue_length+80,self.y+self.tongueImg.h//2
+        else:
+            return self.x- self.tongue_length+30, self.y, self.x+30 , self.y + self.tongueImg.h // 2
+
+        pass
+
+    def handle_collision(self, other, group):
+        if other == self: return
+
+        if group == 'tongue:enemies':
+            other.grabbed = True
+            if self.tongue_length == 0:
+                self.eatting = True
+                game_world.remove_object(other)
+            if self.face == RIGHT:
+                other.x = self.x+30+self.tongue_length-10
+                other.y = self.y
+            else:
+                other.x = self.x+25-self.tongue_length+5
+                other.y=self.y
+        pass
+
+
+
 
 class Yoshi:
     def __init__(self):
         self.image = [load_image("yoshi_temp.png"),load_image("test.png")]
-        self.tongueImg = load_image("tongue.png")
+
         # 위치 관련
         self.x = 5200
         self.y = 3000
@@ -644,6 +705,8 @@ class Yoshi:
         self.cur_state = FALL
         self.face = RIGHT
         self.cur_state.enter(self)
+
+        self.egg_count = 0
 
     def sprite_update(self):
         if self.delay >= yoshi_delay[self.cur_state] :
@@ -875,6 +938,7 @@ class Yoshi:
             self.cur_state = WALK
             game_framework.push_state(finish_state)
         elif group == 'yoshi:enemies':
+            if other.grabbed: return
             if self.state == "MARIO":
                 self.state = "NOMARIO"
                 play_state.babyMario = item.BabyMario(self.x-130,self.y+100)

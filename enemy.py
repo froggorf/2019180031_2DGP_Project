@@ -12,6 +12,7 @@ class Enemy:
         self.movetime = 0
         self.waittime = random.randint(30,100)
         self.face = LEFT
+        self.grabbed = False
     # def draw(self):
     #     pass
 
@@ -38,6 +39,7 @@ class Flower(Enemy):
         pass
 
     def update(self):
+        if self.grabbed: return
         self.frame=(self.frame+0.2)%5
         self.move()
         self.calc_gravity()
@@ -134,7 +136,7 @@ class Flower(Enemy):
     def handle_collision(self, other, group):
         if self == other: return
         #print('enemies 가 무언가랑 만났다고 함')
-
+        if self.grabbed : return
         if group == 'enemies:groundRect':
             self.y = other.top + 1
         elif group == 'enemies:stairRect':

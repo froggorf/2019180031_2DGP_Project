@@ -23,6 +23,7 @@ jumpBlock = None
 coins = None
 finishLine = None
 babyMario = None
+tongue = None
 
 stageState = None
 enemies = None
@@ -30,6 +31,7 @@ pressA= None
 pressD = None
 
 spawnMario = None
+spawnTongue = None
 
 def enter():
     global X,Y
@@ -46,7 +48,7 @@ def enter():
     yoshi = yoshi_character.Yoshi()
     game_world.add_object(yoshi,1)
 
-    enemies = [enemy.Flower(800,700)]
+    enemies = [enemy.Flower(700,700)]
     game_world.add_objects(enemies, 1)
 
     stage1_status.input_object_to_game_world()
@@ -96,7 +98,7 @@ def exit():
     game_world.clear()
 
 def update():
-    global spawnMario
+    global spawnMario, spawnTongue
     for game_object in game_world.all_objects():
         game_object.update()
     # yoshi.update()
@@ -107,6 +109,10 @@ def update():
         game_world.add_object(babyMario, 1)
         game_world.add_collision_group(yoshi, babyMario, 'yoshi:babyMario')
         spawnMario = False
+    if spawnTongue:
+        game_world.add_object(tongue, 1)
+        game_world.add_collision_group(tongue,enemies, 'tongue:enemies')
+        spawnTongue = False
 
     for a,b,group in game_world.all_collision_pairs():
         if collide(a,b):

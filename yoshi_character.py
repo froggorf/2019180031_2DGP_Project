@@ -485,7 +485,7 @@ class FLY:
                     self.camera[Y] + int(68 * 1.6) // 2
                 )
 
-class ATTACK:
+class TONGUE_ATTACK:
     def enter(self, event=None):
         self.delay = 0
         self.frame = 0
@@ -498,6 +498,8 @@ class ATTACK:
     def exit(self, event=None):
         if play_state.tongue.eatting:
             self.egg_count+=1
+            if self.egg_count>9:
+                self.egg_count = 9
             print(self.egg_count)
 
         game_world.remove_object(play_state.tongue)
@@ -520,12 +522,6 @@ class ATTACK:
         if self.attack_time>27+5+27+1:
             self.cur_state.exit(self)
 
-
-
-
-
-        pass
-
     def draw(self):
         if self.state == "MARIO":
             if self.face == RIGHT:
@@ -547,7 +543,8 @@ class ATTACK:
                     self.camera[Y] + int(64 * 1.6) // 2
                 )
 
-
+class EGG_ATTACK:
+    pass
 
 
 
@@ -579,17 +576,17 @@ class ATTACK:
 
 
 next_state = {
-    IDLE_01: {WD: JUMP, AD: WALK, AU: WALK, DD: WALK, DU: WALK,CTRLD:ATTACK},
-    IDLE_02: {WD: JUMP, AD: WALK, AU: WALK, DD: WALK, DU: WALK, CTRLD:ATTACK},
-    WALK: {WD: JUMP, AD: IDLE_01, AU: IDLE_01, DD: IDLE_01, DU: IDLE_01, SHIFTD: RUN, SHIFTU: WALK,CTRLD:ATTACK},
-    RUN: {WD: JUMP, AD: IDLE_01, AU: IDLE_01, DD: IDLE_01, DU: IDLE_01, SHIFTD: WALK, SHIFTU: WALK,CTRLD:ATTACK},
+    IDLE_01: {WD: JUMP, AD: WALK, AU: WALK, DD: WALK, DU: WALK,CTRLD:TONGUE_ATTACK},
+    IDLE_02: {WD: JUMP, AD: WALK, AU: WALK, DD: WALK, DU: WALK, CTRLD:TONGUE_ATTACK},
+    WALK: {WD: JUMP, AD: IDLE_01, AU: IDLE_01, DD: IDLE_01, DU: IDLE_01, SHIFTD: RUN, SHIFTU: WALK,CTRLD:TONGUE_ATTACK},
+    RUN: {WD: JUMP, AD: IDLE_01, AU: IDLE_01, DD: IDLE_01, DU: IDLE_01, SHIFTD: WALK, SHIFTU: WALK,CTRLD:TONGUE_ATTACK},
     JUMP: {WD: JUMP, WU:FALL,AD: JUMP, AU: JUMP, DD: JUMP, DU: JUMP},
     FALL: {AD: FALL, AU: FALL, DD: FALL, DU: FALL},
     FLY: {WU: FALL, AD:FLY, AU: FLY, DD: FLY, DU:FLY},
-    ATTACK:{}
+    TONGUE_ATTACK:{}
 }
-yoshi_delay = {IDLE_01:8,IDLE_02:10,WALK:8,RUN: 8,JUMP:0,FALL:0, FLY: 6,ATTACK: 10}
-yoshi_motion_num = {IDLE_01:8,IDLE_02:5, WALK:8, RUN:2, JUMP:1, FALL:1, FLY: 8, ATTACK:1}
+yoshi_delay = {IDLE_01:8,IDLE_02:10,WALK:8,RUN: 8,JUMP:0,FALL:0, FLY: 6,TONGUE_ATTACK: 10}
+yoshi_motion_num = {IDLE_01:8,IDLE_02:5, WALK:8, RUN:2, JUMP:1, FALL:1, FLY: 8, TONGUE_ATTACK:1}
 
 class Tongue:
     tongueImg = None

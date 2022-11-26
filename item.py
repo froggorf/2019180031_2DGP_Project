@@ -12,6 +12,10 @@ class Item:
         self.y = y
 
 
+class Egg:
+    pass
+
+
 class Coin(Item):
     frame = None
     def __init__(self,x,y):

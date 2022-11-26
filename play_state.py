@@ -7,6 +7,7 @@ import stage
 import pause_state
 import start_state
 import enemy
+import ui
 
 import stage1_status
 X = 0
@@ -33,6 +34,8 @@ pressD = None
 spawnMario = None
 spawnTongue = None
 
+uilist = None
+
 def enter():
     global X,Y
     X = 0
@@ -43,6 +46,9 @@ def enter():
 
     global gameMode, yoshi, stageState, enemies,groundRect
     global stairRect, ceilingBlock,footBlock,largeBlock,jumpBlock,coins ,finishLine,babyMario
+    global uilist
+
+    uilist = [ui.EggUi()]
     gameMode = {"START": 0, "SELECTSTAGE": 1, "PLAYSTAGE": 2}
 
     yoshi = yoshi_character.Yoshi()
@@ -135,7 +141,8 @@ def draw():
     # stageState.draw(yoshi.x,yoshi.y)
     # yoshi.draw()
     # enemies.draw(*stageState.get_camera())
-
+    for uid in uilist:
+        uid.draw(yoshi.egg_count)
     update_canvas()
     # delay(0.01)
 

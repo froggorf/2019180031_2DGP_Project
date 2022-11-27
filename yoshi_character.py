@@ -502,7 +502,6 @@ class TONGUE_ATTACK:
             self.egg_count+=1
             if self.egg_count>9:
                 self.egg_count = 9
-            print(self.egg_count)
 
         game_world.remove_object(play_state.tongue)
 
@@ -546,14 +545,17 @@ class TONGUE_ATTACK:
                 )
 
 class EGG_ATTACK_START:
-    aiming_line_img = None
+    aiming_line_img_right = None
+    aiming_line_img_left = None
     def enter(self, event=None):
         if self.egg_count <= 0:
             self.dir[X] = 0
             self.cur_state.exit(self)
             return
-        if EGG_ATTACK_START.aiming_line_img == None:
-            EGG_ATTACK_START.aiming_line_img = load_image('aiming_line.png')
+        if EGG_ATTACK_START.aiming_line_img_right == None:
+            EGG_ATTACK_START.aiming_line_img_right = load_image('aiming_line_right.png')
+        if EGG_ATTACK_START.aiming_line_img_left == None:
+            EGG_ATTACK_START.aiming_line_img_left = load_image('aiming_line_left.png')
         self.delay = 0
         self.frame = 0
         self.dir[X] = 0
@@ -605,33 +607,55 @@ class EGG_ATTACK_START:
                     self.camera[X] + int(68 * 1.6) // 2,
                     self.camera[Y] + int(64 * 1.6) // 2
                 )
-            EGG_ATTACK_START.aiming_line_img.clip_composite_draw(
-                0,
-                0,
-                EGG_ATTACK_START.aiming_line_img.w,
-                EGG_ATTACK_START.aiming_line_img.h,
-                self.radian,
-                '',
-                self.camera[X]+int(68 * 1.6),
-                self.camera[Y]+EGG_ATTACK_START.aiming_line_img.h//2,
-                #get_canvas_width()//2,
-                #get_canvas_height()//2
-            )
-        else:
-          self.image[yoshi_state[self.state]].clip_draw(
-                int(68 * 1.6) * self.frame,
-                self.image[yoshi_state[self.state]].h - 168,
-                int(68 * 1.6),
-                int(64 * 1.6),
-                self.camera[X] + int(68 * 1.6) // 2,
-                self.camera[Y] + int(64 * 1.6) // 2
-            )
+
+                EGG_ATTACK_START.aiming_line_img_right.clip_composite_draw(
+                    0,
+                    0,
+                    EGG_ATTACK_START.aiming_line_img_right.w,
+                    EGG_ATTACK_START.aiming_line_img_right.h,
+                    self.radian,
+                    '',
+                    self.camera[X]+int(68 * 1.6),
+                    self.camera[Y]+EGG_ATTACK_START.aiming_line_img_right.h//2,
+                    #get_canvas_width()//2,
+                    #get_canvas_height()//2
+                )
+            else:
+              self.image[yoshi_state[self.state]].clip_draw(
+                    0,
+                    self.image[yoshi_state[self.state]].h - 168,
+                    int(68 * 1.6),
+                    int(64 * 1.6),
+                    self.camera[X] + int(68 * 1.6) // 2,
+                    self.camera[Y] + int(64 * 1.6) // 2
+                )
+              EGG_ATTACK_START.aiming_line_img_left.clip_composite_draw(
+                  0,
+                  0,
+                  EGG_ATTACK_START.aiming_line_img_left.w,
+                  EGG_ATTACK_START.aiming_line_img_left.h,
+                  -self.radian,
+                  '',
+                  self.camera[X] ,
+                  self.camera[Y] + EGG_ATTACK_START.aiming_line_img_left.h // 2,
+                  # get_canvas_width()//2,
+                  # get_canvas_height()//2
+              )
+        #else if
+
 
 class EGG_ATTACK_END:
+    animation_time = 0
     def enter(self, event=None):
         self.delay = 0
         self.frame = 0
-        print(self.degree)
+
+        play_state.eggs.append(  (item.Egg(int(self.x + self.size[X]//2), int(self.y),self.radian,self.face)))
+        play_state.spawnEgg = True
+        self.egg_count -= 1
+
+        EGG_ATTACK_END.animation_time = 0
+
         pass
 
     def exit(self, event=None):
@@ -649,6 +673,9 @@ class EGG_ATTACK_END:
             self.cur_state.enter(self)
 
     def do(self):
+        EGG_ATTACK_END.animation_time+=1
+        if EGG_ATTACK_END.animation_time>15:
+            self.cur_state.exit(self)
         pass
 
     def draw(self):
@@ -662,15 +689,16 @@ class EGG_ATTACK_END:
                     self.camera[X] + int(68 * 1.6) // 2,
                     self.camera[Y] + int(64 * 1.6) // 2
                 )
-        else:
-            self.image[yoshi_state[self.state]].clip_draw(
-                int(68 * 1.6) * self.frame,
-                self.image[yoshi_state[self.state]].h - 168,
-                int(68 * 1.6),
-                int(64 * 1.6),
-                self.camera[X] + int(68 * 1.6) // 2,
-                self.camera[Y] + int(64 * 1.6) // 2
-            )
+            else:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    int(68 * 1.6) * self.frame,
+                    self.image[yoshi_state[self.state]].h - 168,
+                    int(68 * 1.6),
+                    int(64 * 1.6),
+                    self.camera[X] + int(68 * 1.6) // 2,
+                    self.camera[Y] + int(64 * 1.6) // 2
+                )
+
 
 
 
@@ -763,6 +791,7 @@ class Tongue:
             if self.tongue_length == 0:
                 self.eatting = True
                 game_world.remove_object(other)
+                play_state.enemies.remove(other)
             if self.face == RIGHT:
                 other.x = self.x+30+self.tongue_length-10
                 other.y = self.y

@@ -1,7 +1,13 @@
 import random
 from pico2d import *
+
+import game_world
+import play_state
+
 X= 0
 Y= 1
+LEFT = 0
+RIGHT = 1
 
 class Item:
     image = None
@@ -12,8 +18,70 @@ class Item:
         self.y = y
 
 
-class Egg:
-    pass
+class Egg(Item):
+
+    def __init__(self, x, y, radian,face):
+        super(Egg, self).__init__(x,y)
+        self.radian = radian
+        self.size = [84//3*2,90//3*2]
+        self.speed = 15
+        self.face = face
+
+    def draw(self, left, bottom, right, top):
+        Item.image.clip_draw(
+            0,
+            700 - 333,
+            84,
+            90,
+            self.x - left + 84//2,
+            self.y - bottom + 90// 2,
+            self.size[X],
+            self.size[Y]
+        )
+
+    def update(self):
+        if self.face == RIGHT:
+            self.x += self.speed
+        else:
+            self.x -= self.speed
+        self.y+=self.radian * self.speed
+        pass
+
+    def get_bb(self):
+        return self.x, self.y, self.x + self.size[X], self.y + self.size[Y]
+
+    def handle_collision(self, other, group):
+        if self==other: return
+        if group == 'eggs:enemies':
+            game_world.remove_object(other)
+            if other in play_state.enemies:
+                play_state.enemies.remove(other)
+            game_world.remove_object(self)
+            if self in play_state.eggs:
+                play_state.eggs.remove(self)
+        elif group == 'eggs:groundRect':
+            game_world.remove_object(self)
+            if self in play_state.eggs:
+                play_state.eggs.remove(self)
+        elif group == 'eggs:stairRect':
+            game_world.remove_object(self)
+            if self in play_state.eggs:
+                play_state.eggs.remove(self)
+        elif group == 'eggs:ceilingBlock':
+            game_world.remove_object(self)
+            if self in play_state.eggs:
+                play_state.eggs.remove(self)
+        elif group == 'eggs:footBlock':
+            game_world.remove_object(self)
+            if self in play_state.eggs:
+                play_state.eggs.remove(self)
+        elif group == 'eggs:largeBlock':
+            game_world.remove_object(self)
+            if self in play_state.eggs:
+                play_state.eggs.remove(self)
+
+
+
 
 
 class Coin(Item):

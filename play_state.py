@@ -25,6 +25,7 @@ coins = None
 finishLine = None
 babyMario = None
 tongue = None
+eggs= None
 
 stageState = None
 enemies = None
@@ -33,6 +34,7 @@ pressD = None
 
 spawnMario = None
 spawnTongue = None
+spawnEgg = None
 
 uilist = None
 
@@ -49,13 +51,13 @@ def enter():
     global uilist
 
     uilist = [ui.EggUi()]
+    global eggs
+    eggs = []
+
     gameMode = {"START": 0, "SELECTSTAGE": 1, "PLAYSTAGE": 2}
 
     yoshi = yoshi_character.Yoshi()
     game_world.add_object(yoshi,1)
-
-    enemies = [enemy.Flower(700,700)]
-    game_world.add_objects(enemies, 1)
 
     stage1_status.input_object_to_game_world()
 
@@ -85,6 +87,7 @@ def enter():
     game_world.add_collision_group(enemies, footBlock, 'enemies:footBlock')
     game_world.add_collision_group(enemies, largeBlock, 'enemies:largeBlock')
 
+
 def exit():
     global X, Y
     del X
@@ -101,10 +104,12 @@ def exit():
     del quit_game
     global groundRect, stairRect,ceilingBlock, footBlock, largeBlock, jumpBlock, coins, finishLine
     del groundRect,stairRect,ceilingBlock,footBlock,largeBlock,jumpBlock,coins,finishLine
+    global spawnMario, spawnTongue, spawnEgg
+    del spawnMario, spawnTongue,spawnEgg
     game_world.clear()
 
 def update():
-    global spawnMario, spawnTongue
+    global spawnMario, spawnTongue, spawnEgg
     for game_object in game_world.all_objects():
         game_object.update()
     # yoshi.update()
@@ -119,12 +124,21 @@ def update():
         game_world.add_object(tongue, 1)
         game_world.add_collision_group(tongue,enemies, 'tongue:enemies')
         spawnTongue = False
+    if spawnEgg:
+        game_world.add_objects(eggs,1)
+        game_world.add_collision_group(eggs, enemies,'eggs:enemies')
+        game_world.add_collision_group(eggs, groundRect, 'eggs:groundRect')
+        game_world.add_collision_group(eggs, stairRect, 'eggs:stairRect')
+        game_world.add_collision_group(eggs, ceilingBlock, 'eggs:ceilingBlock')
+        game_world.add_collision_group(eggs, footBlock, 'eggs:footBlock')
+        game_world.add_collision_group(eggs, largeBlock, 'eggs:largeBlock')
+        spawnEgg=False
 
     for a,b,group in game_world.all_collision_pairs():
         if collide(a,b):
             #print('Collision by', group)
             a.handle_collision(b,group)
-            a.handle_collision(a, group)
+            b.handle_collision(a, group)
 
 def draw_world():
     #TODO: 인자 다 import로 해버리기

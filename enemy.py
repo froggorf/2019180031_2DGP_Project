@@ -83,7 +83,7 @@ class Flower(Enemy):
         for rect in play_state.footBlock:
             if play_state.collide(self,rect):
                 if self.movetime >= 0:
-                    self.x = rect.left - 70
+                    self.x = rect.pos.left - 70
                 elif self.movetime <= 0:
                     self.x = rect.pos.right
         if self.x < 0:

@@ -33,11 +33,12 @@ def remove_object(o):
     for layer in objects:
         if o in layer:
             layer.remove(o)
-            #충돌 그룹에서도, 객체를 리스트에서 삭제해야함
             remove_collision_object(o)
             del o
             return
-    raise ValueError('Trying destroy non existing object')
+
+
+
 
 
 # def remove_object(o):
@@ -79,6 +80,7 @@ def add_collision_group(a,b,group):
         else:
             collision_group[group][1].append(b)
 
+
 def all_collision_pairs():
     #collision_group 딕셔너리에서 각 리스트로부터 페어를 만들어서 보내줌
     for group, pairs in collision_group.items():
@@ -88,7 +90,8 @@ def all_collision_pairs():
 
 def remove_collision_object(o):
     for pairs in collision_group.values(): #key:value 에서 value에 해당되는것만 가져옴
-        if o in pairs[0]:
+
+        while o in pairs[0]:
             pairs[0].remove(o)
-        elif o in pairs[1]:
+        while o in pairs[1]:
             pairs[1].remove(o)

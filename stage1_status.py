@@ -2,7 +2,7 @@ import play_state
 import stage
 import item
 import game_world
-
+import enemy
 def input_object_to_game_world():
     play_state.groundRect = [
         stage.myRect(0, 0, 832, 512),
@@ -119,6 +119,7 @@ def input_object_to_game_world():
     ]
     play_state.finishLine = stage.myRect(5747, 2870, 6139, 3262)
 
+    play_state.enemies = [enemy.Flower(700,700),enemy.Flower(100,700),enemy.Flower(1948,1000),enemy.Flower(3600,1500)]
 
 
     game_world.add_objects(play_state.largeBlock, 1)
@@ -129,3 +130,4 @@ def input_object_to_game_world():
     game_world.add_objects(play_state.jumpBlock, 1)
     game_world.add_objects(play_state.coins, 1)
     game_world.add_object(play_state.finishLine, 1)
+    game_world.add_objects(play_state.enemies, 1)

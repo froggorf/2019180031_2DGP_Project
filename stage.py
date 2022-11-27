@@ -17,7 +17,7 @@ class StageState:
         self.cameraSpeed = 5
 
         #이미지 관련
-        self.image = [load_image("stage1.png")]
+        self.image = [load_image("stage1.png"),load_image('stage2.png')]
         self.background_image = [load_image("stage1_background.png")]
 
         #스테이지 구분 관련
@@ -173,8 +173,8 @@ class myRect:
         return self.left, self.bottom, self.right, self.top
 
     def handle_collision(self, other, group):
+        pass
 
-        print('myRect 가 무언가랑 만났다고 함')
 
 
 class FootBlock():
@@ -193,7 +193,7 @@ class FootBlock():
         return self.pos.left, self.pos.bottom, self.pos.right, self.pos.top
 
     def handle_collision(self, other, group):
-        print('footBlock 가 무언가랑 만났다고 함')
+        pass
 
 
 
@@ -232,7 +232,7 @@ class LargeBlock(FootBlock):
         return self.pos.left, self.pos.bottom, self.pos.right, self.pos.top
 
     def handle_collision(self, other, group):
-        print('largeBlock 가 무언가랑 만났다고 함')
+        pass
 
 class JumpBlock(FootBlock):
     image = None
@@ -250,4 +250,4 @@ class JumpBlock(FootBlock):
         return self.pos.left, self.pos.bottom, self.pos.right, self.pos.top
 
     def handle_collision(self, other, group):
-        print('jumpBlock 가 무언가랑 만났다고 함')
+        pass

@@ -131,3 +131,21 @@ def input_object_to_game_world():
     game_world.add_objects(play_state.coins, 1)
     game_world.add_object(play_state.finishLine, 1)
     game_world.add_objects(play_state.enemies, 1)
+
+    #충돌체크 그룹 추가
+    game_world.add_collision_group(play_state.yoshi, play_state.groundRect, 'yoshi:groundRect')
+    game_world.add_collision_group(play_state.yoshi, play_state.stairRect, 'yoshi:stairRect')
+    game_world.add_collision_group(play_state.yoshi, play_state.ceilingBlock, 'yoshi:ceilingBlock')
+    game_world.add_collision_group(play_state.yoshi, play_state.footBlock, 'yoshi:footBlock')
+    game_world.add_collision_group(play_state.yoshi, play_state.largeBlock, 'yoshi:largeBlock')
+    game_world.add_collision_group(play_state.yoshi, play_state.jumpBlock, 'yoshi:jumpBlock')
+    game_world.add_collision_group(play_state.yoshi, play_state.coins, 'yoshi:coins')
+    game_world.add_collision_group(play_state.yoshi, play_state.finishLine, 'yoshi:finishLine')
+    game_world.add_collision_group(play_state.yoshi, play_state.enemies, 'yoshi:enemies')
+
+
+    game_world.add_collision_group(play_state.enemies, play_state.groundRect, 'enemies:groundRect')
+    game_world.add_collision_group(play_state.enemies, play_state.stairRect, 'enemies:stairRect')
+    game_world.add_collision_group(play_state.enemies, play_state.ceilingBlock, 'enemies:ceilingBlock')
+    game_world.add_collision_group(play_state.enemies, play_state.footBlock, 'enemies:footBlock')
+    game_world.add_collision_group(play_state.enemies, play_state.largeBlock, 'enemies:largeBlock')

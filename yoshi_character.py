@@ -498,8 +498,8 @@ class TONGUE_ATTACK:
         self.attack_time = 0
 
     def exit(self, event=None):
-        if play_state.tongue.eatting:
-            self.egg_count+=1
+        if play_state.tongue.eatting!=0:
+            self.egg_count+=play_state.tongue.eatting
             if self.egg_count>9:
                 self.egg_count = 9
 
@@ -728,7 +728,7 @@ class Tongue:
         self.y=y
         self.attack_time = 0
         self.tongue_length = 0
-        self.eatting = False
+        self.eatting = 0
         if Tongue.tongueImg == None:
             Tongue.tongueImg = load_image("tongue.png")
         pass
@@ -789,7 +789,7 @@ class Tongue:
         if group == 'tongue:enemies':
             other.grabbed = True
             if self.tongue_length == 0:
-                self.eatting = True
+                self.eatting += 1
                 game_world.remove_object(other)
                 play_state.enemies.remove(other)
             if self.face == RIGHT:
@@ -943,7 +943,7 @@ class Yoshi:
                 if self.dir[X] == 1:
                     self.x = rect.left - self.size[X] - 1
                 elif self.dir[X] == -1:
-                    self.x = rect.right + 1
+                    self.x = rect.right + 3
         for rect in play_state.largeBlock:
             if play_state.collide(play_state.yoshi,rect):
                 if self.dir[X] == 1:
@@ -1019,6 +1019,15 @@ class Yoshi:
         if other == self : return
 
         if group == 'yoshi:groundRect':
+            if self.cur_state==FLY:
+                if self.gravity == -9:
+                    self.y = other.top+1
+                elif self.gravity == -1:
+                    self.y = other.bottom-self.size[Y]-1
+                self.cur_state.exit(self)
+                self.cur_state=FALL
+                self.cur_state.enter(self)
+                return
             self.y = other.top+ 1
             self.gravity = -GRAVITY;
             if self.cur_state == FALL:

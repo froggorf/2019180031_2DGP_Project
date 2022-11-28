@@ -5,11 +5,14 @@ import game_world
 import yoshi_character
 import stage
 import pause_state
+import stage_select_state
 import start_state
 import enemy
 import ui
 
 import stage1_status
+import stage2_status
+
 X = 0
 Y = 1
 quit_game = False
@@ -59,7 +62,11 @@ def enter():
     yoshi = yoshi_character.Yoshi()
     game_world.add_object(yoshi,1)
 
-    stage1_status.input_object_to_game_world()
+    if stage_select_state.select_stage == 1:
+        stage1_status.input_object_to_game_world()
+    elif stage_select_state.select_stage==2:
+        stage2_status.input_object_to_game_world()
+
 
     stageState = stage.StageState()
     game_world.add_object(stageState,0)
@@ -67,46 +74,41 @@ def enter():
     global quit_game
     quit_game=False
     #TODO: 나중에 다시 키기
-    game_framework.push_state(start_state)
-
-    #충돌체크 그룹 추가
-    game_world.add_collision_group(yoshi, groundRect, 'yoshi:groundRect')
-    game_world.add_collision_group(yoshi, stairRect, 'yoshi:stairRect')
-    game_world.add_collision_group(yoshi, ceilingBlock, 'yoshi:ceilingBlock')
-    game_world.add_collision_group(yoshi, footBlock, 'yoshi:footBlock')
-    game_world.add_collision_group(yoshi, largeBlock, 'yoshi:largeBlock')
-    game_world.add_collision_group(yoshi, jumpBlock, 'yoshi:jumpBlock')
-    game_world.add_collision_group(yoshi, coins, 'yoshi:coins')
-    game_world.add_collision_group(yoshi, finishLine, 'yoshi:finishLine')
-    game_world.add_collision_group(yoshi, enemies, 'yoshi:enemies')
+    #game_framework.push_state(start_state)
 
 
-    game_world.add_collision_group(enemies, groundRect, 'enemies:groundRect')
-    game_world.add_collision_group(enemies, stairRect, 'enemies:stairRect')
-    game_world.add_collision_group(enemies, ceilingBlock, 'enemies:ceilingBlock')
-    game_world.add_collision_group(enemies, footBlock, 'enemies:footBlock')
-    game_world.add_collision_group(enemies, largeBlock, 'enemies:largeBlock')
 
 
 def exit():
     global X, Y
-    del X
-    del Y
+    X = None
+    Y = None
     global pressA, pressD
-    del pressA
-    del pressD
+    pressA = None
+    pressD = None
     global gameMode, yoshi, stageState, enemies
-    del gameMode
-    del yoshi
-    del stageState
-    del enemies
+    gameMode = None
+    yoshi = None
+    stageState = None
+    enemies = None
     global quit_game
-    del quit_game
+    quit_game = None
     global groundRect, stairRect,ceilingBlock, footBlock, largeBlock, jumpBlock, coins, finishLine
-    del groundRect,stairRect,ceilingBlock,footBlock,largeBlock,jumpBlock,coins,finishLine
+    groundRect = None
+    stairRect = None
+    ceilingBlock = None
+    footBlock = None
+    largeBlock = None
+    jumpBlock = None
+    coins = None
+    finishLine = None
     global spawnMario, spawnTongue, spawnEgg
-    del spawnMario, spawnTongue,spawnEgg
+    spawnMario = None
+    spawnTongue = None
+    spawnEgg = None
     game_world.clear()
+    print('초기화 됐어야했는데?')
+    print(groundRect)
 
 def update():
     global spawnMario, spawnTongue, spawnEgg

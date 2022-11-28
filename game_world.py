@@ -63,6 +63,8 @@ def clear():
         del o
     for layer in objects:
         layer.clear()
+    global collision_group
+    collision_group = dict()
 
 def add_collision_group(a,b,group):
     if group not in collision_group:

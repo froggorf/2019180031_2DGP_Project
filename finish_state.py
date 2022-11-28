@@ -6,19 +6,21 @@ import stage_select_state
 goal_image = None
 up_y = None
 forward = None
+move_time = None
 def enter():
-    global goal_image,up_y, forward
+    global goal_image,up_y, forward,move_time
     goal_image = load_image('GOAL_image.png')
     up_y=0
     forward = True
+    move_time = 0
 
 
 
 def exit():
     global goal_image,up_y,forward
-    del goal_image
-    del up_y
-    del forward
+    goal_image = None
+    up_y = None
+    forward = None
 
 
 def pause():
@@ -34,7 +36,7 @@ def handle_events():
 
 
 def update():
-    global forward, up_y
+    global forward, up_y,move_time
     if forward:
         up_y+=1
         if up_y > 30:
@@ -44,7 +46,8 @@ def update():
         if up_y < -30:
             forward = True
     play_state.yoshi.x += 3
-    if play_state.yoshi.x > 6140:
+    move_time+=1
+    if move_time>=164:
         play_state.on_quit_game()
         stage_select_state.playable_stage += 1
         if stage_select_state.playable_stage > 4: stage_select_state.playable_stage=4

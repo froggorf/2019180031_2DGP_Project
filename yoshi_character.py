@@ -806,7 +806,7 @@ class Yoshi:
         self.image = [load_image("yoshi_with_mario_1.6x.png"),load_image("test.png")]
 
         # 위치 관련
-        self.x = 4200
+        self.x = 2450
         self.y = 1400
         self.size = [int(62 * 1.6), int(66 * 1.6)]
 
@@ -860,7 +860,7 @@ class Yoshi:
 
     def update(self):
         self.sprite_update()
-
+        
         self.cur_state.do(self)
         self.move()
         self.calc_gravity()
@@ -1015,9 +1015,7 @@ class Yoshi:
         return self.x, self.y, self.x+self.size[X], self.y+self.size[Y]
 
     def handle_collision(self,other,group):
-        #print('yoshi 가 무언가랑 만났다고 함')
         if other == self : return
-
         if group == 'yoshi:groundRect':
             if self.cur_state==FLY:
                 if self.gravity == -9:
@@ -1080,9 +1078,12 @@ class Yoshi:
                     self.cur_state.enter(self)
         elif group == 'yoshi:coins':
             game_world.remove_object(other)
+            if other in play_state.coins:
+                play_state.coins.remove(other)
         elif group == 'yoshi:finishLine':
-            self.cur_state = WALK
-            game_framework.push_state(finish_state)
+            if self.state == "MARIO":
+                self.cur_state = WALK
+                game_framework.push_state(finish_state)
         elif group == 'yoshi:enemies':
             if other.grabbed: return
             if self.state == "MARIO":
@@ -1092,6 +1093,7 @@ class Yoshi:
         elif group == 'yoshi:babyMario':
             play_state.yoshi.state='MARIO'
             game_world.remove_object(other)
+
 
 
 
@@ -1126,6 +1128,3 @@ def set_keydown(event):
         key_down[ED] = True
     elif event== EU:
         key_down[ED] = False
-
-
-

@@ -168,8 +168,11 @@ class Coin(Item):
         return self.x, self.y, self.x + self.size[X], self.y + self.size[Y]
 
     def handle_collision(self, other, group):
-        pass
-
+        if group == 'eggs:coins':
+            play_state.stageState.coin_num+=1
+            game_world.remove_object(self)
+            if self in play_state.coins:
+                play_state.coins.remove(self)
 
 LEFT = 0
 RIGHT = 1
@@ -188,8 +191,11 @@ class BabyMario(Item):
         BabyMario.frame = (BabyMario.frame+0.1)%2
         if self.face == LEFT:
             self.x-=1
+            if self.x<0:
+                self.x = 0
         else:
             self.x +=1
+
         self.y += self.gravity
         if self.up:
             self.gravity -= 0.5

@@ -138,6 +138,7 @@ def update():
         game_world.add_collision_group(eggs, footBlock, 'eggs:footBlock')
         game_world.add_collision_group(eggs, largeBlock, 'eggs:largeBlock')
         game_world.add_collision_group(eggs, eventbox, 'eggs:eventbox')
+        game_world.add_collision_group(eggs,coins,'eggs:coins')
         spawnEgg=False
 
     for a,b,group in game_world.all_collision_pairs():

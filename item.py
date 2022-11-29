@@ -18,6 +18,51 @@ class Item:
         self.y = y
 
 
+class EventBox(Item):
+    frame = None
+
+    def __init__(self, x, y,eventfunc):
+        super(EventBox, self).__init__(x, y)
+        self.size = [54,60]
+        self.offset = [150,77]
+        self.event_func = eventfunc
+
+        if EventBox.frame == None:
+            EventBox.frame = 0
+    def draw(self, left, bottom, right, top):
+        Item.image.clip_draw(
+            0,
+            700 - 575-77+self.offset[Y]*int(EventBox.frame),
+            self.offset[X],
+            self.offset[Y],
+            self.x - left + self.offset[X] // 2,
+            self.y - bottom + self.offset[Y] // 2,
+            self.offset[X],
+            self.offset[Y]
+        )
+
+    def update(self):
+        EventBox.frame = (EventBox.frame+0.07)%4
+        pass
+        # Coin.frame = (Coin.frame + 0.01) % 4
+        # # from stage import myRect
+        # # temp = myRect(l,b,r,t)
+        # # if self.myIntersectRect(temp):
+        # #     return 100
+
+    def get_bb(self):
+        mid_x = self.x + self.offset[X]//2
+        mid_y = self.y + self.offset[Y]//2
+        return mid_x-self.size[X]//2,mid_y-self.size[Y]//2,mid_x+self.size[X]//2,mid_y+self.size[Y]//2
+
+    def handle_collision(self, other, group):
+        if group == 'eggs:eventbox':
+            self.event_func()
+            game_world.remove_object(self)
+            if self in play_state.eventbox:
+                play_state.eventbox.remove(self)
+
+
 class Egg(Item):
 
     def __init__(self, x, y, radian,face):
@@ -76,6 +121,10 @@ class Egg(Item):
             if self in play_state.eggs:
                 play_state.eggs.remove(self)
         elif group == 'eggs:largeBlock':
+            game_world.remove_object(self)
+            if self in play_state.eggs:
+                play_state.eggs.remove(self)
+        elif group == 'eggs:eventbox':
             game_world.remove_object(self)
             if self in play_state.eggs:
                 play_state.eggs.remove(self)

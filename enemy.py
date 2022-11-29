@@ -71,21 +71,21 @@ class Flower(Enemy):
         for rect in play_state.groundRect:
             if play_state.collide(self,rect):
                 if self.movetime >= 0:
-                    self.x = rect.left - 70
+                    self.x -= self.speed - 1
                 elif self.movetime <= 0:
-                    self.x = rect.right
+                    self.x += self.speed + 1
         for rect in play_state.largeBlock:
             if play_state.collide(self,rect):
                 if self.movetime >= 0:
-                    self.x = rect.left - 70
+                    self.x -= self.speed - 1
                 elif self.movetime <= 0:
-                    self.x = rect.pos.right
+                    self.x += self.speed + 1
         for rect in play_state.footBlock:
             if play_state.collide(self,rect):
                 if self.movetime >= 0:
-                    self.x = rect.pos.left - 70
+                    self.x -= self.speed - 1
                 elif self.movetime <= 0:
-                    self.x = rect.pos.right
+                    self.x += self.speed + 1
         if self.x < 0:
             self.x = 0
         if self.y < 0:
@@ -113,22 +113,6 @@ class Flower(Enemy):
             if self.myIntersectRect(rect.pos):
                 self.y = rect.pos.top
 
-    #TODO: 나중에 game_World에 넣고서 충돌체크 리팩토링 하고선 지우기
-    def myIntersectRect(self, rect):
-        if rect.left == -1: return
-        bVertical = False
-        bHorizontal = False
-
-        if self.x < rect.right and self.x + 70 > rect.left:
-            bHorizontal = True
-
-        if self.y + 85 > rect.bottom and self.y < rect.top:
-            bVertical = True
-
-        if bVertical and bHorizontal:
-            return True
-        else:
-            return False
 
     def get_bb(self):
         return self.x, self.y, self.x + 61, self.y + 85

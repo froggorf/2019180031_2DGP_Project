@@ -44,9 +44,6 @@ def input_object_to_game_world():
     ]
 
     play_state.stairRect = [
-        # stage.myRect(830, 0, 880, 528),
-
-
         stage.myRect(0, 0, 233, 474),
         stage.myRect(199, 0, 199 + 398, 458),
         stage.myRect(617,0,617+237,481),
@@ -72,15 +69,12 @@ def input_object_to_game_world():
         stage.myRect(5336, stage2_h - 939 - 40, 5336 + 122, stage2_h - 939),
         stage.myRect(5383, stage2_h - 909 - 25, 5383 + 43, stage2_h - 909),
         stage.myRect(6087, stage2_h - 986 - 29, 6087 + 96, stage2_h - 986),
-        # stage.myRect(),
     ]
 
     play_state.ceilingBlock = [
-
         stage.myRect(6042, stage2_h - 1231 - 84, 6042+42, stage2_h - 1231),
         stage.myRect(6057, stage2_h - 1173 - 97, 6057 + 80, stage2_h - 1173),
         stage.myRect(6105, stage2_h - 1114 - 85, 6105 + 115, stage2_h - 1114),
-        # stage.myRect(2960, 870, 3000, 1100),
 
     ]
     play_state.footBlock = [
@@ -93,10 +87,36 @@ def input_object_to_game_world():
     ]
     play_state.jumpBlock = [
         # stage.JumpBlock(500, 508, 500 + 62, 508 + 62, 101),
-
     ]
     play_state.coins = [
         # item.Coin(1170, 700),
+        item.Coin(1100, stage2_h-1328),
+        item.Coin(1200,stage2_h-1255),
+        item.Coin(1300,stage2_h-1328),
+
+        item.Coin(2550,700),
+        item.Coin(2650,800),
+        item.Coin(2750,750),
+
+        item.Coin(4540, 930),
+        item.Coin(4480, 1050),
+        item.Coin(4430, 1140),
+        item.Coin(4370, 1300),
+
+        item.Coin(2350,1500),
+        item.Coin(2450,1500),
+        item.Coin(2350,1600),
+        item.Coin(2450,1600),
+
+        item.Coin(520,1550),
+        item.Coin(520,1650),
+        item.Coin(620,1550),
+        item.Coin(620,1650),
+        item.Coin(720,1550),
+        item.Coin(720,1650),
+
+
+
     ]
     play_state.eventbox =[
         item.EventBox(4600,1500, eventbox_create_box)

@@ -7,6 +7,21 @@ import enemy
 stage2_w = 7751
 stage2_h = 1913
 
+def eventbox_create_box():
+    for fb in play_state.footBlock:
+        game_world.remove_object(fb)
+
+    for i in range(13):
+        play_state.footBlock += [stage.FootBlock(4123-62*(i+1),stage2_h-691-62,4123-(62*i),stage2_h-691)]
+        
+    game_world.add_objects(play_state.footBlock,1)
+    game_world.add_collision_group(play_state.yoshi, play_state.footBlock, 'yoshi:footBlock')
+    game_world.add_collision_group(play_state.enemies, play_state.footBlock, 'enemies:footBlock')
+
+
+
+
+
 def input_object_to_game_world():
     play_state.groundRect = [
         #stage.myRect(0, 0,233,474),
@@ -79,6 +94,9 @@ def input_object_to_game_world():
     play_state.coins = [
         # item.Coin(1170, 700),
     ]
+    play_state.eventbox =[
+        item.EventBox(4600,1500, eventbox_create_box)
+    ]
 
     play_state.finishLine = stage.myRect(6817,stage2_h-1359-80,6817+104,stage2_h-1359)
 
@@ -94,6 +112,7 @@ def input_object_to_game_world():
     game_world.add_objects(play_state.coins, 1)
     game_world.add_object(play_state.finishLine, 1)
     game_world.add_objects(play_state.enemies, 1)
+    game_world.add_objects(play_state.eventbox,1)
 
     #충돌체크 그룹 추가
     game_world.add_collision_group(play_state.yoshi, play_state.groundRect, 'yoshi:groundRect')

@@ -13,7 +13,7 @@ def eventbox_create_box():
 
     for i in range(13):
         play_state.footBlock += [stage.FootBlock(4123-62*(i+1),stage2_h-691-62,4123-(62*i),stage2_h-691)]
-        
+
     game_world.add_objects(play_state.footBlock,1)
     game_world.add_collision_group(play_state.yoshi, play_state.footBlock, 'yoshi:footBlock')
     game_world.add_collision_group(play_state.enemies, play_state.footBlock, 'enemies:footBlock')
@@ -37,6 +37,9 @@ def input_object_to_game_world():
         stage.myRect(6077, stage2_h - 1019 - 132, 6077+147, stage2_h - 1019),
         stage.myRect(5885,0,5885+162,834),
         stage.myRect(6038,0,6038+1713,471),
+        stage.myRect(2217, stage2_h - 432 - 62, 2217+734, stage2_h - 432),
+        stage.myRect(1875, stage2_h - 609 - 62, 1875 + 344, stage2_h - 609),
+        stage.myRect(453,stage2_h-393-62,453+738,stage2_h-393)
         # stage.myRect()
     ]
 
@@ -59,6 +62,7 @@ def input_object_to_game_world():
         stage.myRect(3380,0,3380+808,589),
         stage.myRect(3434,0,3434+421,648),
         stage.myRect(4064,0,4064+311,652),
+
         stage.myRect(4389,0,4389+113,518),
         stage.myRect(4388,0,4388+321,477),
         stage.myRect(4690,0,4690+385,534),

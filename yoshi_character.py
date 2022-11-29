@@ -233,8 +233,8 @@ class RUN:
                 )
             else:
                 self.image[yoshi_state[self.state]].clip_draw(
-                    int(72 * 1.6) * self.frame,
-                    1120,
+                    451+int(72 * 1.6) * self.frame,
+                    960,
                     int(72 * 1.6),
                     int(68 * 1.6),
                     self.camera[X] + int(72 * 1.6) // 2,
@@ -301,7 +301,7 @@ class JUMP:
             if self.face == RIGHT:
                 self.image[yoshi_state[self.state]].clip_draw(
                     0,
-                    1600,
+                    1120,
                     int(60 * 1.6),
                     int(72 * 1.6),
                     self.camera[X] + int(60 * 1.6) // 2,
@@ -309,8 +309,8 @@ class JUMP:
                 )
             else:
                 self.image[yoshi_state[self.state]].clip_draw(
-                    0,
-                    1760,
+                    340,
+                    1120,
                     int(60 * 1.6),
                     int(72 * 1.6),
                     self.camera[X] + int(60 * 1.6) // 2,
@@ -373,7 +373,7 @@ class FALL:
             if self.face == RIGHT:
                 self.image[yoshi_state[self.state]].clip_draw(
                     0,
-                    1920,
+                    1600,
                     int(58 * 1.6),
                     int(62 * 1.6),
                     self.camera[X] + int(58 * 1.6) // 2,
@@ -381,8 +381,8 @@ class FALL:
                 )
             else:
                 self.image[yoshi_state[self.state]].clip_draw(
-                    0,
-                    2080,
+                    325,
+                    1600,
                     int(58 * 1.6),
                     int(62 * 1.6),
                     self.camera[X] + int(58 * 1.6) // 2,
@@ -527,8 +527,8 @@ class TONGUE_ATTACK:
         if self.state == "MARIO":
             if self.face == RIGHT:
                 self.image[yoshi_state[self.state]].clip_draw(
-                    int(68 * 1.6) * self.frame,
-                    self.image[yoshi_state[self.state]].h-328,
+                    0,
+                    1760,
                     int(68 * 1.6),
                     int(64 * 1.6),
                     self.camera[X] + int(68 * 1.6) // 2,
@@ -536,8 +536,8 @@ class TONGUE_ATTACK:
                 )
             else:
                 self.image[yoshi_state[self.state]].clip_draw(
-                    int(68 * 1.6) * self.frame,
-                    self.image[yoshi_state[self.state]].h - 168,
+                    411,
+                    1760,
                     int(68 * 1.6),
                     int(64 * 1.6),
                     self.camera[X] + int(68 * 1.6) // 2,
@@ -600,12 +600,12 @@ class EGG_ATTACK_START:
         if self.state == "MARIO":
             if self.face == RIGHT:
                 self.image[yoshi_state[self.state]].clip_draw(
-                    int(68 * 1.6) * self.frame,
-                    self.image[yoshi_state[self.state]].h-328,
-                    int(68 * 1.6),
-                    int(64 * 1.6),
-                    self.camera[X] + int(68 * 1.6) // 2,
-                    self.camera[Y] + int(64 * 1.6) // 2
+                    0,
+                    1920,
+                    87,
+                    103,
+                    self.camera[X] + 87//2,
+                    self.camera[Y] + 103//2
                 )
 
                 EGG_ATTACK_START.aiming_line_img_right.clip_composite_draw(
@@ -622,12 +622,12 @@ class EGG_ATTACK_START:
                 )
             else:
               self.image[yoshi_state[self.state]].clip_draw(
-                    0,
-                    self.image[yoshi_state[self.state]].h - 168,
-                    int(68 * 1.6),
-                    int(64 * 1.6),
-                    self.camera[X] + int(68 * 1.6) // 2,
-                    self.camera[Y] + int(64 * 1.6) // 2
+                    361,
+                    1920,
+                    87,
+                    103,
+                    self.camera[X] + 87 // 2,
+                    self.camera[Y] + 103 // 2
                 )
               EGG_ATTACK_START.aiming_line_img_left.clip_composite_draw(
                   0,
@@ -645,16 +645,10 @@ class EGG_ATTACK_START:
 
 
 class EGG_ATTACK_END:
-    animation_time = 0
     def enter(self, event=None):
         self.delay = 0
         self.frame = 0
 
-        play_state.eggs.append(  (item.Egg(int(self.x + self.size[X]//2), int(self.y),self.radian,self.face)))
-        play_state.spawnEgg = True
-        self.egg_count -= 1
-
-        EGG_ATTACK_END.animation_time = 0
 
         pass
 
@@ -673,30 +667,34 @@ class EGG_ATTACK_END:
             self.cur_state.enter(self)
 
     def do(self):
-        EGG_ATTACK_END.animation_time+=1
-        if EGG_ATTACK_END.animation_time>15:
+        if self.frame==3:
+            play_state.eggs.append((item.Egg(int(self.x + self.size[X] // 2), int(self.y), self.radian, self.face)))
+            play_state.spawnEgg = True
+            self.egg_count -= 1
+            if self.egg_count<=0:
+                self.egg_count = 0
+                print('error - egg_count is error')
             self.cur_state.exit(self)
-        pass
 
     def draw(self):
         if self.state == "MARIO":
             if self.face == RIGHT:
                 self.image[yoshi_state[self.state]].clip_draw(
-                    int(68 * 1.6) * self.frame,
-                    self.image[yoshi_state[self.state]].h - 328,
-                    int(68 * 1.6),
-                    int(64 * 1.6),
-                    self.camera[X] + int(68 * 1.6) // 2,
-                    self.camera[Y] + int(64 * 1.6) // 2
+                    106 * self.frame,
+                    160*13,
+                    106,
+                    112,
+                    self.camera[X] + 106 // 2,
+                    self.camera[Y] + 112       // 2
                 )
             else:
                 self.image[yoshi_state[self.state]].clip_draw(
-                    int(68 * 1.6) * self.frame,
-                    self.image[yoshi_state[self.state]].h - 168,
-                    int(68 * 1.6),
-                    int(64 * 1.6),
-                    self.camera[X] + int(68 * 1.6) // 2,
-                    self.camera[Y] + int(64 * 1.6) // 2
+                    106 * self.frame,
+                    160*14,
+                    106,
+                    112,
+                    self.camera[X] + 106 // 2,
+                    self.camera[Y] + 112 // 2
                 )
 
 
@@ -717,8 +715,8 @@ next_state = {
     EGG_ATTACK_START:{ED: EGG_ATTACK_END},
     EGG_ATTACK_END:{}
 }
-yoshi_delay = {IDLE_01:8,IDLE_02:10,WALK:8,RUN: 8,JUMP:0,FALL:0, FLY: 6,TONGUE_ATTACK: 10,EGG_ATTACK_START:10,EGG_ATTACK_END: 10}
-yoshi_motion_num = {IDLE_01:8,IDLE_02:5, WALK:8, RUN:2, JUMP:1, FALL:1, FLY: 8, TONGUE_ATTACK:1,EGG_ATTACK_START:1,EGG_ATTACK_END:1}
+yoshi_delay = {IDLE_01:8,IDLE_02:10,WALK:8,RUN: 8,JUMP:0,FALL:0, FLY: 6,TONGUE_ATTACK: 10,EGG_ATTACK_START:10,EGG_ATTACK_END: 3}
+yoshi_motion_num = {IDLE_01:8,IDLE_02:5, WALK:8, RUN:2, JUMP:1, FALL:1, FLY: 8, TONGUE_ATTACK:1,EGG_ATTACK_START:1,EGG_ATTACK_END:4}
 
 class Tongue:
     tongueImg = None
@@ -805,11 +803,11 @@ class Tongue:
 
 class Yoshi:
     def __init__(self):
-        self.image = [load_image("yoshi_temp.png"),load_image("test.png")]
+        self.image = [load_image("yoshi_with_mario_1.6x.png"),load_image("test.png")]
 
         # 위치 관련
-        self.x = 5200
-        self.y = 3000
+        self.x = 4200
+        self.y = 1400
         self.size = [int(62 * 1.6), int(66 * 1.6)]
 
         # 상태 관련
@@ -836,21 +834,23 @@ class Yoshi:
         self.face = RIGHT
         self.cur_state.enter(self)
 
-        self.egg_count = 0
+        self.egg_count = 9
 
     def sprite_update(self):
         if self.delay >= yoshi_delay[self.cur_state] :
             self.frame = (self.frame+1)%yoshi_motion_num[self.cur_state]
             self.delay = 0
             if self.cur_state==IDLE_01 and self.frame == 0:
-                if random.randint(0, 3) == 0:
+                if random.randint(0,2)==0:
                     self.cur_state.exit(self)
                     self.cur_state = IDLE_02
                     self.cur_state.enter(self)
-            if self.cur_state==IDLE_02 and self.frame == 0:
-                self.cur_state.exit(self)
-                self.cur_state = IDLE_01
-                self.cur_state.enter(self)
+
+            elif self.cur_state==IDLE_02 and self.frame==0:
+                if random.randint(0,1)==0:
+                    self.cur_state.exit(self)
+                    self.cur_state = IDLE_01
+                    self.cur_state.enter(self)
         else:
             self.delay += 1
 
@@ -1028,10 +1028,17 @@ class Yoshi:
                 self.cur_state=FALL
                 self.cur_state.enter(self)
                 return
-            self.y = other.top+ 1
-            self.gravity = -GRAVITY;
-            if self.cur_state == FALL:
-                self.check_fall()
+            if self.gravity>=0:
+                self.y = other.bottom - self.size[Y]-1
+                self.gravity = 0
+                self.cur_state.exit(self)
+                self.cur_state = FALL
+                self.cur_state.enter(self)
+            else:
+                self.y = other.top+ 1
+                self.gravity = -GRAVITY;
+                if self.cur_state == FALL:
+                    self.check_fall()
         elif group == 'yoshi:stairRect':
             self.y = other.top+ 1
             self.gravity = -GRAVITY;

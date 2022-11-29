@@ -29,6 +29,7 @@ finishLine = None
 babyMario = None
 tongue = None
 eggs= None
+eventbox =None
 
 stageState = None
 enemies = None
@@ -54,7 +55,8 @@ def enter():
     global uilist
 
     uilist = [ui.EggUi()]
-    global eggs
+    global eggs,eventbox
+
     eggs = []
 
     gameMode = {"START": 0, "SELECTSTAGE": 1, "PLAYSTAGE": 2}
@@ -86,11 +88,12 @@ def exit():
     global pressA, pressD
     pressA = None
     pressD = None
-    global gameMode, yoshi, stageState, enemies
+    global gameMode, yoshi, stageState, enemies,eventbox
     gameMode = None
     yoshi = None
     stageState = None
     enemies = None
+    eventbox=None
     global quit_game
     quit_game = None
     global groundRect, stairRect,ceilingBlock, footBlock, largeBlock, jumpBlock, coins, finishLine
@@ -134,6 +137,7 @@ def update():
         game_world.add_collision_group(eggs, ceilingBlock, 'eggs:ceilingBlock')
         game_world.add_collision_group(eggs, footBlock, 'eggs:footBlock')
         game_world.add_collision_group(eggs, largeBlock, 'eggs:largeBlock')
+        game_world.add_collision_group(eggs, eventbox, 'eggs:eventbox')
         spawnEgg=False
 
     for a,b,group in game_world.all_collision_pairs():

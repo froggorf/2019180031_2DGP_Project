@@ -231,4 +231,14 @@ class BabyMario(Item):
         return self.x, self.y, self.x + self.size[X], self.y + self.size[Y]
 
     def handle_collision(self, other, group):
-        pass
+        if group =='babyMario:groundRect':
+            pass
+        elif group =='babyMario:stairRect':
+            pass
+        elif group ==  'babyMario:ceilingBlock':
+            pass
+        elif group =='babyMario:footBlock':
+            pass
+        elif group =='babyMario:largeBlock':
+            pass
+

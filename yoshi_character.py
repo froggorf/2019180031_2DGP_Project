@@ -16,8 +16,8 @@ MAXJUMPTIME = 10
 jump_delay = 0
 
 #이벤트 정의
-WD,WU,AD,AU,SD,SU,DD,DU,SHIFTD,SHIFTU,GOTOFLY,CTRLD,CTRLU,ED,EU = range(15)
-key_down = [False for i in range(15)]
+WD,WU,AD,AU,SD,SU,DD,DU,SHIFTD,SHIFTU,GOTOFLY,CTRLD,CTRLU,ED,EU,GETHIT = range(16)
+key_down = [False for i in range(16)]
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_w): WD,
@@ -697,6 +697,80 @@ class EGG_ATTACK_END:
                     self.camera[Y] + 112 // 2
                 )
 
+class HITTING:
+    def enter(self, event=None):
+        self.delay = 0
+        self.frame = 0
+        self.dir[X] = 0
+        self.hitting_time = 0
+        pass
+
+    def exit(self, event=None):
+        if (key_down[DD] and key_down[AD]):
+            self.cur_state = IDLE_01
+            self.cur_state.enter(self)
+        elif key_down[DD]:
+            self.cur_state = WALK
+            self.cur_state.enter(self, DD)
+        elif key_down[AD]:
+            self.cur_state = WALK
+            self.cur_state.enter(self, AD)
+        else:
+            self.cur_state = IDLE_01
+            self.cur_state.enter(self)
+        self.image[yoshi_state['NOMARIO']].opacify(1)
+        self.image[yoshi_state['MARIO']].opacify(1)
+    def do(self):
+        self.hitting_time+=1
+
+        if self.hitting_time>=50:
+            self.cur_state.exit(self)
+        elif self.hitting_time>=25:
+            if self.face == RIGHT:
+                self.x -= 3
+            else:
+                self.x += 3
+            self.y = self.y-3+self.gravity
+        else:
+            if self.face == RIGHT:
+                self.x -= 3
+            else:
+                self.x += 3
+            self.y =self.y+35+self.gravity
+        if self.hitting_time%10 == 0:
+            self.image[yoshi_state['NOMARIO']].opacify(1)
+            self.image[yoshi_state['MARIO']].opacify(1)
+        elif self.hitting_time%10 == 5:
+            self.image[yoshi_state['NOMARIO']].opacify(0.5)
+            self.image[yoshi_state['MARIO']].opacify(0.5)
+
+
+
+        pass
+
+    def draw(self):
+        self.state ='MARIO'
+        if self.state == "MARIO":
+
+            if self.face == RIGHT:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    662,
+                    160*14,
+                    83,
+                    99,
+                    self.camera[X] + 83 // 2,
+                    self.camera[Y] + 99       // 2
+                )
+            else:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    777,
+                    160*14,
+                    83,
+                    99,
+                    self.camera[X] + 83 // 2,
+                    self.camera[Y] + 99 // 2
+                )
+        self.state = 'NOMARIO'
 
 
 
@@ -704,19 +778,20 @@ class EGG_ATTACK_END:
 
 
 next_state = {
-    IDLE_01: {WD: JUMP, AD: WALK, AU: WALK, DD: WALK, DU: WALK,CTRLD:TONGUE_ATTACK,ED:EGG_ATTACK_START},
-    IDLE_02: {WD: JUMP, AD: WALK, AU: WALK, DD: WALK, DU: WALK, CTRLD:TONGUE_ATTACK, ED:EGG_ATTACK_START},
-    WALK: {WD: JUMP, AD: IDLE_01, AU: IDLE_01, DD: IDLE_01, DU: IDLE_01, SHIFTD: RUN, SHIFTU: WALK,CTRLD:TONGUE_ATTACK,ED:EGG_ATTACK_START},
-    RUN: {WD: JUMP, AD: IDLE_01, AU: IDLE_01, DD: IDLE_01, DU: IDLE_01, SHIFTD: WALK, SHIFTU: WALK,CTRLD:TONGUE_ATTACK,ED:EGG_ATTACK_START},
-    JUMP: {WD: JUMP, WU:FALL,AD: JUMP, AU: JUMP, DD: JUMP, DU: JUMP},
-    FALL: {AD: FALL, AU: FALL, DD: FALL, DU: FALL},
-    FLY: {WU: FALL, AD:FLY, AU: FLY, DD: FLY, DU:FLY},
-    TONGUE_ATTACK:{},
-    EGG_ATTACK_START:{ED: EGG_ATTACK_END},
-    EGG_ATTACK_END:{}
+    IDLE_01: {WD: JUMP, AD: WALK, AU: WALK, DD: WALK, DU: WALK,CTRLD:TONGUE_ATTACK,ED:EGG_ATTACK_START,GETHIT:HITTING},
+    IDLE_02: {WD: JUMP, AD: WALK, AU: WALK, DD: WALK, DU: WALK, CTRLD:TONGUE_ATTACK, ED:EGG_ATTACK_START,GETHIT:HITTING},
+    WALK: {WD: JUMP, AD: IDLE_01, AU: IDLE_01, DD: IDLE_01, DU: IDLE_01, SHIFTD: RUN, SHIFTU: WALK,CTRLD:TONGUE_ATTACK,ED:EGG_ATTACK_START,GETHIT:HITTING},
+    RUN: {WD: JUMP, AD: IDLE_01, AU: IDLE_01, DD: IDLE_01, DU: IDLE_01, SHIFTD: WALK, SHIFTU: WALK,CTRLD:TONGUE_ATTACK,ED:EGG_ATTACK_START,GETHIT:HITTING},
+    JUMP: {WD: JUMP, WU:FALL,AD: JUMP, AU: JUMP, DD: JUMP, DU: JUMP,GETHIT:HITTING},
+    FALL: {AD: FALL, AU: FALL, DD: FALL, DU: FALL,GETHIT:HITTING},
+    FLY: {WU: FALL, AD:FLY, AU: FLY, DD: FLY, DU:FLY,GETHIT:HITTING},
+    TONGUE_ATTACK:{GETHIT:HITTING},
+    EGG_ATTACK_START:{ED: EGG_ATTACK_END,GETHIT:HITTING},
+    EGG_ATTACK_END:{GETHIT:HITTING},
+    HITTING:{}
 }
-yoshi_delay = {IDLE_01:8,IDLE_02:10,WALK:8,RUN: 8,JUMP:0,FALL:0, FLY: 6,TONGUE_ATTACK: 10,EGG_ATTACK_START:10,EGG_ATTACK_END: 3}
-yoshi_motion_num = {IDLE_01:8,IDLE_02:5, WALK:8, RUN:2, JUMP:1, FALL:1, FLY: 8, TONGUE_ATTACK:1,EGG_ATTACK_START:1,EGG_ATTACK_END:4}
+yoshi_delay = {IDLE_01:8,IDLE_02:10,WALK:8,RUN: 8,JUMP:0,FALL:0, FLY: 6,TONGUE_ATTACK: 10,EGG_ATTACK_START:10,EGG_ATTACK_END: 3,HITTING:10}
+yoshi_motion_num = {IDLE_01:8,IDLE_02:5, WALK:8, RUN:2, JUMP:1, FALL:1, FLY: 8, TONGUE_ATTACK:1,EGG_ATTACK_START:1,EGG_ATTACK_END:4,HITTING:1}
 
 class Tongue:
     tongueImg = None
@@ -860,7 +935,7 @@ class Yoshi:
 
     def update(self):
         self.sprite_update()
-        
+
         self.cur_state.do(self)
         self.move()
         self.calc_gravity()
@@ -896,7 +971,7 @@ class Yoshi:
             self.y = 0
         self.gravity -= GRAVITY
         if self.gravity < -GRAVITY * 3:
-            if self.cur_state != FALL and self.cur_state!= FLY:
+            if self.cur_state != FALL and self.cur_state!= FLY and self.cur_state!=RUN and self.cur_state != HITTING :
                 self.cur_state.exit(self)
                 self.flytime = 0
                 self.cur_state = FALL
@@ -1085,11 +1160,16 @@ class Yoshi:
                 self.cur_state = WALK
                 game_framework.push_state(finish_state)
         elif group == 'yoshi:enemies':
+            if self.cur_state==HITTING: return
             if other.grabbed: return
             if self.state == "MARIO":
                 self.state = "NOMARIO"
-                play_state.babyMario = item.BabyMario(self.x-130,self.y+100)
+                play_state.babyMario = item.BabyMario(self.x-170,self.y+150)
                 play_state.spawnMario = True
+                play_state.game_over_timer_ui.start_setting()
+            self.cur_state.exit(self)
+            self.cur_state = HITTING
+            self.cur_state.enter(self, GETHIT)
         elif group == 'yoshi:babyMario':
             play_state.yoshi.state='MARIO'
             game_world.remove_object(other)

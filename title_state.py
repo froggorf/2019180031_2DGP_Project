@@ -4,15 +4,38 @@ import game_framework
 #import play_state
 import stage_select_state
 image = None
-
+image_time = 0
+image_logo = None
+loading = None
 def enter():
     # fill here
-    global image
-    image = load_image('title.png')
+    hide_cursor()
+    hide_lattice()
+    global image_logo,loading
+    image_logo= load_image('tukorea_logo.png')
+    loading = False
+    clear_canvas()
+    image_logo.clip_draw(0, 0, image_logo.w, image_logo.h, get_canvas_width()//2, get_canvas_height()//2,get_canvas_width(),get_canvas_height())
+    update_canvas()
+
+    global image,image_time
+    image = list()
+    for i in range(1,148):
+        idx = None
+        if i//10 >= 10:
+            idx = str(i)
+        elif i//10>=1:
+            idx = '0'+str(i)
+        else:
+            idx = '00'+str(i)
+        strr = 'title_image\\frame_apngframe'+idx+'.png'
+        image.append(load_image(strr))
+    image_time = 0
+    #image = load_image('title.png')
 
 def exit():
     global image
-    del image
+    image = None
 
 def handle_events():
     # fill here
@@ -28,10 +51,20 @@ def handle_events():
 
 def draw():
     clear_canvas()
-    image.clip_draw(0,0,800,600,get_canvas_width()//2,get_canvas_height()//2,get_canvas_width(),get_canvas_height())
+
+
+    image[int(image_time)].draw(
+        get_canvas_width()//2,
+        get_canvas_height()//2
+    )
     update_canvas()
 
 def update():
+    global image_time,loading
+
+    image_time+=0.2
+    if(image_time>=147):
+        image_time = 0
     pass
 
 def pause():

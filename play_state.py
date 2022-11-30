@@ -41,6 +41,7 @@ spawnTongue = None
 spawnEgg = None
 
 uilist = None
+game_over_timer_ui = None
 
 def enter():
     global X,Y
@@ -52,7 +53,8 @@ def enter():
 
     global gameMode, yoshi, stageState, enemies,groundRect
     global stairRect, ceilingBlock,footBlock,largeBlock,jumpBlock,coins ,finishLine,babyMario
-    global uilist
+    global uilist,game_over_timer_ui
+    game_over_timer_ui = ui.GameOverTimerUI()
 
     uilist = [ui.EggUi()]
     global eggs,eventbox
@@ -105,13 +107,12 @@ def exit():
     jumpBlock = None
     coins = None
     finishLine = None
-    global spawnMario, spawnTongue, spawnEgg
+    global spawnMario, spawnTongue, spawnEgg,uilist
     spawnMario = None
     spawnTongue = None
     spawnEgg = None
+    uilist = None
     game_world.clear()
-    print('초기화 됐어야했는데?')
-    print(groundRect)
 
 def update():
     global spawnMario, spawnTongue, spawnEgg
@@ -124,6 +125,12 @@ def update():
     if spawnMario:
         game_world.add_object(babyMario, 1)
         game_world.add_collision_group(yoshi, babyMario, 'yoshi:babyMario')
+        game_world.add_collision_group(babyMario, groundRect, 'babyMario:groundRect')
+        game_world.add_collision_group(babyMario, stairRect, 'babyMario:stairRect')
+        game_world.add_collision_group(babyMario, ceilingBlock, 'babyMario:ceilingBlock')
+        game_world.add_collision_group(babyMario, footBlock, 'babyMario:footBlock')
+        game_world.add_collision_group(babyMario, largeBlock, 'babyMario:largeBlock')
+
         spawnMario = False
     if spawnTongue:
         game_world.add_object(tongue, 1)
@@ -140,7 +147,8 @@ def update():
         game_world.add_collision_group(eggs, eventbox, 'eggs:eventbox')
         game_world.add_collision_group(eggs,coins,'eggs:coins')
         spawnEgg=False
-
+    if yoshi.state == "NOMARIO":
+        game_over_timer_ui.update()
     for a,b,group in game_world.all_collision_pairs():
         if collide(a,b):
             #print('Collision by', group)
@@ -164,6 +172,8 @@ def draw():
     # enemies.draw(*stageState.get_camera())
     for uid in uilist:
         uid.draw(yoshi.egg_count)
+    if yoshi.state == "NOMARIO":
+        game_over_timer_ui.draw()
     update_canvas()
     # delay(0.01)
 

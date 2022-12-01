@@ -266,6 +266,7 @@ class JUMP:
         if event == WD and self.gravity < 10:
             self.gravity += GRAVITY*5
             self.pressJump += 1
+            self.bgm_jump.play(1)
 
         if event == DD:
             self.dir[X]+=1
@@ -413,6 +414,8 @@ class FLY:
         self.delay = 0
         self.frame = 0
         if event == GOTOFLY:
+            self.bgm_fly.set_volume(32)
+            self.bgm_fly.play(1)
             self.flytime = 0
         if event == DD:
             self.dir[X] += 1
@@ -433,6 +436,7 @@ class FLY:
         if event == WU:
             self.flytime = -35
             self.gravity = 0
+        self.bgm_fly.set_volume(0)
         pass
 
     def do(self):
@@ -490,7 +494,7 @@ class TONGUE_ATTACK:
         self.delay = 0
         self.frame = 0
         self.dir[X] = 0
-
+        self.bgm_tongue.play(1)
         play_state.tongue = Tongue(self.face,self.x,self.y)
         play_state.spawnTongue = True
         self.attack_time = 0
@@ -701,7 +705,7 @@ class EGG_ATTACK_END:
     def enter(self, event=None):
         self.delay = 0
         self.frame = 0
-
+        self.bgm_egg_throwing.play(1)
 
         pass
 
@@ -775,6 +779,7 @@ class HITTING:
         self.frame = 0
         self.dir[X] = 0
         self.hitting_time = 0
+        self.bgm_hitting.play(1)
         pass
 
     def exit(self, event=None):
@@ -1004,7 +1009,16 @@ class Yoshi:
         self.face = RIGHT
         self.cur_state.enter(self)
 
+        #개인 상태 관련
         self.egg_count = 0
+
+        #사운드 관련
+        self.bgm_jump = load_wav('resource\\sound\\yoshi_jump.wav')
+        self.bgm_fly = load_wav('resource\\sound\\yoshi_flying.wav')
+        self.bgm_tongue = load_wav('resource\\sound\\yoshi_tongue.wav')
+        self.bgm_hitting = load_wav('resource\\sound\\yoshi_hitting.wav')
+        self.bgm_egg_throwing = load_wav('resource\\sound\\yoshi_egg_throwing.wav')
+
 
     def sprite_update(self):
         if self.delay >= yoshi_delay[self.cur_state] :
@@ -1233,11 +1247,8 @@ class Yoshi:
                     self.cur_state.exit(self)
                     self.cur_state = JUMP
                     self.cur_state.enter(self)
-        elif group == 'yoshi:coins':
-            play_state.stageState.coin_num+=1
-            game_world.remove_object(other)
-            if other in play_state.coins:
-                play_state.coins.remove(other)
+                    other.play_bgm()
+
         elif group == 'yoshi:finishLine':
             if self.state == "MARIO":
                 self.cur_state = WALK

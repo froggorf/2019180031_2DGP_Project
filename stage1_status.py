@@ -1,3 +1,4 @@
+from pico2d import *
 import play_state
 import stage
 import item
@@ -149,3 +150,7 @@ def input_object_to_game_world():
     game_world.add_collision_group(play_state.enemies, play_state.ceilingBlock, 'enemies:ceilingBlock')
     game_world.add_collision_group(play_state.enemies, play_state.footBlock, 'enemies:footBlock')
     game_world.add_collision_group(play_state.enemies, play_state.largeBlock, 'enemies:largeBlock')
+
+    play_state.stage_bgm = load_music('resource\\sound\\stage1_sound.mp3')
+    play_state.stage_bgm.set_volume(32)
+    play_state.stage_bgm.repeat_play()

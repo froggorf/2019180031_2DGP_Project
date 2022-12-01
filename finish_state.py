@@ -7,6 +7,7 @@ goal_image = None
 up_y = None
 forward = None
 move_time = None
+bgm = None
 def enter():
     global goal_image,up_y, forward,move_time
     goal_image = load_image('resource\\goal\\GOAL_image.png')
@@ -14,6 +15,10 @@ def enter():
     forward = True
     move_time = 0
 
+    global bgm
+    bgm = load_wav('resource\\sound\\goal_sound.wav')
+    bgm.set_volume(25)
+    bgm.play(1)
 
 
 def exit():
@@ -21,6 +26,8 @@ def exit():
     goal_image = None
     up_y = None
     forward = None
+    global bgm
+    bgm = None
 
 
 def pause():

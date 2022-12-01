@@ -20,7 +20,7 @@ class Item:
 
 class EventBox(Item):
     frame = None
-
+    bgm = None
     def __init__(self, x, y,eventfunc):
         super(EventBox, self).__init__(x, y)
         self.size = [54,60]
@@ -29,6 +29,9 @@ class EventBox(Item):
 
         if EventBox.frame == None:
             EventBox.frame = 0
+        if EventBox.bgm == None:
+            EventBox.bgm = load_wav('resource\\sound\\event_box.wav')
+            EventBox.bgm.set_volume(50)
     def draw(self, left, bottom, right, top):
         Item.image.clip_draw(
             0,
@@ -57,6 +60,7 @@ class EventBox(Item):
 
     def handle_collision(self, other, group):
         if group == 'eggs:eventbox':
+            EventBox.bgm.play(1)
             self.event_func()
             game_world.remove_object(self)
             if self in play_state.eventbox:
@@ -135,6 +139,7 @@ class Egg(Item):
 
 class Coin(Item):
     frame = None
+    bgm = None
     def __init__(self,x,y):
         super(Coin, self).__init__(x,y)
         self.size = [45,60]
@@ -142,6 +147,9 @@ class Coin(Item):
 
         if Coin.frame == None:
             Coin.frame = 0
+        if Coin.bgm ==None:
+            Coin.bgm = load_wav('resource\\sound\\coin.wav')
+            Coin.bgm.set_volume(32)
 
     def draw(self,left,bottom,right,top):
         Item.image.clip_draw(
@@ -169,6 +177,13 @@ class Coin(Item):
 
     def handle_collision(self, other, group):
         if group == 'eggs:coins':
+            Coin.bgm.play(1)
+            play_state.stageState.coin_num+=1
+            game_world.remove_object(self)
+            if self in play_state.coins:
+                play_state.coins.remove(self)
+        elif group == 'yoshi:coins':
+            Coin.bgm.play(1)
             play_state.stageState.coin_num+=1
             game_world.remove_object(self)
             if self in play_state.coins:
@@ -178,10 +193,19 @@ LEFT = 0
 RIGHT = 1
 class BabyMario(Item):
     frame = None
+
     def __init__(self,x,y):
         super(BabyMario, self).__init__(x,y)
         if BabyMario.frame == None:
             BabyMario.frame = 0
+
+        self.bgm = load_wav('resource\\sound\\baby_mario_cry.wav')
+        self.bgm.play(1)
+        self.bgm.set_volume(20)
+        self.bgm_time = 0
+
+
+
         self.size = [81,81]
         self.gravity = 0
         self.face = LEFT
@@ -189,6 +213,11 @@ class BabyMario(Item):
 
     def update(self):
         BabyMario.frame = (BabyMario.frame+0.1)%2
+        self.bgm_time += (1/60)
+        if self.bgm_time >= 0.5:
+            self.bgm_time = 0
+            self.bgm.play(1)
+
         if self.face == LEFT:
             self.x-=1
             if self.x<0:

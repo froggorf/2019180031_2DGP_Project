@@ -9,7 +9,7 @@ animation_time = None
 game_over_image= None
 game_over_time = None
 press_space_img = None
-
+bgm = None
 def enter():
     global animation_image
     animation_image=list()
@@ -28,6 +28,9 @@ def enter():
     global press_space_img
     press_space_img=load_image('resource\\yoshi_island_game_over\\press_space_to_title.png')
 
+    global bgm
+    bgm = load_wav('resource\\sound\\game_over_sound.wav')
+    bgm.play(1)
 
 def exit():
     pass
@@ -62,7 +65,6 @@ def update():
     animation_time += 0.2
     if(animation_time >= 50):
         animation_time = 41
-    print(animation_time)
     pass
 
 def draw():

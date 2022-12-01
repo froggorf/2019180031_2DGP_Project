@@ -7,6 +7,8 @@ image = None
 image_time = 0
 image_logo = None
 loading = None
+press_img = None
+bgm = None
 def enter():
     # fill here
     hide_cursor()
@@ -17,6 +19,8 @@ def enter():
     clear_canvas()
     image_logo.clip_draw(0, 0, image_logo.w, image_logo.h, get_canvas_width()//2, get_canvas_height()//2,get_canvas_width(),get_canvas_height())
     update_canvas()
+    global press_img
+    press_img = load_image('resource\\')
 
     global image,image_time
     image = list()
@@ -28,14 +32,25 @@ def enter():
             idx = '0'+str(i)
         else:
             idx = '00'+str(i)
-        strr = 'resource\\title_image\\frame_apngframe'+idx+'.png'
-        image.append(load_image(strr))
+        image.append(load_image('resource\\title_image\\frame_apngframe'+idx+'.png'))
     image_time = 0
+    global bgm
+    bgm = load_music('resource\\sound\\title_sound.mp3')
+    bgm.set_volume(32)
+    bgm.repeat_play()
+
     #image = load_image('title.png')
 
 def exit():
     global image
+    global bgm
+    bgm.stop()
+    bgm = None
     image = None
+    global image_time,image_logo,loading
+    image_time=None
+    image_logo=None
+    loading = None
 
 def handle_events():
     # fill here

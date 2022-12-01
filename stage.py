@@ -200,6 +200,7 @@ class FootBlock():
 
 class LargeBlock(FootBlock):
     image = None
+    bgm = None
     def __init__(self,g_left,g_bottom,g_right,g_top):
         self.pos = myRect(g_left, g_bottom, g_right, g_top)
         if LargeBlock.image==None:
@@ -208,6 +209,10 @@ class LargeBlock(FootBlock):
         self.first_w = self.pos.get_w()
         self.first_h = self.pos.get_h()
         self.larger_block = False
+        if LargeBlock.bgm == None:
+            LargeBlock.bgm = load_wav('resource\\sound\\larger_block.wav')
+            LargeBlock.bgm.set_volume(20)
+        self.play_sound = False
 
     def draw(self, left, bottom, right, top):
         self.image.clip_draw(0, 0, 63, 62, self.pos.left - left + self.pos.get_w() // 2, self.pos.bottom - bottom + self.pos.get_h() // 2, self.pos.get_w(), self.pos.get_h())
@@ -228,6 +233,9 @@ class LargeBlock(FootBlock):
             self.pos.bottom+=self.first_h//19
             self.pos.top+=self.first_h//12
             self.largertime+=1
+            if self.play_sound == False:
+                LargeBlock.bgm.play(1)
+                self.play_sound=True
 
     def get_bb(self):
         return self.pos.left, self.pos.bottom, self.pos.right, self.pos.top
@@ -237,11 +245,15 @@ class LargeBlock(FootBlock):
 
 class JumpBlock(FootBlock):
     image = None
+    bgm = None
     def __init__(self, g_left=0, g_bottom=0, g_right=0, g_top=0, jumppower=0):
         self.pos = myRect(g_left, g_bottom, g_right, g_top)
         if JumpBlock.image == None:
             JumpBlock.image = load_image('resource\\about_stage\\foot_block.png')
         self.jump_power = jumppower
+        if JumpBlock.bgm == None:
+            JumpBlock.bgm = load_wav('resource\\sound\\jump_block.wav')
+            JumpBlock.bgm.set_volume(72)
 
     def draw(self, left, bottom, right, top):
         self.image.clip_draw(126, 0, 63, 62, self.pos.left - left + self.pos.get_w() // 2,
@@ -252,3 +264,6 @@ class JumpBlock(FootBlock):
 
     def handle_collision(self, other, group):
         pass
+
+    def play_bgm(self):
+        JumpBlock.bgm.play(1)

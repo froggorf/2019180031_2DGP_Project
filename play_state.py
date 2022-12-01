@@ -43,6 +43,7 @@ spawnEgg = None
 uilist = None
 game_over_timer_ui = None
 coin_ui = None
+stage_bgm = None
 
 def enter():
     global X,Y
@@ -60,7 +61,7 @@ def enter():
 
     uilist = [ui.EggUi()]
     global eggs,eventbox
-
+    global stage_bgm
     eggs = []
 
     gameMode = {"START": 0, "SELECTSTAGE": 1, "PLAYSTAGE": 2}
@@ -80,8 +81,6 @@ def enter():
     global quit_game
     quit_game=False
     game_framework.push_state(start_state)
-
-
 
 
 def exit():
@@ -116,6 +115,9 @@ def exit():
     coin_ui=None
     game_over_timer_ui=None
     game_world.clear()
+    global stage_bgm
+    stage_bgm.stop()
+    stage_bgm = None
 
 def update():
     global spawnMario, spawnTongue, spawnEgg
@@ -195,6 +197,8 @@ def on_quit_game():
     quit_game=True
 
 def resume():
+
+    stage_bgm.resume()
     if pressA and not pressD:
         yoshi.cur_state.exit(yoshi)
         yoshi.cur_state = yoshi_character.WALK
@@ -211,7 +215,10 @@ def resume():
 
 
 
+
 def pause():
+
+    stage_bgm.pause()
     pass
 
 def handle_yoshi(event):

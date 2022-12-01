@@ -9,7 +9,7 @@ playable_stage = None
 icon_pos = None
 X,Y = None,None
 select_stage = None
-
+bgm = None
 def enter():
     global select_stage_image, icon_image
     global icon_size
@@ -24,28 +24,37 @@ def enter():
     icon_pos = [[],[50,186],[240,186], [431,186],[625,186]]
     X,Y = 0,1
     select_stage = 0
+    global bgm
+    bgm = load_music('resource\\sound\\select_stage_sound.mp3')
+    bgm.set_volume(32)
+    bgm.repeat_play()
 
 
 def exit():
     global select_stage_image, icon_image, icon_size
     global playable_stage, icon_pos, X,Y, select_stage
-    del select_stage_image
-    del icon_image
-    del icon_size
-    del playable_stage
-    del icon_pos
-    del X
-    del Y
-    del select_stage
+    select_stage_image = None
+    icon_image = None
+    icon_size = None
+    playable_stage = None
+    icon_pos= None
+    X= None
+    Y= None
+    select_stage= None
+    global bgm
+    bgm.stop()
+    bgm = None
 
 
 
 
 def pause():
+    bgm.stop()
     pass
 
 
 def resume():
+    bgm.repeat_play()
     pass
 
 

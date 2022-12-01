@@ -86,10 +86,15 @@ class EggUi(UI):
         )
 
 class GameOverTimerUI(UI):
+    bgm = None
     def __init__(self):
         super(GameOverTimerUI, self).__init__()
         self.time = 10
         self.counter = 0
+        if GameOverTimerUI.bgm ==None:
+            GameOverTimerUI.bgm = load_wav('resource\\sound\\game_over_timer.wav')
+        self.bgm_time = 0
+
     def start_setting(self):
         self.time = 10
         self.counter = 0
@@ -127,6 +132,10 @@ class GameOverTimerUI(UI):
             get_canvas_height() - 100 - 164 // 2
         )
     def update(self):
+        self.bgm_time+= (1/60)
+        if self.bgm_time >=1.5 and self.time<=5:
+            GameOverTimerUI.bgm.play(1)
+            self.bgm_time=0
         self.counter+=16
         if self.counter>=1000:
             self.counter-=1000

@@ -1,10 +1,11 @@
 from pico2d import *
 import play_state
 import game_framework
-
+import stage_select_state
 image = None
 move = None
 time = None
+bgm = None
 def enter():
     global image, move, time
     image = [load_image('resource\\about_stage\\stage1_start.png')]
@@ -14,11 +15,18 @@ def enter():
     play_state.yoshi.y = 700
     play_state.pressA= False
     play_state.pressD=False
+    global bgm
+    bgm = load_music('resource\\sound\\start_sound.mp3')
+    bgm.set_volume(32)
+    bgm.play(1)
 def exit():
     global image, move, time
     del image
     del move
     del time
+    global bgm
+    bgm.stop()
+    del bgm
 
 def pause():
     pass
@@ -56,12 +64,21 @@ def update():
         play_state.yoshi.x += 5
         play_state.yoshi.y -= 2
         time += 1
-    elif time<80:
-        play_state.yoshi.x += 4
-        play_state.yoshi.y -= 3
+    elif time<110:
+        play_state.yoshi.x += 2
+        play_state.yoshi.y -= 1
         time += 1
     else:
         game_framework.pop_state()
+        if stage_select_state.select_stage == 1:
+            play_state.stage_bgm = load_music('resource\\sound\\stage1_sound.mp3')
+            play_state.stage_bgm.set_volume(32)
+            play_state.stage_bgm.repeat_play()
+        elif stage_select_state.select_stage == 2:
+            play_state.stage_bgm = load_music('resource\\sound\\stage2_sound.mp3')
+            play_state.stage_bgm.set_volume(32)
+            play_state.stage_bgm.repeat_play()
+
 
     delay(0.01)
     pass

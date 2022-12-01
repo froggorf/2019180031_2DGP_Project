@@ -584,7 +584,9 @@ class EGG_ATTACK_START:
         self.degree = 0
         self.radian = 0
         self.forward = True
-
+        self.aiming_time = 0
+        self.bgm_aiming.set_volume(28)
+        self.bgm_aiming.play(1)
         pass
 
     def exit(self, event=None):
@@ -601,8 +603,13 @@ class EGG_ATTACK_START:
         else:
             self.cur_state = IDLE_01
             self.cur_state.enter(self)
+        self.bgm_aiming.set_volume(0)
 
     def do(self):
+        self.aiming_time += (1/60)
+        if self.aiming_time >= 1:
+            self.aiming_time = 0
+            self.bgm_aiming.play(1)
         if self.forward:
             self.degree -= 2
             if self.degree <= -70:
@@ -706,6 +713,7 @@ class EGG_ATTACK_END:
         self.delay = 0
         self.frame = 0
         self.bgm_egg_throwing.play(1)
+        self.bgm_aiming.set_volume(0)
 
         pass
 
@@ -1018,6 +1026,7 @@ class Yoshi:
         self.bgm_tongue = load_wav('resource\\sound\\yoshi_tongue.wav')
         self.bgm_hitting = load_wav('resource\\sound\\yoshi_hitting.wav')
         self.bgm_egg_throwing = load_wav('resource\\sound\\yoshi_egg_throwing.wav')
+        self.bgm_aiming = load_wav('resource\\sound\\yoshi_aiming.wav')
 
 
     def sprite_update(self):

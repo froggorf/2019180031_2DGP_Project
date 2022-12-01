@@ -4,17 +4,23 @@ import play_state
 image = None
 select = None
 handImage = None
+bgm = None
 def enter():
     global image,select,handImage
     image = load_image('resource\\pause\\pause.png')
     select = 0
     handImage=load_image('resource\\pause\\hand.png')
+    global bgm
+    bgm = load_wav('resource\\sound\\pause.wav')
+    bgm.set_volume(20)
+    bgm.play(1)
 
 def exit():
-    global image,select,handImage
+    global image,select,handImage,bgm
     del image
     del select
     del handImage
+    del bgm
 
 def handle_events():
     global select

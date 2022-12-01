@@ -20,7 +20,7 @@ def enter():
     image_logo.clip_draw(0, 0, image_logo.w, image_logo.h, get_canvas_width()//2, get_canvas_height()//2,get_canvas_width(),get_canvas_height())
     update_canvas()
     global press_img
-    press_img = load_image('resource\\')
+    press_img = load_image('resource\\yoshi_island_game_over\\press_space_to_title.png')
 
     global image,image_time
     image = list()
@@ -51,6 +51,8 @@ def exit():
     image_time=None
     image_logo=None
     loading = None
+    global press_img
+    press_img=None
 
 def handle_events():
     # fill here
@@ -71,6 +73,10 @@ def draw():
     image[int(image_time)].draw(
         get_canvas_width()//2,
         get_canvas_height()//2
+    )
+    press_img.draw(
+        get_canvas_width() // 4,
+        get_canvas_height() // 6
     )
     update_canvas()
 

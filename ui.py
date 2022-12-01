@@ -2,12 +2,62 @@ from pico2d import *
 
 import game_framework
 import game_over_state
+import play_state
+
 
 class UI:
     image = None
     def __init__(self):
         if UI.image == None:
-            UI.image = load_image('ui.png')
+            UI.image = load_image('resource\\UI\\ui.png')
+
+
+class CoinUI(UI):
+    def __init__(self):
+        super(CoinUI, self).__init__()
+        pass
+
+    def draw(self):
+        #코인 출력
+        UI.image.clip_draw(
+            0,
+            800-183-80,
+            60,
+            80,
+            50,
+            get_canvas_height()-50
+        )
+        #십의자리
+        coin_num = play_state.stageState.coin_num
+
+        if coin_num >= 10:
+            UI.image.clip_draw(
+                40*(coin_num//10),
+                720,
+                40,
+                81,
+                130,
+                get_canvas_height()-50
+            )
+            # 일의자리
+            UI.image.clip_draw(
+                40 * (coin_num % 10),
+                720,
+                40,
+                81,
+                190,
+                get_canvas_height() - 50
+            )
+        else:
+            UI.image.clip_draw(
+                40 * (coin_num % 10),
+                720,
+                40,
+                81,
+                150,
+                get_canvas_height() - 50
+            )
+
 
 
 
@@ -43,7 +93,6 @@ class GameOverTimerUI(UI):
     def start_setting(self):
         self.time = 10
         self.counter = 0
-        print('초기화 됐는데?')
 
     def draw(self):
         #검은원
@@ -85,7 +134,6 @@ class GameOverTimerUI(UI):
             print(self.time)
             if self.time<0:
                 self.time = 0
-                print("game_over_state 로 가기")
                 game_framework.change_state(game_over_state)
 
         pass

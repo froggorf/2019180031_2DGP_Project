@@ -7,7 +7,7 @@ move = None
 time = None
 def enter():
     global image, move, time
-    image = [load_image('stage1_start.png')]
+    image = [load_image('resource\\about_stage\\stage1_start.png')]
     move = [0, 400]
     time = 0
     play_state.yoshi.x = -60

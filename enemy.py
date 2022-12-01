@@ -26,7 +26,7 @@ class Flower(Enemy):
     def __init__(self,x,y):
         super(Flower, self).__init__(x,y)
         if Flower.image == None:
-            Flower.image = load_image('enemy.png')
+            Flower.image = load_image('resource\\enemies\\enemy.png')
 
     def draw(self,left, bottom, right, top):
         #Flower.image.clip_draw(61*int(self.frame),1000-85,61,85,self.x,self.y)

@@ -17,8 +17,8 @@ class StageState:
         self.cameraSpeed = 5
 
         #이미지 관련
-        self.image = [load_image("stage1.png"),load_image('stage2.png')]
-        self.background_image = [load_image("stage1_background.png"),load_image('stage1_background.png')]
+        self.image = [load_image("resource\\about_stage\\stage1.png"),load_image('resource\\about_stage\\stage2.png')]
+        self.background_image = [load_image("resource\\about_stage\\stage1_background.png"),load_image('resource\\about_stage\\stage1_background.png')]
 
         #스테이지 구분 관련
         self.selectStage = stage_select_state.select_stage -1
@@ -183,7 +183,7 @@ class FootBlock():
     def __init__(self,g_left=0,g_bottom=0, g_right=0,g_top=0):
         self.pos = myRect(g_left,g_bottom,g_right,g_top)
         if FootBlock.image==None:
-            FootBlock.image = load_image('foot_block.png')
+            FootBlock.image = load_image('resource\\about_stage\\foot_block.png')
 
     def draw(self, left, bottom, right, top):
         self.image.clip_draw(63, 0, 63, 62, self.pos.left - left + self.pos.get_w() // 2, self.pos.bottom - bottom + self.pos.get_h() // 2, self.pos.get_w(), self.pos.get_h())
@@ -203,7 +203,7 @@ class LargeBlock(FootBlock):
     def __init__(self,g_left,g_bottom,g_right,g_top):
         self.pos = myRect(g_left, g_bottom, g_right, g_top)
         if LargeBlock.image==None:
-            LargeBlock.image = load_image('foot_block.png')
+            LargeBlock.image = load_image('resource\\about_stage\\foot_block.png')
         self.largertime = 0
         self.first_w = self.pos.get_w()
         self.first_h = self.pos.get_h()
@@ -240,7 +240,7 @@ class JumpBlock(FootBlock):
     def __init__(self, g_left=0, g_bottom=0, g_right=0, g_top=0, jumppower=0):
         self.pos = myRect(g_left, g_bottom, g_right, g_top)
         if JumpBlock.image == None:
-            JumpBlock.image = load_image('foot_block.png')
+            JumpBlock.image = load_image('resource\\about_stage\\foot_block.png')
         self.jump_power = jumppower
 
     def draw(self, left, bottom, right, top):

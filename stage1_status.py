@@ -117,7 +117,7 @@ def input_object_to_game_world():
         item.Coin(5100, 3070),
         item.Coin(5150, 3050)
     ]
-    play_state.finishLine = stage.myRect(5747, 2870, 6139, 3262)
+    play_state.finishLine = stage.myRect(5747, 2898, 6139, 2900)
 
     play_state.enemies = [enemy.Flower(700,700),enemy.Flower(100,700),enemy.Flower(1948,1000),enemy.Flower(3600,1500)]
 

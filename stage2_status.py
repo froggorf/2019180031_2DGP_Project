@@ -122,7 +122,7 @@ def input_object_to_game_world():
         item.EventBox(4600,1500, eventbox_create_box)
     ]
 
-    play_state.finishLine = stage.myRect(6817,stage2_h-1359-80,6817+104,stage2_h-1359)
+    play_state.finishLine = stage.myRect(6817,stage2_h-1359-80,6817+104,stage2_h-1359-80+1)
 
     play_state.enemies = [enemy.Flower(700,700),enemy.Flower(100,700),enemy.Flower(1948,1000),enemy.Flower(3600,1500)]
 

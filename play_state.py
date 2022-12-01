@@ -42,6 +42,7 @@ spawnEgg = None
 
 uilist = None
 game_over_timer_ui = None
+coin_ui = None
 
 def enter():
     global X,Y
@@ -53,8 +54,9 @@ def enter():
 
     global gameMode, yoshi, stageState, enemies,groundRect
     global stairRect, ceilingBlock,footBlock,largeBlock,jumpBlock,coins ,finishLine,babyMario
-    global uilist,game_over_timer_ui
+    global uilist,game_over_timer_ui,coin_ui
     game_over_timer_ui = ui.GameOverTimerUI()
+    coin_ui= ui.CoinUI()
 
     uilist = [ui.EggUi()]
     global eggs,eventbox
@@ -77,8 +79,7 @@ def enter():
 
     global quit_game
     quit_game=False
-    #TODO: 나중에 다시 키기
-    #game_framework.push_state(start_state)
+    game_framework.push_state(start_state)
 
 
 
@@ -107,11 +108,13 @@ def exit():
     jumpBlock = None
     coins = None
     finishLine = None
-    global spawnMario, spawnTongue, spawnEgg,uilist
+    global spawnMario, spawnTongue, spawnEgg,uilist,coin_ui,game_over_timer_ui
     spawnMario = None
     spawnTongue = None
     spawnEgg = None
     uilist = None
+    coin_ui=None
+    game_over_timer_ui=None
     game_world.clear()
 
 def update():
@@ -174,6 +177,7 @@ def draw():
         uid.draw(yoshi.egg_count)
     if yoshi.state == "NOMARIO":
         game_over_timer_ui.draw()
+    coin_ui.draw()
     update_canvas()
     # delay(0.01)
 

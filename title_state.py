@@ -12,7 +12,7 @@ def enter():
     hide_cursor()
     hide_lattice()
     global image_logo,loading
-    image_logo= load_image('tukorea_logo.png')
+    image_logo= load_image('resource\\title_image\\tukorea_logo.png')
     loading = False
     clear_canvas()
     image_logo.clip_draw(0, 0, image_logo.w, image_logo.h, get_canvas_width()//2, get_canvas_height()//2,get_canvas_width(),get_canvas_height())
@@ -28,7 +28,7 @@ def enter():
             idx = '0'+str(i)
         else:
             idx = '00'+str(i)
-        strr = 'title_image\\frame_apngframe'+idx+'.png'
+        strr = 'resource\\title_image\\frame_apngframe'+idx+'.png'
         image.append(load_image(strr))
     image_time = 0
     #image = load_image('title.png')

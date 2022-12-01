@@ -5,8 +5,7 @@ import finish_state
 import game_world
 import play_state
 import item
-
-yoshi_state = {"MARIO": 0 , "NOMARIO":1, "MARIO_SWALLOW":2, "NOMARIO_SWALLOW":3}
+yoshi_state = {"MARIO": 0 , "NOMARIO":1}
 X = 0
 Y = 1
 LEFT = 0
@@ -244,7 +243,7 @@ class RUN:
             if self.face == RIGHT:
                 self.image[yoshi_state[self.state]].clip_draw(
                     int(72 * 1.6) * self.frame,
-                    960,
+                    160*6,
                     int(72 * 1.6),
                     int(52 * 1.6),
                     self.camera[X] + int(72 * 1.6) // 2,
@@ -252,8 +251,8 @@ class RUN:
                 )
             else:
                 self.image[yoshi_state[self.state]].clip_draw(
-                    int(72 * 1.6) * self.frame,
-                    1120,
+                    469+int(72 * 1.6) * self.frame,
+                    160*6,
                     int(72 * 1.6),
                     int(52 * 1.6),
                     self.camera[X] + int(72 * 1.6) // 2,
@@ -320,7 +319,7 @@ class JUMP:
             if self.face == RIGHT:
                 self.image[yoshi_state[self.state]].clip_draw(
                     0,
-                    1600,
+                    1120,
                     int(50 * 1.6),
                     int(66 * 1.6),
                     self.camera[X] + int(50 * 1.6) // 2,
@@ -328,8 +327,8 @@ class JUMP:
                 )
             else:
                 self.image[yoshi_state[self.state]].clip_draw(
-                    0,
-                    1760,
+                    334,
+                    1120,
                     int(50 * 1.6),
                     int(66 * 1.6),
                     self.camera[X] + int(50 * 1.6) // 2,
@@ -392,7 +391,7 @@ class FALL:
             if self.face == RIGHT:
                 self.image[yoshi_state[self.state]].clip_draw(
                     0,
-                    1920,
+                    1600,
                     int(46 * 1.6),
                     int(60 * 1.6),
                     self.camera[X] + int(46 * 1.6) // 2,
@@ -400,15 +399,14 @@ class FALL:
                 )
             else:
                 self.image[yoshi_state[self.state]].clip_draw(
-                    0,
-                    2080,
+                    315,
+                    1600,
                     int(46 * 1.6),
                     int(60 * 1.6),
                     self.camera[X] + int(46 * 1.6) // 2,
                     self.camera[Y] + int(60 * 1.6) // 2
                 )
 
-#TODO: FALL 중일때도 FLY로 넘어갈 수 있게 하기
 fly_gravity = [0,4,4,0,-4,-4,-2,2,10]
 class FLY:
     def enter(self, event=None):
@@ -543,6 +541,25 @@ class TONGUE_ATTACK:
                     self.camera[X] + int(68 * 1.6) // 2,
                     self.camera[Y] + int(64 * 1.6) // 2
                 )
+        else:
+            if self.face == RIGHT:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    0,
+                    1760,
+                    93,
+                    80,
+                    self.camera[X] + 93 // 2,
+                    self.camera[Y] + 80 // 2
+                )
+            else:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    417,
+                    1760,
+                    93,
+                    80,
+                    self.camera[X] + 93 // 2,
+                    self.camera[Y] + 80 // 2
+                )
 
 class EGG_ATTACK_START:
     aiming_line_img_right = None
@@ -553,9 +570,9 @@ class EGG_ATTACK_START:
             self.cur_state.exit(self)
             return
         if EGG_ATTACK_START.aiming_line_img_right == None:
-            EGG_ATTACK_START.aiming_line_img_right = load_image('aiming_line_right.png')
+            EGG_ATTACK_START.aiming_line_img_right = load_image('resource\\about_yoshi\\aiming_line_right.png')
         if EGG_ATTACK_START.aiming_line_img_left == None:
-            EGG_ATTACK_START.aiming_line_img_left = load_image('aiming_line_left.png')
+            EGG_ATTACK_START.aiming_line_img_left = load_image('resource\\about_yoshi\\aiming_line_left.png')
         self.delay = 0
         self.frame = 0
         self.dir[X] = 0
@@ -617,8 +634,6 @@ class EGG_ATTACK_START:
                     '',
                     self.camera[X]+int(68 * 1.6),
                     self.camera[Y]+EGG_ATTACK_START.aiming_line_img_right.h//2,
-                    #get_canvas_width()//2,
-                    #get_canvas_height()//2
                 )
             else:
               self.image[yoshi_state[self.state]].clip_draw(
@@ -638,10 +653,48 @@ class EGG_ATTACK_START:
                   '',
                   self.camera[X] ,
                   self.camera[Y] + EGG_ATTACK_START.aiming_line_img_left.h // 2,
-                  # get_canvas_width()//2,
-                  # get_canvas_height()//2
               )
-        #else if
+        else:
+            if self.face == RIGHT:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    0,
+                    1920,
+                    84,
+                    96,
+                    self.camera[X] + 84//2,
+                    self.camera[Y] + 96//2
+                )
+
+                EGG_ATTACK_START.aiming_line_img_right.clip_composite_draw(
+                    0,
+                    0,
+                    EGG_ATTACK_START.aiming_line_img_right.w,
+                    EGG_ATTACK_START.aiming_line_img_right.h,
+                    self.radian,
+                    '',
+                    self.camera[X]+int(68 * 1.6),
+                    self.camera[Y]+EGG_ATTACK_START.aiming_line_img_right.h//2,
+                )
+            else:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    363,
+                    1920,
+                    84,
+                    96,
+                    self.camera[X] + 84 // 2,
+                    self.camera[Y] + 96 // 2
+                )
+
+                EGG_ATTACK_START.aiming_line_img_left.clip_composite_draw(
+                    0,
+                    0,
+                    EGG_ATTACK_START.aiming_line_img_left.w,
+                    EGG_ATTACK_START.aiming_line_img_left.h,
+                    -self.radian,
+                    '',
+                    self.camera[X] ,
+                    self.camera[Y] + EGG_ATTACK_START.aiming_line_img_left.h // 2,
+                )
 
 
 class EGG_ATTACK_END:
@@ -690,6 +743,25 @@ class EGG_ATTACK_END:
             else:
                 self.image[yoshi_state[self.state]].clip_draw(
                     106 * self.frame,
+                    160*14,
+                    106,
+                    112,
+                    self.camera[X] + 106 // 2,
+                    self.camera[Y] + 112 // 2
+                )
+        else:
+            if self.face == RIGHT:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    105 * self.frame,
+                    160*13,
+                    106,
+                    112,
+                    self.camera[X] + 106 // 2,
+                    self.camera[Y] + 112       // 2
+                )
+            else:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    105 * self.frame,
                     160*14,
                     106,
                     112,
@@ -749,9 +821,7 @@ class HITTING:
         pass
 
     def draw(self):
-        self.state ='MARIO'
         if self.state == "MARIO":
-
             if self.face == RIGHT:
                 self.image[yoshi_state[self.state]].clip_draw(
                     662,
@@ -770,7 +840,26 @@ class HITTING:
                     self.camera[X] + 83 // 2,
                     self.camera[Y] + 99 // 2
                 )
-        self.state = 'NOMARIO'
+        else:
+            if self.face == RIGHT:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    738,
+                    160*14,
+                    81,
+                    103,
+                    self.camera[X] + 81 // 2,
+                    self.camera[Y] + 103 // 2
+                )
+            else:
+                self.image[yoshi_state[self.state]].clip_draw(
+                    879,
+                    160*14,
+                    81,
+                    103,
+                    self.camera[X] + 81 // 2,
+                    self.camera[Y] + 103 // 2
+                )
+
 
 
 
@@ -803,23 +892,29 @@ class Tongue:
         self.tongue_length = 0
         self.eatting = 0
         if Tongue.tongueImg == None:
-            Tongue.tongueImg = load_image("tongue.png")
+            Tongue.tongueImg = load_image("resource\\about_yoshi\\tongue.png")
         pass
     def draw(self,left,bottom,right,top):
         if self.face == RIGHT:
-            #self.x - left + self.size[X] // 2,
-            self.tongueImg.clip_draw_to_origin(
-                self.tongueImg.w - self.tongue_length,
-                self.tongueImg.h // 2,
-                self.tongue_length,
-                self.tongueImg.h // 2,
-                self.x - left+80,
-                self.y - bottom+22
-            )
-            # self.tongueImg.clip_draw(
-            #
-            #
-            # )
+            if play_state.yoshi.state == "MARIO":
+                self.tongueImg.clip_draw_to_origin(
+                    self.tongueImg.w - self.tongue_length,
+                    self.tongueImg.h // 2,
+                    self.tongue_length,
+                    self.tongueImg.h // 2,
+                    self.x - left+80,
+                    self.y - bottom+22
+                )
+            else:
+                self.tongueImg.clip_draw_to_origin(
+                    self.tongueImg.w - self.tongue_length,
+                    self.tongueImg.h // 2,
+                    self.tongue_length,
+                    self.tongueImg.h // 2,
+                    self.x - left + 70,
+                    self.y - bottom + 22
+                )
+
         else:
             self.tongueImg.clip_draw_to_origin(
                 0,
@@ -878,7 +973,7 @@ class Tongue:
 
 class Yoshi:
     def __init__(self):
-        self.image = [load_image("yoshi_with_mario_1.6x.png"),load_image("test.png")]
+        self.image = [load_image("resource\\about_yoshi\\yoshi_with_mario_1.6x.png"),load_image("resource\\about_yoshi\\yoshi_1.6x.png")]
 
         # 위치 관련
         self.x = 2450
@@ -909,7 +1004,7 @@ class Yoshi:
         self.face = RIGHT
         self.cur_state.enter(self)
 
-        self.egg_count = 9
+        self.egg_count = 0
 
     def sprite_update(self):
         if self.delay >= yoshi_delay[self.cur_state] :
@@ -940,22 +1035,18 @@ class Yoshi:
         self.move()
         self.calc_gravity()
 
-        #TODO: 나중에 game_world만들고 충돌체크 처리하기
-        #self.collide_enemy()
 
-
-        # self.check_finish()
 
 
     def check_camera(self):
         from play_state import stageState
-        #if self.state == "MARIO":
         self.camera[X] = stageState.cameraSize[X] // 2
         self.camera[Y] = stageState.cameraSize[Y] // 2
         if self.x < stageState.cameraSize[X] // 2:  # 맵 왼편
             self.camera[X] = self.x
         if self.y < stageState.cameraSize[Y] // 2:  # 맵 아래편
             self.camera[Y] = self.y
+
         # 맵 오른편 위편
         if self.x > stageState.image[stageState.selectStage].w - stageState.cameraSize[X] // 2:
             self.camera[X] = stageState.cameraSize[X] - (stageState.image[stageState.selectStage].w - self.x)
@@ -966,7 +1057,7 @@ class Yoshi:
 
     def calc_gravity(self):
         self.y += self.gravity
-        #TODO: 나중에 지우기
+
         if self.y<0:
             self.y = 0
         self.gravity -= GRAVITY
@@ -991,22 +1082,6 @@ class Yoshi:
         else:
             print('Error - 일어날 수 없음')
 
-    #TODO: game_world 리팩토링 진행하기
-    def myIntersectRect(self, rect ):
-        if rect.left == -1: return
-        bVertical = False
-        bHorizontal = False
-
-        if self.x < rect.right and self.x+self.size[X] > rect.left:
-            bHorizontal=True
-
-        if self.y+self.size[Y] > rect.bottom and self.y < rect.top:
-            bVertical = True
-
-        if bVertical and bHorizontal:
-            return True
-        else:
-            return False
 
     def move(self):
         self.x += self.dir[X] * self.speed
@@ -1038,7 +1113,7 @@ class Yoshi:
             self.y = 0
 
 
-        #TODO: 나중에 다시 읽고 리팩토링이 되도록 설정하기
+
     def check_jump(self):
         global jump_delay
         if self.pressJump != 0:
@@ -1064,12 +1139,7 @@ class Yoshi:
             if self.state == "MARIO":
                 self.state = "NOMARIO"
                 play_state.stageState.babymario = item.BabyMario(self.x-80,self.y+80)
-    def check_finish(self):
-        pass
-        # from play_state import stageState
-        # if self.myIntersectRect(stageState.finishLine):
-        #     self.cur_state= WALK
-        #     game_framework.push_state(finish_state)
+
     def add_event(self, event):
         self.event_que.insert(0, event)
 
@@ -1092,6 +1162,9 @@ class Yoshi:
     def handle_collision(self,other,group):
         if other == self : return
         if group == 'yoshi:groundRect':
+            if self.cur_state == HITTING and self.hitting_time<=24:
+                self.y = other.bottom - self.size[Y]-1
+                return
             if self.cur_state==FLY:
                 if self.gravity == -9:
                     self.y = other.top+1
@@ -1118,10 +1191,16 @@ class Yoshi:
             if self.cur_state == FALL:
                 self.check_fall()
         elif group == 'yoshi:ceilingBlock':
+            if self.cur_state == HITTING and self.hitting_time<=24:
+                self.y = other.bottom - self.size[Y]-1
+                return
             if self.gravity>= 0:
                 self.y = other.bottom - self.size[Y] - 2
                 self.gravity = 0
         elif group == 'yoshi:largeBlock':
+            if self.cur_state == HITTING and self.hitting_time<=24:
+                self.y = other.pos.bottom - self.size[Y]-1
+                return
             if self.gravity >= 0:
                 self.y = other.pos.bottom - self.size[Y] - 1
                 self.gravity = 0
@@ -1132,6 +1211,9 @@ class Yoshi:
                 if self.cur_state == FALL:
                     self.check_fall()
         elif group == 'yoshi:footBlock':
+            if self.cur_state == HITTING and self.hitting_time<=24:
+                self.y = other.pos.bottom - self.size[Y]-1
+                return
             for rect in play_state.largeBlock:
                 if play_state.collide(self, rect):
                     self.handle_collision(rect,'yoshi:largeBlock')
@@ -1152,6 +1234,7 @@ class Yoshi:
                     self.cur_state = JUMP
                     self.cur_state.enter(self)
         elif group == 'yoshi:coins':
+            play_state.stageState.coin_num+=1
             game_world.remove_object(other)
             if other in play_state.coins:
                 play_state.coins.remove(other)
@@ -1178,7 +1261,6 @@ class Yoshi:
 
 
 
-#TODO: 좋은 방법 생각나면 리팩토링 하기
 def set_keydown(event):
     if event == WD:
         key_down[WD]=True

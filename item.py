@@ -13,7 +13,7 @@ class Item:
     image = None
     def __init__(self,x,y):
         if Item.image == None:
-            Item.image = load_image('item.png')
+            Item.image = load_image('resource\\item\\item.png')
         self.x = x
         self.y = y
 
@@ -93,7 +93,7 @@ class Egg(Item):
         pass
 
     def get_bb(self):
-        return self.x, self.y, self.x + self.size[X], self.y + self.size[Y]
+        return self.x, self.y+15, self.x + self.size[X], self.y + self.size[Y]
 
     def handle_collision(self, other, group):
         if self==other: return
@@ -231,14 +231,26 @@ class BabyMario(Item):
         return self.x, self.y, self.x + self.size[X], self.y + self.size[Y]
 
     def handle_collision(self, other, group):
-        if group =='babyMario:groundRect':
-            pass
-        elif group =='babyMario:stairRect':
-            pass
-        elif group ==  'babyMario:ceilingBlock':
-            pass
-        elif group =='babyMario:footBlock':
-            pass
-        elif group =='babyMario:largeBlock':
-            pass
+        if group == 'babyMario:groundRect':
+            if self.gravity >= 0:
+                self.y = other.bottom - self.size[Y] - 1
+            else:
+                self.y = other.top + 1
+        elif group == 'babyMario:stairRect':
+            self.y = other.top + 1
+        elif group == 'babyMario:ceilingBlock':
+            if self.gravity >= 0:
+                self.y = other.bottom - self.size[Y] - 2
+        elif group == 'babyMario:largeBlock':
+            if self.gravity >= 0:
+                self.y = other.pos.bottom - self.size[Y] - 1
+            else:
+                self.y = other.pos.top + 1
+        elif group == 'babyMarioW:footBlock':
+            if self.gravity >= 0:
+                self.y = other.pos.bottom - self.size[Y] - 1
+            else:
+                self.y = other.pos.top + 1
+
+
 

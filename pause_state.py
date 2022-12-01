@@ -6,9 +6,9 @@ select = None
 handImage = None
 def enter():
     global image,select,handImage
-    image = load_image('pause.png')
+    image = load_image('resource\\pause\\pause.png')
     select = 0
-    handImage=load_image('hand.png')
+    handImage=load_image('resource\\pause\\hand.png')
 
 def exit():
     global image,select,handImage

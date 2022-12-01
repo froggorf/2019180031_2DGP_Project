@@ -14,7 +14,7 @@ def enter():
     global animation_image
     animation_image=list()
     for i in range(1, 41):
-        strr = 'yoshi_island_game_over\\yoshi_island_game_over ('+str(i)+').png'
+        strr = 'resource\\yoshi_island_game_over\\yoshi_island_game_over ('+str(i)+').png'
         animation_image.append(load_image(strr))
     global animation_time
     animation_time = 0
@@ -22,11 +22,11 @@ def enter():
     global game_over_image, game_over_time
     game_over_image = list()
     for i in range(53, 62):
-        strr = 'yoshi_island_game_over\\yoshi_island_game_over (' + str(i) + ').png'
+        strr = 'resource\\yoshi_island_game_over\\yoshi_island_game_over (' + str(i) + ').png'
         game_over_image.append(load_image(strr))
 
     global press_space_img
-    press_space_img=load_image('yoshi_island_game_over\\press_space_to_title.png')
+    press_space_img=load_image('resource\\yoshi_island_game_over\\press_space_to_title.png')
 
 
 def exit():

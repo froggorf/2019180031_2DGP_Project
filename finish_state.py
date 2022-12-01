@@ -9,7 +9,7 @@ forward = None
 move_time = None
 def enter():
     global goal_image,up_y, forward,move_time
-    goal_image = load_image('GOAL_image.png')
+    goal_image = load_image('resource\\goal\\GOAL_image.png')
     up_y=0
     forward = True
     move_time = 0
@@ -49,7 +49,8 @@ def update():
     move_time+=1
     if move_time>=164:
         play_state.on_quit_game()
-        stage_select_state.playable_stage += 1
+        if stage_select_state.select_stage == stage_select_state.playable_stage:
+            stage_select_state.playable_stage += 1
         if stage_select_state.playable_stage > 4: stage_select_state.playable_stage=4
         game_framework.pop_state()
         return

@@ -197,7 +197,7 @@ def on_quit_game():
     quit_game=True
 
 def resume():
-
+    print(pressA, pressD)
     stage_bgm.resume()
     if pressA and not pressD:
         yoshi.cur_state.exit(yoshi)

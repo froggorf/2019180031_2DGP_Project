@@ -77,7 +77,6 @@ def input_object_to_game_world():
         stage.LargeBlock(3584, 3263 - 2558, 3584 + 62, 3263 - 2558 + 62)
     ]
     play_state.jumpBlock = [
-        stage.JumpBlock(500, 508, 500 + 62, 508 + 62, 101),
         stage.JumpBlock(4432, 1275, 4432 + 62, 1275 + 62, 75),
         stage.JumpBlock(4994, 1720, 4994 + 62, 1720 + 62, 115)
     ]
@@ -93,34 +92,33 @@ def input_object_to_game_world():
         item.Coin(2630, 1150),
         item.Coin(2750, 1200),
         item.Coin(2850, 1150),
-
-        item.Coin(3350, 1200),
-        item.Coin(3425, 1300),
-        item.Coin(3550, 1410),
-        item.Coin(3675, 1500),
+        #
+        # item.Coin(3350, 1200),
+        # item.Coin(3425, 1300),
+        # item.Coin(3550, 1410),
+        # item.Coin(3675, 1500),
 
         item.Coin(4445, 1500),
-        item.Coin(4445, 1600),
         item.Coin(4445, 1700),
-        item.Coin(4515, 1800),
         item.Coin(4580, 1800),
 
         item.Coin(5012, 1900),
-        item.Coin(5012, 2030),
         item.Coin(5012, 2160),
-        item.Coin(5012, 2290),
         item.Coin(5012, 2420),
-        item.Coin(5012, 2550),
         item.Coin(5012, 2680),
-        item.Coin(5012, 2810),
         item.Coin(5012, 2900),
-        item.Coin(5050, 3020),
-        item.Coin(5100, 3070),
         item.Coin(5150, 3050)
     ]
     play_state.finishLine = stage.myRect(5747, 2898, 6139, 2900)
 
-    play_state.enemies = [enemy.Flower(700,700),enemy.Flower(100,700),enemy.Flower(1948,1000),enemy.Flower(3600,1500)]
+    play_state.enemies = [
+        #enemy.Flower(700,700),
+        enemy.Flower(1146,3264-2660-80),
+        enemy.Flower(1962, 3264 - 2569-80),
+        enemy.Flower(3489,3264 - 2610-80),
+        enemy.Flower(4542,3264-1880-80)
+
+        ]
 
 
     game_world.add_objects(play_state.largeBlock, 1)

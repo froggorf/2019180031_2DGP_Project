@@ -125,7 +125,12 @@ def input_object_to_game_world():
 
     play_state.finishLine = stage.myRect(6817,stage2_h-1359-80,6817+104,stage2_h-1359-80+1)
 
-    play_state.enemies = [enemy.Flower(700,700),enemy.Flower(100,700),enemy.Flower(1948,1000),enemy.Flower(3600,1500)]
+    play_state.enemies = [
+        enemy.Flower(739, 1913-1405),
+        enemy.Flower(1978, 1913 - 1400),
+        enemy.Flower(3488, 1913 - 1230),
+        enemy.Flower(4703, 1913 - 1349),
+    ]
 
 
     game_world.add_objects(play_state.largeBlock, 1)

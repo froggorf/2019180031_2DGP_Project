@@ -786,6 +786,7 @@ class HITTING:
         self.delay = 0
         self.frame = 0
         self.dir[X] = 0
+        self.godmode_time = 2.0
         self.hitting_time = 0
         self.bgm_hitting.play(1)
         pass
@@ -858,12 +859,6 @@ class HITTING:
                     else:
                         self.x = rect.pos.right + 1
             self.y =self.y+35+self.gravity
-        if self.hitting_time%10 == 0:
-            self.image[yoshi_state['NOMARIO']].opacify(1)
-            self.image[yoshi_state['MARIO']].opacify(1)
-        elif self.hitting_time%10 == 5:
-            self.image[yoshi_state['NOMARIO']].opacify(0.5)
-            self.image[yoshi_state['MARIO']].opacify(0.5)
 
 
 
@@ -1055,7 +1050,8 @@ class Yoshi:
 
         #개인 상태 관련
         self.egg_count = 0
-
+        self.godmode_time = 0
+        self.opacify_time = 0
         #사운드 관련
         self.bgm_jump = load_wav('resource\\sound\\yoshi_jump.wav')
         self.bgm_fly = load_wav('resource\\sound\\yoshi_flying.wav')
@@ -1089,6 +1085,20 @@ class Yoshi:
 
     def update(self):
         self.sprite_update()
+        if self.godmode_time>0:
+            self.opacify_time+=1
+            if self.opacify_time==1:
+                self.image[yoshi_state['NOMARIO']].opacify(1)
+                self.image[yoshi_state['MARIO']].opacify(1)
+            elif self.opacify_time>= 5:
+                self.image[yoshi_state['NOMARIO']].opacify(0.5)
+                self.image[yoshi_state['MARIO']].opacify(0.5)
+                self.opacify_time = -1
+            self.godmode_time-=(1/60)
+            if self.godmode_time<=0:
+                self.godmode_time=0
+                self.image[yoshi_state['NOMARIO']].opacify(1)
+                self.image[yoshi_state['MARIO']].opacify(1)
 
         self.cur_state.do(self)
         self.move()
@@ -1299,7 +1309,8 @@ class Yoshi:
                 self.cur_state = WALK
                 game_framework.push_state(finish_state)
         elif group == 'yoshi:enemies':
-            if self.cur_state==HITTING: return
+            #if self.cur_state==HITTING: return
+            if self.godmode_time>0 : return
             if other.grabbed: return
             if self.state == "MARIO":
                 self.state = "NOMARIO"

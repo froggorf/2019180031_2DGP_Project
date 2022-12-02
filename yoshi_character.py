@@ -815,12 +815,48 @@ class HITTING:
                 self.x -= 3
             else:
                 self.x += 3
+            for rect in play_state.groundRect:
+                if play_state.collide(play_state.yoshi, rect):
+                    if self.face == LEFT:
+                        self.x = rect.left - self.size[X] - 1
+                    else:
+                        self.x = rect.right + 3
+            for rect in play_state.largeBlock:
+                if play_state.collide(play_state.yoshi, rect):
+                    if self.face == LEFT:
+                        self.x = rect.pos.left - self.size[X] - 1
+                    else:
+                        self.x = rect.pos.right + 1
+            for rect in play_state.footBlock:
+                if play_state.collide(play_state.yoshi, rect):
+                    if self.face == LEFT:
+                        self.x = rect.pos.left - self.size[X] - 1
+                    else:
+                        self.x = rect.pos.right + 1
             self.y = self.y-3+self.gravity
         else:
             if self.face == RIGHT:
                 self.x -= 3
             else:
                 self.x += 3
+            for rect in play_state.groundRect:
+                if play_state.collide(play_state.yoshi, rect):
+                    if self.face == LEFT:
+                        self.x = rect.left - self.size[X] - 1
+                    else:
+                        self.x = rect.right + 3
+            for rect in play_state.largeBlock:
+                if play_state.collide(play_state.yoshi, rect):
+                    if self.face == LEFT:
+                        self.x = rect.pos.left - self.size[X] - 1
+                    else:
+                        self.x = rect.pos.right + 1
+            for rect in play_state.footBlock:
+                if play_state.collide(play_state.yoshi, rect):
+                    if self.face == LEFT:
+                        self.x = rect.pos.left - self.size[X] - 1
+                    else:
+                        self.x = rect.pos.right + 1
             self.y =self.y+35+self.gravity
         if self.hitting_time%10 == 0:
             self.image[yoshi_state['NOMARIO']].opacify(1)

@@ -3,6 +3,8 @@ import random
 import play_state
 LEFT = 0
 RIGHT = 1
+X = 0
+Y = 1
 class Enemy:
     def __init__(self,x,y):
         self.x = x
@@ -27,6 +29,7 @@ class Flower(Enemy):
         super(Flower, self).__init__(x,y)
         if Flower.image == None:
             Flower.image = load_image('resource\\enemies\\enemy.png')
+        self.size = [61,85]
 
     def draw(self,left, bottom, right, top):
         #Flower.image.clip_draw(61*int(self.frame),1000-85,61,85,self.x,self.y)
@@ -70,22 +73,22 @@ class Flower(Enemy):
     def check_block(self):
         for rect in play_state.groundRect:
             if play_state.collide(self,rect):
-                if self.movetime >= 0:
-                    self.x -= self.speed - 1
-                elif self.movetime <= 0:
-                    self.x += self.speed + 1
+                if self.face == LEFT:
+                    self.x = rect.right+1
+                else:
+                    self.x = rect.left-self.size[X] -1
         for rect in play_state.largeBlock:
             if play_state.collide(self,rect):
-                if self.movetime >= 0:
-                    self.x -= self.speed - 1
-                elif self.movetime <= 0:
-                    self.x += self.speed + 1
+                if self.face == LEFT:
+                    self.x = rect.pos.right+1
+                else:
+                    self.x = rect.pos.left - self.size[X] - 1
         for rect in play_state.footBlock:
             if play_state.collide(self,rect):
-                if self.movetime >= 0:
-                    self.x -= self.speed - 1
-                elif self.movetime <= 0:
-                    self.x += self.speed + 1
+                if self.face == LEFT:
+                    self.x = rect.pos.right+1
+                else:
+                    self.x = rect.pos.left - self.size[X] - 1
         if self.x < 0:
             self.x = 0
         if self.y < 0:

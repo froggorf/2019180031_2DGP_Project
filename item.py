@@ -204,8 +204,6 @@ class BabyMario(Item):
         self.bgm.set_volume(20)
         self.bgm_time = 0
 
-
-
         self.size = [81,81]
         self.gravity = 0
         self.face = LEFT
@@ -218,28 +216,49 @@ class BabyMario(Item):
             self.bgm_time = 0
             self.bgm.play(1)
 
+
+
+
         if self.face == LEFT:
             self.x-=1
             if self.x<0:
                 self.x = 0
         else:
             self.x +=1
+        for rect in play_state.groundRect:
+            if play_state.collide(self, rect):
+                if self.face == LEFT:
+                    self.x = rect.right + 3
+                else:
+                    self.x = rect.left - self.size[X] - 1
+        for rect in play_state.largeBlock:
+            if play_state.collide(self, rect):
+                if self.face == LEFT:
+                    self.x = rect.pos.right + 1
+                else:
+                    self.x = rect.pos.left - self.size[X] - 1
+        for rect in play_state.footBlock:
+            if play_state.collide(self, rect):
+                if self.face == LEFT:
+                    self.x = rect.pos.right + 1
+                else:
+                    self.x = rect.pos.left - self.size[X] - 1
 
         self.y += self.gravity
+
         if self.up:
             self.gravity -= 0.5
-            if self.gravity == -10 :
+            if self.gravity == -10:
                 self.up = False
         else:
             self.gravity += 0.5
             if self.gravity == 10:
-                self.up=True
-                if random.randint(0,4)==0:
-                    if self.face ==LEFT:
+                self.up = True
+                if random.randint(0, 4) == 0:
+                    if self.face == LEFT:
                         self.face = RIGHT
                     else:
                         self.face = LEFT
-
 
 
 
@@ -266,7 +285,10 @@ class BabyMario(Item):
             else:
                 self.y = other.top + 1
         elif group == 'babyMario:stairRect':
-            self.y = other.top + 1
+            if self.gravity>=0:
+                self.y = other.bottom - self.size[Y]-1
+            else:
+                self.y = other.top + 1
         elif group == 'babyMario:ceilingBlock':
             if self.gravity >= 0:
                 self.y = other.bottom - self.size[Y] - 2

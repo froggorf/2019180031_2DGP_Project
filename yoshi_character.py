@@ -1303,7 +1303,7 @@ class Yoshi:
             if other.grabbed: return
             if self.state == "MARIO":
                 self.state = "NOMARIO"
-                play_state.babyMario = item.BabyMario(self.x-170,self.y+150)
+                play_state.babyMario = item.BabyMario(self.x,self.y+250)
                 play_state.spawnMario = True
                 play_state.game_over_timer_ui.start_setting()
             self.cur_state.exit(self)

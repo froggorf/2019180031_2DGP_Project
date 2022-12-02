@@ -190,6 +190,19 @@ def handle_events():
             game_framework.quit()
         if event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.push_state(pause_state)
+        if event.key == SDLK_a:
+            global pressA
+            if event.type==SDL_KEYDOWN:
+                pressA = True
+            else:
+                pressA = False
+        elif event.key == SDLK_d:
+            global pressD
+            if event.type==SDL_KEYDOWN:
+                pressD=True
+            else:
+                pressD=False
+
         handle_yoshi(event)
 
 def on_quit_game():
@@ -202,13 +215,20 @@ def resume():
     if pressA and not pressD:
         yoshi.cur_state.exit(yoshi)
         yoshi.cur_state = yoshi_character.WALK
-        yoshi.dir[X] -= 1
+        yoshi.dir[X] = -1
         yoshi.face = 0
     elif pressD and not pressA:
         yoshi.cur_state.exit(yoshi)
         yoshi.cur_state = yoshi_character.WALK
-        yoshi.dir[X] += 1
+
+        yoshi.dir[X] = 1
         yoshi.face = 1
+    elif (not pressD and not pressA) or (pressD and pressA):
+        yoshi.cur_state.exit(yoshi)
+        yoshi.cur_state = yoshi_character.IDLE_01
+        yoshi.dir[X] = 0
+
+
 
     if quit_game == True:
         game_framework.pop_state()

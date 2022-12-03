@@ -2,6 +2,7 @@ from pico2d import *
 import play_state
 import game_framework
 import stage_select_state
+import yoshi_character
 image = None
 move = None
 time = None
@@ -11,8 +12,13 @@ def enter():
     image = [load_image('resource\\about_stage\\stage1_start.png')]
     move = [0, 400]
     time = 0
+
     play_state.yoshi.x = -60
     play_state.yoshi.y = 700
+    if stage_select_state.select_stage==4:
+        play_state.yoshi.x = 234
+        play_state.yoshi.y = 217
+        play_state.yoshi.cur_state=yoshi_character.IDLE_01
     play_state.pressA= False
     play_state.pressD=False
     global bgm
@@ -57,16 +63,19 @@ def handle_events():
 def update():
     global time
     if time <30:
-        play_state.yoshi.x += 7
-        play_state.yoshi.y -=2
+        if stage_select_state.select_stage != 4:
+            play_state.yoshi.x += 7
+            play_state.yoshi.y -=2
         time += 1
     elif time<60:
-        play_state.yoshi.x += 5
-        play_state.yoshi.y -= 2
+        if stage_select_state.select_stage != 4:
+            play_state.yoshi.x += 5
+            play_state.yoshi.y -= 2
         time += 1
     elif time<110:
-        play_state.yoshi.x += 2
-        play_state.yoshi.y -= 1
+        if stage_select_state.select_stage != 4:
+            play_state.yoshi.x += 2
+            play_state.yoshi.y -= 1
         time += 1
     else:
         game_framework.pop_state()
@@ -78,7 +87,14 @@ def update():
             play_state.stage_bgm = load_music('resource\\sound\\stage2_sound.mp3')
             play_state.stage_bgm.set_volume(32)
             play_state.stage_bgm.repeat_play()
-
+        elif stage_select_state.select_stage == 3:
+            play_state.stage_bgm = load_music('resource\\sound\\stage3_sound.mp3')
+            play_state.stage_bgm.set_volume(32)
+            play_state.stage_bgm.repeat_play()
+        elif stage_select_state.select_stage == 4:
+            play_state.stage_bgm = load_music('resource\\sound\\stage4_sound.mp3')
+            play_state.stage_bgm.set_volume(32)
+            play_state.stage_bgm.repeat_play()
 
     delay(0.01)
     pass

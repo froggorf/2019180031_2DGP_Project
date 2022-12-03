@@ -20,7 +20,7 @@ def enter():
     select_stage_image = load_image('resource\\stage_select\\stage_select.png')
     icon_image = load_image('resource\\stage_select\\stage_icon.png')
     icon_size=[110,120]
-    playable_stage = 1
+    playable_stage = 4
     icon_pos = [[],[50,186],[240,186], [431,186],[625,186]]
     X,Y = 0,1
     select_stage = 0
@@ -76,6 +76,18 @@ def handle_events():
                 break
             else:
                 select_stage =2
+                game_framework.push_state(play_state)
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_3:
+            if playable_stage<3:
+                break
+            else:
+                select_stage = 3
+                game_framework.push_state(play_state)
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_4:
+            if playable_stage < 4:
+                break
+            else:
+                select_stage = 4
                 game_framework.push_state(play_state)
 
 

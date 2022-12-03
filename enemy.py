@@ -1,6 +1,7 @@
 from pico2d import *
 import random
 import play_state
+import game_world
 LEFT = 0
 RIGHT = 1
 X = 0
@@ -15,11 +16,51 @@ class Enemy:
         self.waittime = random.randint(30,100)
         self.face = LEFT
         self.grabbed = False
+        self.can_attack = True
     # def draw(self):
     #     pass
 
     def update(self):
         pass
+
+
+
+class Rocket(Enemy):
+    image = None
+    def __init__(self,s_x,s_y,e_x= 0,e_y=None):
+
+        super(Rocket, self).__init__(random.randint(0,6000),s_y)
+        if Rocket.image == None:
+            Rocket.image = load_image('resource\\enemies\\enemy.png')
+        self.size = [int(146/5*3), int(132/5*3)]
+        self.startx = s_x
+        self.starty = s_y
+        self.endx = e_x
+        self.endy = e_y
+        self.speed = random.randint(3,10)
+        self.can_attack=False
+    def draw(self,left, bottom, right, top):
+        Rocket.image.clip_draw(146*int(self.frame), 1000-97-132, 146, 132,
+                               self.x - left + self.size[X] // 2, self.y - bottom + self.size[Y] // 2, self.size[X], self.size[Y])
+
+
+
+    def update(self):
+        self.frame=(self.frame+0.2)%2
+        self.move()
+
+    def move(self):
+        self.x -= self.speed
+        if self.x <= self.endx:
+            self.x = self.startx
+    def get_bb(self):
+        return self.x, self.y, self.x + self.size[X], self.y + self.size[Y]
+
+    def handle_collision(self, other, group):
+        if self == other: return
+
+
+
 
 
 
@@ -123,6 +164,20 @@ class Flower(Enemy):
     def handle_collision(self, other, group):
         if self == other: return
         #print('enemies 가 무언가랑 만났다고 함')
+        if group == 'tongue:enemies':
+            self.grabbed = True
+            if other.tongue_length <= 20:
+                other.eatting += 1
+                game_world.remove_object(self)
+                play_state.enemies.remove(self)
+            if other.face == RIGHT:
+                self.x = other.x+30+other.tongue_length-10
+                self.y = other.y
+            else:
+                self.x = other.x+25-other.tongue_length+5
+                self.y=other.y
+
+
         if self.grabbed : return
         if group == 'enemies:groundRect':
             self.y = other.top + 1
@@ -134,4 +189,6 @@ class Flower(Enemy):
             self.y = other.pos.top + 1
         elif group == 'yoshi:footBlock':
             self.y = other.pos.top + 1
+
+
 

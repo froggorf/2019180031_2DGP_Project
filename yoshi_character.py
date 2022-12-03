@@ -5,6 +5,7 @@ import finish_state
 import game_world
 import play_state
 import item
+import game_over_state
 yoshi_state = {"MARIO": 0 , "NOMARIO":1}
 X = 0
 Y = 1
@@ -441,12 +442,12 @@ class FLY:
 
     def do(self):
         self.flytime = (self.flytime+1)
-        if self.flytime == 90:
+        if self.flytime != 90:
+            self.gravity = fly_gravity[self.flytime // 10]
+        if self.flytime >= 90:
             self.cur_state.exit(self, WU)
             self.cur_state = FALL
             self.cur_state.enter(self)
-        else:
-            self.gravity = fly_gravity[self.flytime//10]
         pass
 
     def draw(self):
@@ -998,19 +999,7 @@ class Tongue:
     def handle_collision(self, other, group):
         if other == self: return
 
-        if group == 'tongue:enemies':
-            other.grabbed = True
-            if self.tongue_length == 0:
-                self.eatting += 1
-                game_world.remove_object(other)
-                play_state.enemies.remove(other)
-            if self.face == RIGHT:
-                other.x = self.x+30+self.tongue_length-10
-                other.y = self.y
-            else:
-                other.x = self.x+25-self.tongue_length+5
-                other.y=self.y
-        pass
+
 
 
 
@@ -1020,8 +1009,8 @@ class Yoshi:
         self.image = [load_image("resource\\about_yoshi\\yoshi_with_mario_1.6x.png"),load_image("resource\\about_yoshi\\yoshi_1.6x.png")]
 
         # 위치 관련
-        self.x = 2450
-        self.y = 1400
+        self.x = 946
+        self.y = 6000-883
         self.size = [int(62 * 1.6), int(66 * 1.6)]
 
         # 상태 관련
@@ -1231,13 +1220,15 @@ class Yoshi:
     def handle_collision(self,other,group):
         if other == self : return
         if group == 'yoshi:groundRect':
+
             if self.cur_state == HITTING and self.hitting_time<=24:
                 self.y = other.bottom - self.size[Y]-1
                 return
             if self.cur_state==FLY:
+                print(self.gravity)
                 if self.gravity == -9:
                     self.y = other.top+1
-                elif self.gravity == -1:
+                elif self.gravity == 2 or self.gravity == -1 or self.gravity == 5:
                     self.y = other.bottom-self.size[Y]-1
                 self.cur_state.exit(self)
                 self.cur_state=FALL
@@ -1310,19 +1301,25 @@ class Yoshi:
                 game_framework.push_state(finish_state)
         elif group == 'yoshi:enemies':
             #if self.cur_state==HITTING: return
+
             if self.godmode_time>0 : return
             if other.grabbed: return
-            if self.state == "MARIO":
-                self.state = "NOMARIO"
-                play_state.babyMario = item.BabyMario(self.x,self.y+250)
-                play_state.spawnMario = True
-                play_state.game_over_timer_ui.start_setting()
             self.cur_state.exit(self)
             self.cur_state = HITTING
             self.cur_state.enter(self, GETHIT)
+            if other.can_attack != False:
+                if self.state == "MARIO":
+                    self.state = "NOMARIO"
+
+                    play_state.babyMario = item.BabyMario(self.x,self.y+250)
+                    play_state.spawnMario = True
+                    play_state.game_over_timer_ui.start_setting()
+
         elif group == 'yoshi:babyMario':
             play_state.yoshi.state='MARIO'
             game_world.remove_object(other)
+        elif group == 'yoshi:gameover':
+            game_framework.change_state(game_over_state)
 
 
 

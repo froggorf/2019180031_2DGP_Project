@@ -40,7 +40,11 @@ def input_object_to_game_world():
         stage.myRect(6038,0,6038+1713,471),
         stage.myRect(2217, stage2_h - 432 - 62, 2217+734, stage2_h - 432),
         stage.myRect(1875, stage2_h - 609 - 62, 1875 + 344, stage2_h - 609),
-        stage.myRect(453,stage2_h-393-62,453+738,stage2_h-393)
+        stage.myRect(453,stage2_h-393-62,453+738,stage2_h-393),
+
+        stage.myRect(6042, stage2_h - 1231 - 84, 6042 + 42, stage2_h - 1231),
+        stage.myRect(6057, stage2_h - 1173 - 97, 6057 + 80, stage2_h - 1173),
+        stage.myRect(6105, stage2_h - 1114 - 85, 6105 + 115, stage2_h - 1114),
         # stage.myRect()
     ]
 
@@ -73,9 +77,6 @@ def input_object_to_game_world():
     ]
 
     play_state.ceilingBlock = [
-        stage.myRect(6042, stage2_h - 1231 - 84, 6042+42, stage2_h - 1231),
-        stage.myRect(6057, stage2_h - 1173 - 97, 6057 + 80, stage2_h - 1173),
-        stage.myRect(6105, stage2_h - 1114 - 85, 6105 + 115, stage2_h - 1114),
 
     ]
     play_state.footBlock = [
@@ -123,7 +124,8 @@ def input_object_to_game_world():
         item.EventBox(4600,1500, eventbox_create_box)
     ]
 
-    play_state.finishLine = stage.myRect(6817,stage2_h-1359-80,6817+104,stage2_h-1359-80+1)
+    #play_state.finishLine = stage.myRect(6817,stage2_h-1359-80,6817+500,stage2_h-1359-80+1)
+    play_state.finishLine = stage.myRect(6817, 0, 6817 + 500, stage2_h - 1359 - 80 + 1)
 
     play_state.enemies = [
         enemy.Flower(739, 1913-1405),

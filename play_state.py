@@ -12,7 +12,8 @@ import ui
 
 import stage1_status
 import stage2_status
-
+import stage3_status
+import stage4_status
 X = 0
 Y = 1
 quit_game = False
@@ -30,6 +31,8 @@ babyMario = None
 tongue = None
 eggs= None
 eventbox =None
+game_over_line = None
+
 
 stageState = None
 enemies = None
@@ -73,14 +76,17 @@ def enter():
         stage1_status.input_object_to_game_world()
     elif stage_select_state.select_stage==2:
         stage2_status.input_object_to_game_world()
-
+    elif stage_select_state.select_stage==3:
+        stage3_status.input_object_to_game_world()
+    elif stage_select_state.select_stage == 4:
+        stage4_status.input_object_to_game_world()
 
     stageState = stage.StageState()
     game_world.add_object(stageState,0)
 
     global quit_game
     quit_game=False
-    game_framework.push_state(start_state)
+    #game_framework.push_state(start_state)
 
 
 def exit():
@@ -108,6 +114,8 @@ def exit():
     coins = None
     finishLine = None
     global spawnMario, spawnTongue, spawnEgg,uilist,coin_ui,game_over_timer_ui
+    global game_over_line
+    game_over_line=None
     spawnMario = None
     spawnTongue = None
     spawnEgg = None

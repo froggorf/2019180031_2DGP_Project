@@ -26,7 +26,17 @@ def input_object_to_game_world():
         stage.myRect(4787, 1693, 5307, 1728),
         stage.myRect(5121, 2735, 5188, 2890),
         stage.myRect(5260, 1729, 5317, 2680),
-        stage.myRect(5333, 3262 - 404, 6142, 3262 - 381)
+        stage.myRect(5333, 3262 - 404, 6142, 3262 - 381),
+
+        stage.myRect(2960, 870, 3000, 1100),
+        stage.myRect(2880, 920, 3000, 1100),
+        stage.myRect(3904, 1200, 4020, 1300),
+        stage.myRect(4020, 1150, 4100, 1250),
+        stage.myRect(4708, 1419, 4767, 1503),
+        stage.myRect(4647, 1466, 4705, 1551),
+        stage.myRect(4589, 1532, 4647, 1614),
+        stage.myRect(4552, 1673, 4609, 1590),
+        stage.myRect(5136, 2660, 5256, 2783)
     ]
 
     play_state.stairRect = [
@@ -52,15 +62,6 @@ def input_object_to_game_world():
         stage.myRect(5204, 3262 - 392, 5299, 3262 - 343)
     ]
     play_state.ceilingBlock = [
-        stage.myRect(2960, 870, 3000, 1100),
-        stage.myRect(2880, 920, 3000, 1100),
-        stage.myRect(3904, 1200, 4020, 1300),
-        stage.myRect(4020, 1150, 4100, 1250),
-        stage.myRect(4708, 1419, 4767, 1503),
-        stage.myRect(4647, 1466, 4705, 1551),
-        stage.myRect(4589, 1532, 4647, 1614),
-        stage.myRect(4552, 1673, 4609, 1590),
-        stage.myRect(5136, 2660, 5256, 2783)
     ]
     play_state.footBlock = [
         stage.FootBlock(1921, 3263 - 2494, 1921 + 62, 3263 - 2494 + 62),
@@ -109,7 +110,7 @@ def input_object_to_game_world():
         item.Coin(5012, 2900),
         item.Coin(5150, 3050)
     ]
-    play_state.finishLine = stage.myRect(5747, 2898, 6139, 2900)
+    play_state.finishLine = stage.myRect(5747, 0, 5747+500, 2900)
 
     play_state.enemies = [
         #enemy.Flower(700,700),

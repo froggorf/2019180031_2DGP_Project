@@ -17,8 +17,8 @@ class StageState:
         self.cameraSpeed = 5
 
         #이미지 관련
-        self.image = [load_image("resource\\about_stage\\stage1.png"),load_image('resource\\about_stage\\stage2.png')]
-        self.background_image = [load_image("resource\\about_stage\\stage1_background.png"),load_image('resource\\about_stage\\stage1_background.png')]
+        self.image = [load_image("resource\\about_stage\\stage1.png"),load_image('resource\\about_stage\\stage2.png'),load_image('resource\\about_stage\\stage3.png'),load_image('resource\\about_stage\\stage4.png')]
+        self.background_image = [load_image("resource\\about_stage\\stage1_background.png"),load_image('resource\\about_stage\\stage1_background.png'),load_image('resource\\about_stage\\stage1_background.png'),load_image('resource\\about_stage\\stage4_background.png')]
 
         #스테이지 구분 관련
         self.selectStage = stage_select_state.select_stage -1

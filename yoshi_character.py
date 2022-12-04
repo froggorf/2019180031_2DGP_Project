@@ -437,7 +437,8 @@ class FLY:
         if event == WU:
             self.flytime = -35
             self.gravity = 0
-        self.bgm_fly.set_volume(0)
+        if event is not AD and event is not DD:
+            self.bgm_fly.set_volume(0)
         pass
 
     def do(self):
@@ -1009,8 +1010,8 @@ class Yoshi:
         self.image = [load_image("resource\\about_yoshi\\yoshi_with_mario_1.6x.png"),load_image("resource\\about_yoshi\\yoshi_1.6x.png")]
 
         # 위치 관련
-        self.x = 946
-        self.y = 6000-883
+        self.x = 300
+        self.y = 300
         self.size = [int(62 * 1.6), int(66 * 1.6)]
 
         # 상태 관련

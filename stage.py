@@ -71,39 +71,6 @@ class StageState:
             self.cameraSize[X]//2,
             self.cameraSize[Y]//2
         )
-        #foot_block 출력
-        # for rect in self.footBlock:
-        #     if rect.myIntersectRect(self.cameraPos[X],self.cameraPos[Y],self.cameraPos[X]+self.cameraSize[X],self.cameraPos[Y]+self.cameraSize[Y]):
-        #         rect.draw(self.cameraPos[X],self.cameraPos[Y],self.cameraPos[X]+self.cameraSize[X],self.cameraPos[Y]+self.cameraSize[Y])
-        # for rect in self.largerBlock:
-        #     if rect.myIntersectRect(self.cameraPos[X],self.cameraPos[Y],self.cameraPos[X]+self.cameraSize[X],self.cameraPos[Y]+self.cameraSize[Y]):
-        #         rect.draw(self.cameraPos[X], self.cameraPos[Y], self.cameraPos[X] + self.cameraSize[X],self.cameraPos[Y] + self.cameraSize[Y])
-        # for rect in self.jumpBlock:
-        #     if rect.myIntersectRect(self.cameraPos[X],self.cameraPos[Y],self.cameraPos[X]+self.cameraSize[X],self.cameraPos[Y]+self.cameraSize[Y]):
-        #         rect.draw(self.cameraPos[X], self.cameraPos[Y], self.cameraPos[X] + self.cameraSize[X],self.cameraPos[Y] + self.cameraSize[Y])
-
-
-        #코인 그리기
-        # for coin in self.coins:
-        #     coin.draw(self.cameraPos[X],self.cameraPos[Y],self.cameraPos[X]+self.cameraSize[X],self.cameraPos[Y]+self.cameraSize[Y])
-
-        #베이비마리오 그리기
-        # if self.babymario!=None:
-        #     self.babymario.draw(self.cameraPos[X],self.cameraPos[Y],self.cameraPos[X]+self.cameraSize[X],self.cameraPos[Y]+self.cameraSize[Y])
-
-        #충돌체크 사각형 출력
-        # for rect in self.groundRect:
-        #     if rect.myIntersectRect(self.cameraPos[X], self.cameraPos[Y], self.cameraPos[X] + self.cameraSize[X],self.cameraPos[Y] + self.cameraSize[Y]):
-        #         draw_rectangle(rect.left-self.cameraPos[X],rect.bottom-self.cameraPos[Y],rect.left-self.cameraPos[X]+rect.get_w(),rect.bottom-self.cameraPos[Y]+rect.get_h())
-        #
-        # for rect in self.stairRect:
-        #     if rect.myIntersectRect(self.cameraPos[X], self.cameraPos[Y], self.cameraPos[X] + self.cameraSize[X],self.cameraPos[Y] + self.cameraSize[Y]):
-        #         draw_rectangle(rect.left - self.cameraPos[X], rect.bottom - self.cameraPos[Y],rect.left - self.cameraPos[X] + rect.get_w(),rect.bottom - self.cameraPos[Y] + rect.get_h())
-        #
-        # for rect in self.ceilingBlock:
-        #     if rect.myIntersectRect(self.cameraPos[X], self.cameraPos[Y], self.cameraPos[X] + self.cameraSize[X],self.cameraPos[Y] + self.cameraSize[Y]):
-        #         draw_rectangle(rect.left - self.cameraPos[X], rect.bottom - self.cameraPos[Y],rect.left - self.cameraPos[X] + rect.get_w(),rect.bottom - self.cameraPos[Y] + rect.get_h())
-
 
     #업데이트
     def update(self):
@@ -267,3 +234,64 @@ class JumpBlock(FootBlock):
 
     def play_bgm(self):
         JumpBlock.bgm.play(1)
+
+class Lava:
+    image = None
+    frame = None
+    def __init__(self,g_left,g_bottom,g_right,g_top):
+        self.left =g_left
+        self.bottom = g_bottom
+        self.right = g_right
+        self.top = g_top
+
+        if Lava.image == None:
+            Lava.image = load_image('resource\\about_stage\\lava.png')
+        if Lava.frame ==None:
+            Lava.frame = 0
+
+    def update(self):
+        self.top+=1.5
+        Lava.frame = (Lava.frame+0.2)%16
+
+
+    def draw(self,left,bottom,right,top):
+        if int(self.top)-self.bottom >= 160:
+            self.image.clip_draw(0,
+                                 0,
+                                 500,
+                                 500,
+                                 self.left - left + (self.right - self.left) // 2,
+                                 self.bottom - bottom + (int(self.top-160) - self.bottom) // 2,
+                                 self.right - self.left,
+                                 int(self.top-160) - self.bottom)
+            self.image.clip_draw(
+                0,
+                3252-2400-160+160*int(Lava.frame),
+                1024,
+                160,
+                self.left-left+(self.right-self.left)//2,
+                (int(self.top)-160) - bottom + (int(self.top)-(int(self.top)-160))//2,
+                self.right-self.left,
+                160,
+            )
+            pass
+        else:
+            self.image.clip_draw(
+                0,
+                3252 - 2400 + 160 * int(Lava.frame)-(int(self.top)-self.bottom),
+                1024,
+                int(self.top)-self.bottom,
+                self.left - left + (self.right - self.left) // 2,
+                self.bottom - bottom + (int(self.top) - self.bottom) // 2,
+                self.right - self.left,
+                self.top-self.bottom,
+            )
+        pass
+
+    def get_bb(self):
+        return self.left,self.bottom,self.right,int(self.top)
+
+    def handle_collision(self,other,group):
+        pass
+
+

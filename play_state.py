@@ -86,7 +86,7 @@ def enter():
 
     global quit_game
     quit_game=False
-    #game_framework.push_state(start_state)
+    game_framework.push_state(start_state)
 
 
 def exit():
@@ -250,11 +250,9 @@ def pause():
 
 def handle_yoshi(event):
     yoshi.handle_event(event)
-
     if event.key == SDLK_F1:
-        yoshi.y += 500
-    if event.key == SDLK_F2 and event.type == SDL_KEYDOWN:
-        yoshi.x += 500
+        yoshi.godmode_time+=10.0
+
 
 
 def collide(a,b):

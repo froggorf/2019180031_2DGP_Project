@@ -116,7 +116,7 @@ def input_object_to_game_world():
 
     ]
     play_state.game_over_line = [
-
+        stage.Lava(105,0,105+1024,1)
     ]
 
 
@@ -130,6 +130,7 @@ def input_object_to_game_world():
     game_world.add_object(play_state.finishLine, 1)
     game_world.add_objects(play_state.enemies, 1)
     game_world.add_objects(play_state.eventbox,1)
+    game_world.add_objects(play_state.game_over_line,1)
 
     #충돌체크 그룹 추가
     game_world.add_collision_group(play_state.yoshi, play_state.groundRect, 'yoshi:groundRect')
@@ -150,6 +151,6 @@ def input_object_to_game_world():
     game_world.add_collision_group(play_state.enemies, play_state.footBlock, 'enemies:footBlock')
     game_world.add_collision_group(play_state.enemies, play_state.largeBlock, 'enemies:largeBlock')
 
-    play_state.stage_bgm = load_music('resource\\sound\\stage3_sound.mp3')
+    play_state.stage_bgm = load_music('resource\\sound\\stage4_sound.mp3')
     play_state.stage_bgm.set_volume(32)
     play_state.stage_bgm.repeat_play()

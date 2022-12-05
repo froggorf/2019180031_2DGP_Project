@@ -24,7 +24,7 @@ def enter():
 
     bggm = load_wav('resource\\sound\\yoshiiiii.wav')
     bggm.play(1)
-
+    delay(1)
     global image,image_time
     image = list()
     for i in range(1,148):

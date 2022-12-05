@@ -44,12 +44,12 @@ def handle_events():
             elif select == 1:
                 play_state.on_quit_game()
                 game_framework.pop_state()
-        elif event.key == SDLK_a:
+        elif event.key == SDLK_a or event.key == SDLK_LEFT:
             if event.type == SDL_KEYDOWN:
                 play_state.pressA = True
             else:
                 play_state.pressA = False
-        elif event.key == SDLK_d:
+        elif event.key == SDLK_d or event.key == SDLK_RIGHT:
             if event.type == SDL_KEYDOWN:
                 play_state.pressD = True
             else:

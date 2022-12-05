@@ -28,6 +28,16 @@ key_event_table = {
     (SDL_KEYUP, SDLK_s): SU,
     (SDL_KEYDOWN, SDLK_d): DD,
     (SDL_KEYUP, SDLK_d): DU,
+
+    (SDL_KEYDOWN, SDLK_UP): WD,
+    (SDL_KEYUP, SDLK_UP): WU,
+    (SDL_KEYDOWN, SDLK_LEFT): AD,
+    (SDL_KEYUP, SDLK_LEFT): AU,
+    (SDL_KEYDOWN, SDLK_DOWN): SD,
+    (SDL_KEYUP, SDLK_DOWN): SU,
+    (SDL_KEYDOWN, SDLK_RIGHT): DD,
+    (SDL_KEYUP, SDLK_RIGHT): DU,
+
     (SDL_KEYDOWN, SDLK_LSHIFT): SHIFTD,
     (SDL_KEYUP, SDLK_LSHIFT): SHIFTU,
     (SDL_KEYDOWN, SDLK_LCTRL): CTRLD,
@@ -144,6 +154,10 @@ class IDLE_02:
 
 class WALK:
     def enter(self, event=None):
+        if not key_down[AD] and not key_down[DD]:
+            self.cur_state = IDLE_01
+            self.cur_state.enter(self)
+            return
         self.delay = 0
         self.frame = 0
         if event == DD:
@@ -264,7 +278,7 @@ class JUMP:
     def enter(self, event=None):
         self.delay = 0
         self.frame = 0
-        if event == WD and self.gravity < 10:
+        if event == WD:
             self.gravity += GRAVITY*5
             self.pressJump += 1
             self.bgm_jump.play(1)
@@ -1280,7 +1294,7 @@ class Yoshi:
                     self.handle_collision(rect,'yoshi:largeBlock')
             if self.gravity>=0:
                 self.y = other.pos.bottom - self.size[Y] - 1
-                self.gravity = 0
+                self.gravity = -GRAVITY
             else:
                 self.y = other.pos.top + 1
                 self.gravity = -GRAVITY;

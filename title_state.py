@@ -22,6 +22,9 @@ def enter():
     global press_img
     press_img = load_image('resource\\yoshi_island_game_over\\press_space_to_title.png')
 
+    bggm = load_wav('resource\\sound\\yoshiiiii.wav')
+    bggm.play(1)
+
     global image,image_time
     image = list()
     for i in range(1,148):

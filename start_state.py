@@ -47,16 +47,16 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.pop_state()
-        elif event.key == SDLK_a:
+        elif event.key == SDLK_a or event.key == SDLK_LEFT:
             if event.type == SDL_KEYDOWN:
-                play_state.pressA  =True
+                play_state.pressA = True
             else:
-                play_state.pressA  =False
-        elif event.key == SDLK_d:
+                play_state.pressA = False
+        elif event.key == SDLK_d or event.key == SDLK_RIGHT:
             if event.type == SDL_KEYDOWN:
                 play_state.pressD = True
             else:
-                play_state.pressD  =False
+                play_state.pressD = False
 
     pass
 

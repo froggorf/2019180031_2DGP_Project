@@ -198,13 +198,13 @@ def handle_events():
             game_framework.quit()
         if event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.push_state(pause_state)
-        if event.key == SDLK_a:
+        if event.key == SDLK_a or event.key == SDLK_LEFT:
             global pressA
             if event.type==SDL_KEYDOWN:
                 pressA = True
             else:
                 pressA = False
-        elif event.key == SDLK_d:
+        elif event.key == SDLK_d or event.key == SDLK_RIGHT:
             global pressD
             if event.type==SDL_KEYDOWN:
                 pressD=True

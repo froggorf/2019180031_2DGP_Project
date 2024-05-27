@@ -5,6 +5,8 @@ import item
 import game_world
 import enemy
 def input_object_to_game_world():
+
+
     play_state.groundRect = [
         stage.myRect(0, 0, 832, 512),
         stage.myRect(1024, 0, 1536, 512),

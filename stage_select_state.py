@@ -20,7 +20,7 @@ def enter():
     select_stage_image = load_image('resource\\stage_select\\stage_select.png')
     icon_image = load_image('resource\\stage_select\\stage_icon.png')
     icon_size=[110,120]
-    playable_stage = 1
+    playable_stage = 2
     icon_pos = [[],[50,186],[240,186], [431,186],[625,186]]
     X,Y = 0,1
     select_stage = 0
